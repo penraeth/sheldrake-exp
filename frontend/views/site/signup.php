@@ -13,9 +13,9 @@ $this->registerJsFile('/js/getLocation.js', ['depends' => [\yii\web\JqueryAsset:
 
 
 ?>
-<div class="site-signup">
+<div class="site-signup col-md-6 col-md-offset-3">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>Signup to participate<br>in experiments</h1>
 
     <div class="col-lg-12 well bs-component">
 
@@ -42,14 +42,14 @@ $this->registerJsFile('/js/getLocation.js', ['depends' => [\yii\web\JqueryAsset:
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-8">
+				<div class="col-xs-12">
 					<p>
 						<?= Yii::t('app', 'We ask for age and gender in order to evaluate relative effect sizes across all experiments. No personal information will be shared.') ?>
 					</p>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-3">
+				<div class="col-xs-6">
 					<?= $form->field($model, 'yearofbirth')->textInput($options = ['size'=>4,'maxlength'=>4]) ?>
 				</div>
 				<div class="col-xs-6">

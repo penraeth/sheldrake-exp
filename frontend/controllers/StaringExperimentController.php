@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use app\models\StaringExperiment;
 use frontend\models\StaringExperimentSearch;
+use app\models\UserInvitation;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
@@ -58,10 +59,26 @@ class StaringExperimentController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+		$experiment = StaringExperiment::findOne(['id'=>$id, 'user_id'=>Yii::$app->user->identity->id]);
+		if (!$experiment) {
+			return $this->redirect(['site/index']);
+		}
+		
+    	$invitations = $experiment->userInvitations;
+		return $this->render('view', [
+			'experiment' => $experiment,
+			'invitations' => $invitations,
+		]);
     }
+    
+    
+    public function actionActive() {
+        $experiments = StaringExperiment::getByUserId(Yii::$app->user->identity->id, 'active');
+		return $this->render('active', [
+			'experiments' => $experiments,
+		]);
+    }
+    
 
     /**
      * Creates a new StaringExperiment model.
@@ -70,15 +87,66 @@ class StaringExperimentController extends Controller
      */
     public function actionCreate()
     {
-        $model = new StaringExperiment();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+    	$experiment = new StaringExperiment();
+		$invitations = [new UserInvitation()];
+        
+        if (Yii::$app->request->isPost) {
+			$count = count( Yii::$app->request->post('UserInvitation', []) );
+			for ($i=1; $i<$count; $i++) {
+				$invitations[] = new UserInvitation();
+			}
+			
+			$errorCount = 0;
+			if ( $experiment->load(Yii::$app->request->post())  &&  UserInvitation::loadMultiple($invitations, Yii::$app->request->post()) ) {
+				$experiment->user_id = Yii::$app->user->identity->id;
+				$transaction = Yii::$app->db->beginTransaction();
+				if ( $experiment->save() ) {
+					$inviteCount = 0;
+					foreach ($invitations as $i=>$invitation) {
+						if ($invitation['email']) {
+							$invitation->exp_id = $experiment->id;
+							if ( $invitation->save() ) {
+								$inviteCount++;
+							} else {
+								$errorCount++;
+							}
+						}
+					}
+				} else {
+					$errorCount++;
+				}
+				
+				if ($errorCount  ||  $inviteCount==0) {
+					$transaction->rollBack();
+				} else {
+					$transaction->commit();
+					$this->sendInvites($experiment->id);
+					return $this->redirect(['view', 'id' => $experiment->id]);
+				}
+			}
         }
+
+		return $this->render('create', [
+			'identity' => Yii::$app->user->identity,
+			'experiment' => $experiment,
+			'invitations' => $invitations,
+		]);
+    }
+    
+    
+    private function sendInvites($id) {
+		$experiment = StaringExperiment::findOne($id);
+    	$invitations = $experiment->userInvitations;
+    	foreach ($invitations as $invitation) {
+    		$template = ($invitation['user_id'])?'inviteUser':'inviteAnon';
+			$mail = Yii::$app->mailer->compose($template, ['invitation'=>$invitation])
+				->setFrom('nobody@sheldrake.org')
+				->setTo($invitation->email)
+				->setSubject('Staring Experiment Invitation')
+				->send();
+			$invitation->email_status = ($mail)?1:-1;
+    		$invitation->save();
+    	}
     }
     
     
@@ -94,15 +162,9 @@ class StaringExperimentController extends Controller
 			$participant->exp_id = $model->id;	// set foreign key for experiment
 			$participant->user_id = $user->id;	// set foreign key for user
 			
-			$user->getLocation();
-			$participant->latitude = ;	// d
-			Yii::$app->getRequest()->getUserIP()
-			
-			
-			            'status' => 'Status',
-            'latitude' => 'Latitude',
-            'longitude' => 'Longitude',
-            'ipaddress' => 'Ipaddress',
+			$loc = $user->getLocation();
+			print $loc;
+			return;
 
 
 			$participant->save(false);			// save primary participant, skip validation as model is already validated
@@ -192,14 +254,15 @@ class StaringExperimentController extends Controller
         }
 
 		//Load and validate the multiple models
-		if (Model::loadMultiple($invitations, Yii::$app->request->post()) &&                                                                                            Model::validateMultiple($invitations)) {
+		#if (Model::loadMultiple($invitations, Yii::$app->request->post())) {                                                                                          Model::validateMultiple($invitations)) {
+#
+		#	foreach ($invitations as $invitation) {
+#
+				//Try to save the models. Validation is not needed as it's already been done.
+		#		$invitation->save(false);
 
-        foreach ($invitations as $invitation) {
-
-            //Try to save the models. Validation is not needed as it's already been done.
-            $invitation->save(false);
-
-        }
+		#	}
+		#	}
         return $this->redirect('view');
     }
 }

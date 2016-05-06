@@ -8,6 +8,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use app\models\StaringExperiment;
 use yii\helpers\Html;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -93,15 +94,11 @@ class SiteController extends Controller
 		
 		if (!Yii::$app->user->isGuest) 
         {
-        	return $this->render('index');
-        	/* if their system is not compatible then tell them what they need to do
-			if (!Yii::$app->session->compatibility == 2) 
-			{
-				return $this->render('/site/incompatible');
-			} else {
-				return $this->render('index');				
-			}
-			*/
+        	$badges = [];
+        	$badges['active'] = StaringExperiment::getByUserId(Yii::$app->user->identity->id, 'active', true);
+        	return $this->render('index', [
+				'badges' => $badges
+			]);
         } else {
         
 			if (isset($cookies['haslogin'])) {
@@ -289,10 +286,10 @@ class SiteController extends Controller
     public function actionSignup()
     {  
         $model = new SignupForm();
-
-        // collect and validate user data
-        if ($model->load(Yii::$app->request->post()) && $model->validate())
-        {
+        
+        if (Yii::$app->request->isGet  &&  Yii::$app->request->get('email')) {
+        	$model->email = Yii::$app->request->get('email');
+        } else if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             // try to save user data in database
             if ($user = $model->signup()) 
             {

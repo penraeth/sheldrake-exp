@@ -86,9 +86,24 @@ class LoginForm extends Model
 			]));
 			
 			// Yii::$app->session['compatibility'] = $_POST['compatibility'];
-			if (isset($_POST['latitude'])) {
+			Yii::$app->session['latitude'] = null;
+			Yii::$app->session['longitude'] = null;
+			if (isset($_POST['latitude'])  &&  $_POST['latitude']!='') {
+				// values passed from browser-based location services
 				Yii::$app->session['latitude'] = $_POST['latitude'];
 				Yii::$app->session['longitude'] = $_POST['longitude'];
+			} else {
+				// no data given; use IP geolocate as a backup
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, 'http://freegeoip.net/json/'.$_SERVER['REMOTE_ADDR']);
+				curl_setopt($ch, CURLOPT_TIMEOUT_MS, 2500);
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, 2500);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$data = json_decode(curl_exec($ch), true);
+				if (isset($data['latitude'])  &&  $data['latitude']!=''  &&  $data['latitude']!==(int)0) {
+					Yii::$app->session['latitude'] = $data['latitude'];
+					Yii::$app->session['longitude'] = $data['longitude'];
+				}
 			}
 
             return Yii::$app->user->login($this->getUser(), 3600 * 24 * 30);

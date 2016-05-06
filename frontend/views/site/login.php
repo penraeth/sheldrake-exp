@@ -17,7 +17,7 @@ $this->registerJsFile('/js/getLocation.js', ['depends' => [\yii\web\JqueryAsset:
 //$this->registerJs($script, View::POS_END); 
 
 ?>
-<div class="site-login">
+<div class="site-login col-md-6 col-md-offset-3">
 
     <h1><?= Html::encode($this->title) ?></h1>
 	

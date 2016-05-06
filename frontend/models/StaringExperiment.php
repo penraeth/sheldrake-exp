@@ -32,7 +32,11 @@ class StaringExperiment extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [];
+        return [
+            [['name'], 'filter', 'filter' => 'trim'],
+            [['name'], 'required'],
+            [['name'], 'string', 'max' => 32]
+        ];
     }
 
     /**
@@ -46,9 +50,31 @@ class StaringExperiment extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+	public static function getByUserId($id, $type, $count=false) {
+		$query = static::find()->where(['user_id' => $id]);
+		switch ($type) {
+			case 'active': $query->andWhere('dateCompleted IS NULL'); break;
+			case 'completed': $query->andWhere('dateCompleted IS NOT NULL'); break;
+		}
+		if ($count) {
+			return $query->count();
+		} else {
+			return $query->all();
+		}
+	} 
+     
+     
     public function getStaringParticipants()
     {
         return $this->hasMany(StaringParticipant::className(), ['exp_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserInvitations()
+    {
+        return $this->hasMany(UserInvitation::className(), ['exp_id' => 'id']);
     }
 
     /**
