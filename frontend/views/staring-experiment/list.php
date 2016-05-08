@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="staring-experiment-view col-md-6 col-md-offset-3">
 
     <div class="panel panel-default" style="padding:8px;">
-		<h4><b>Active Experiments</b></h4>
+		<h4><b><?=$title;?></b></h4>
 		<table class="table table-condensed">
 			<tr>
 				<th>Name</th>

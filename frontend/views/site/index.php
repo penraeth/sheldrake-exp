@@ -23,24 +23,38 @@ $this->title = Yii::t('app', Yii::$app->name);
 					<p><a class="btn btn-default" href="<?= Url::to(['staring-experiment/create']) ?>">CREATE Staring Experiment &raquo;</a></p>
 					<p>You will be the subject and invite others to join your experiment as observers.</p>
 					<p>
-						<a href="<?=Url::to(['staring-experiment/active']);?>">
+						<a href="<?=Url::to(['staring-experiment/list', 'type'=>'host', 'status'=>'active']);?>">
 							&raquo; Your Active Experiments
-							<?php if ($badges['active']): ?><span class="badge pull-right"><?=$badges['active'];?></span><?php endif; ?>
+							<?php if ($badges['host_open']): ?><span class="badge pull-right"><?=$badges['host_open'];?></span><?php endif; ?>
 						</a>
 					</p>
-					<p>&raquo; Your Completed Experiments</p>
+					<p>
+						<a href="<?=Url::to(['staring-experiment/list', 'type'=>'host', 'status'=>'completed']);?>">
+							&raquo; Your Completed Experiments
+							<?php if ($badges['host_done']): ?><span class="badge pull-right"><?=$badges['host_done'];?></span><?php endif; ?>
+						</a>
+					</p>
 				</div>
             </div>
             <div class="col-sm-4">
             	<div class="panel panel-default" style="padding:12px">
 					<p><a class="btn btn-default" href="<?= Url::to(['staring-experiment/create']) ?>">JOIN Staring Experiment &raquo;</a></p>
 					<p>Become an observer in an experiment you've been invited to.</p>
-					<p>&raquo; Active Experiments You've Joined</p>
-					<p>&raquo; Completed Experiments You've Joined</p>
+					<p>
+						<a href="<?=Url::to(['staring-experiment/list-by-invite', 'status'=>'active']);?>">
+							&raquo; Your Active Invitations
+							<?php if ($badges['guest_open']): ?><span class="badge pull-right"><?=$badges['guest_open'];?></span><?php endif; ?>
+						</a>
+					</p>
+					<p>
+						<a href="<?=Url::to(['staring-experiment/list', 'type'=>'host', 'status'=>'completed']);?>">
+							&raquo; Your Completed Invitations
+							<?php if ($badges['guest_done']): ?><span class="badge pull-right"><?=$badges['guest_done'];?></span><?php endif; ?>
+						</a>
+					</p>
 				</div>
             </div>
         </div>
 
     </div>
 </div>
-

@@ -4,8 +4,8 @@ namespace frontend\controllers;
 
 use Yii;
 use app\models\StaringExperiment;
-use frontend\models\StaringExperimentSearch;
 use app\models\UserInvitation;
+use frontend\models\StaringExperimentSearch;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
@@ -59,22 +59,31 @@ class StaringExperimentController extends Controller
      */
     public function actionView($id)
     {
-		$experiment = StaringExperiment::findOne(['id'=>$id, 'user_id'=>Yii::$app->user->identity->id]);
+		$experiment = StaringExperiment::getViewAccess($id, Yii::$app->user->identity->id);
 		if (!$experiment) {
 			return $this->redirect(['site/index']);
 		}
 		
-    	$invitations = $experiment->userInvitations;
 		return $this->render('view', [
 			'experiment' => $experiment,
-			'invitations' => $invitations,
+			'invitations' => $experiment->userInvitations,
+			'host' => $experiment->host
 		]);
     }
     
     
-    public function actionActive() {
-        $experiments = StaringExperiment::getByUserId(Yii::$app->user->identity->id, 'active');
-		return $this->render('active', [
+    public function actionList($type='host', $status='active') {
+        $experiments = StaringExperiment::getByUserId(Yii::$app->user->identity->id, $status);
+		return $this->render('list', [
+			'title' => ucfirst($status).' Experiments',
+			'experiments' => $experiments,
+		]);
+    }
+    
+    public function actionListByInvite() {
+        $experiments = StaringExperiment::getByInvitation(Yii::$app->user->identity->id);
+		return $this->render('list', [
+			'title' => 'Active Invitations',
 			'experiments' => $experiments,
 		]);
     }
@@ -105,10 +114,19 @@ class StaringExperimentController extends Controller
 					foreach ($invitations as $i=>$invitation) {
 						if ($invitation['email']) {
 							$invitation->exp_id = $experiment->id;
-							if ( $invitation->save() ) {
-								$inviteCount++;
-							} else {
-								$errorCount++;
+							try {
+								if ( $invitation->save() ) {
+									$inviteCount++;
+								} else {
+									$errorCount++;
+								}
+							} catch (\yii\db\Exception $e) {
+								if ($e->errorInfo[1] == 1062) {
+									//pk error on duplicate entry; ignore
+								} else {
+									$errorCount++;
+									throw new \Exception($e);
+								}
 							}
 						}
 					}

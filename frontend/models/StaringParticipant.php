@@ -56,7 +56,22 @@ class StaringParticipant extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getExp()
+	public static function getByUserId($id, $type, $count=false) {
+		$query = static::find()->joinWith('staringExperiment')->where(['staring_participant.user_id' => $id]);
+		switch ($type) {
+			case 'active': $query->andWhere('staring_experiment.datecompleted IS NULL'); break;
+			case 'completed': $query->andWhere('staring_experiment.datecompleted IS NOT NULL'); break;
+		}
+		if ($count) {
+			return $query->count();
+		} else {
+			return $query->all();
+		}
+	} 
+
+
+
+    public function getStaringExperiment()
     {
         return $this->hasOne(StaringExperiment::className(), ['id' => 'exp_id']);
     }

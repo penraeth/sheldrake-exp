@@ -57,7 +57,7 @@
 		<div id="invitees">
 			<?php for ($i=0; $i<count($invitations); $i++): ?>
 				<?php $invitation = $invitations[$i]; ?>
-				<?php if ($i==0 || $invitation['email']): ?>
+				<?php if ($i==0 || $invitation->email): ?>
 					<?= $form->field($invitation, "[$inviteCount]email", ['template'=>'{input}'])
 						->label('')
 						->textInput(['placeholder'=>'e-mail address']);
