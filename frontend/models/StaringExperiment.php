@@ -74,6 +74,17 @@ class StaringExperiment extends \yii\db\ActiveRecord
 		}
 	}
 	
+	public static function getByParticipant($id, $count=false) {
+		$query = static::find()->joinWith('staringParticipants')->where(['staring_participant.user_id' => $id]);
+		$query->andWhere('relationship > 0');
+		$query->andWhere('datecompleted IS NOT NULL');
+		if ($count) {
+			return $query->count();
+		} else {
+			return $query->all();
+		}
+	}
+	
 	public static function getViewAccess($id, $user_id) {
 		$query = static::find()->joinWith('userInvitations')->where(['staring_experiment.id' => $id]);
 		$query->andFilterWhere(['or', ['staring_experiment.user_id' => $user_id], ['user_invitation.user_id' => $user_id]]);
@@ -86,15 +97,12 @@ class StaringExperiment extends \yii\db\ActiveRecord
         return $this->hasMany(StaringParticipant::className(), ['exp_id' => 'id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getUserInvitations()
     {
         return $this->hasMany(UserInvitation::className(), ['exp_id' => 'id']);
     }
 
-    /**
+   /**
      * @return \yii\db\ActiveQuery
      */
     public function getUsers()

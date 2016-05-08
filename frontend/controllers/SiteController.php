@@ -98,7 +98,7 @@ class SiteController extends Controller
         	$badges['host_open'] = StaringExperiment::getByUserId(Yii::$app->user->identity->id, 'active', true);
         	$badges['host_done'] = StaringExperiment::getByUserId(Yii::$app->user->identity->id, 'completed', true);
         	$badges['guest_open'] = StaringExperiment::getByInvitation(Yii::$app->user->identity->id, true);
-        	$badges['guest_done'] = StaringExperiment::getByInvitation(Yii::$app->user->identity->id, true);
+        	$badges['guest_done'] = StaringExperiment::getByParticipant(Yii::$app->user->identity->id, true);
         	return $this->render('index', [
 				'badges' => $badges
 			]);

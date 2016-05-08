@@ -69,8 +69,33 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 		</div>
 	<?php endif; ?>
 	
-	<?php if ( !$experiment->datecompleted ): ?>
 	
+	<?php if ( $experiment->datecompleted ): ?>
+		<!-- completed -->
+		
+		<div class="panel panel-default" style="padding:8px">
+			<h4><b>Results</b></h4>
+			<table class="table table-condensed">
+				<tr>
+					<td align="right"><b>Trial</b></th>
+					<td align="left"><b>Time</b></th>
+					<td align="right"><b>Observers</b></th>
+					<td align="right"><b>Judgment</b></th>
+				</tr>
+				<?php foreach ($trials as $trial): ?>
+					<tr valign="middle">
+						<td align="right"><?=$trial->trial;?></td>
+						<td align="left"><?=$trial->created_at;?></td>
+						<td align="right"><?=$trial->observers;?></td>
+						<td align="right"><?=$trial->judgment;?></td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+		</div>
+	
+	<?php else: ?>
+		<!-- active -->
+		
 		<?php if ($isHost): ?>
 			<div class="panel panel-default" style="padding:8px; text-align:right">
 				<?php $form = ActiveForm::begin([
@@ -118,6 +143,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				<?php ActiveForm::end(); ?>
 			</div>
 		<?php endif; ?>
-		
+				
 	<?php endif; ?>
+
 </div>

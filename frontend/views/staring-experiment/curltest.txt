@@ -1,1 +1,8 @@
-curl -X POST -v --data "observers=3&judgment=8" http://dev.sheldrake.org/api/log-trial/202/8a2e09ce154511e6929a44de8f3043c1
+curl -X POST -v --data "trial=1&observers=3&judgment=8" http://dev.sheldrake.org/api/log-trial/202/8a2e09ce154511e6929a44de8f3043c1
+curl -X POST -v --data "trial=2&observers=2&judgment=2" http://dev.sheldrake.org/api/log-trial/202/8a2e09ce154511e6929a44de8f3043c1
+curl -X POST -v --data "trial=3&observers=6&judgment=3" http://dev.sheldrake.org/api/log-trial/202/8a2e09ce154511e6929a44de8f3043c1
+curl -X POST -v --data "trial=4&observers=3&judgment=3" http://dev.sheldrake.org/api/log-trial/202/8a2e09ce154511e6929a44de8f3043c1
+
+curl -X POST -v --data "trial=1&observers=3&judgment=12" http://dev.sheldrake.org/api/log-trial/203/a82c8fb4155311e6929a44de8f3043c1
+curl -X POST -v --data "trial=2&observers=2&judgment=12" http://dev.sheldrake.org/api/log-trial/203/a82c8fb4155311e6929a44de8f3043c1
+curl -X POST -v --data "trial=3&observers=6&judgment=12" http://dev.sheldrake.org/api/log-trial/203/a82c8fb4155311e6929a44de8f3043c1

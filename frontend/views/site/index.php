@@ -47,7 +47,7 @@ $this->title = Yii::t('app', Yii::$app->name);
 						</a>
 					</p>
 					<p>
-						<a href="<?=Url::to(['staring-experiment/list', 'type'=>'host', 'status'=>'completed']);?>">
+						<a href="<?=Url::to(['staring-experiment/list-by-participant', 'type'=>'host', 'status'=>'completed']);?>">
 							&raquo; Your Completed Invitations
 							<?php if ($badges['guest_done']): ?><span class="badge pull-right"><?=$badges['guest_done'];?></span><?php endif; ?>
 						</a>

@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use app\models\StaringExperiment;
 use app\models\StaringParticipant;
+use app\models\StaringTrial;
 use app\models\UserInvitation;
 use frontend\models\StaringExperimentSearch;
 use yii\web\Controller;
@@ -70,10 +71,16 @@ class StaringExperimentController extends Controller
 			$participant = new StaringParticipant();
 		}
 		
+		$trials = [];
+		if ($experiment->datecompleted) {
+			$trials = StaringTrial::find()->where( ['exp_id'=>$id] )->all();
+		}
+		
 		return $this->render('view', [
 			'experiment' => $experiment,
 			'participant' => $participant,
 			'invitations' => $experiment->userInvitations,
+			'trials' => $trials,
 			'host' => $experiment->host
 		]);
     }
@@ -83,6 +90,7 @@ class StaringExperimentController extends Controller
         $experiments = StaringExperiment::getByUserId(Yii::$app->user->identity->id, $status);
 		return $this->render('list', [
 			'title' => ucfirst($status).' Experiments',
+			'status' => $status,
 			'experiments' => $experiments,
 		]);
     }
@@ -91,6 +99,16 @@ class StaringExperimentController extends Controller
         $experiments = StaringExperiment::getByInvitation(Yii::$app->user->identity->id);
 		return $this->render('list', [
 			'title' => 'Active Invitations',
+			'status' => 'active',
+			'experiments' => $experiments,
+		]);
+    }
+    
+    public function actionListByParticipant() {
+        $experiments = StaringExperiment::getByParticipant(Yii::$app->user->identity->id);
+		return $this->render('list', [
+			'title' => 'Completed Invitations',
+			'status' => 'completed',
 			'experiments' => $experiments,
 		]);
     }
