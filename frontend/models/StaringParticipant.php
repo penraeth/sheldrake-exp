@@ -9,7 +9,6 @@ use Yii;
  *
  * @property integer $user_id
  * @property integer $exp_id
- * @property string $datejoined
  * @property integer $observers
  * @property integer $relationship
  * @property integer $status
@@ -36,7 +35,7 @@ class StaringParticipant extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'exp_id'], 'required'],
+            [['user_id', 'exp_id', 'observers', 'relationship'], 'required'],
             [['user_id', 'exp_id', 'observers', 'relationship', 'status'], 'integer'],
             [['latitude', 'longitude'], 'number'],
             [['ipaddress'], 'string', 'max' => 200]

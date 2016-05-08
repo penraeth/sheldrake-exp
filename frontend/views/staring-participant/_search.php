@@ -19,8 +19,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'exp_id') ?>
 
-    <?= $form->field($model, 'datejoined') ?>
-
     <?= $form->field($model, 'observers') ?>
 
     <?= $form->field($model, 'relationship') ?>

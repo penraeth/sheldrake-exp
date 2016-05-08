@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use app\models\StaringExperiment;
+use app\models\StaringParticipant;
 use app\models\UserInvitation;
 use frontend\models\StaringExperimentSearch;
 use yii\web\Controller;
@@ -64,8 +65,14 @@ class StaringExperimentController extends Controller
 			return $this->redirect(['site/index']);
 		}
 		
+		$participant = StaringParticipant::findOne( ['user_id'=>Yii::$app->user->identity->id, 'exp_id'=>$id] );
+		if (!$participant) {
+			$participant = new StaringParticipant();
+		}
+		
 		return $this->render('view', [
 			'experiment' => $experiment,
+			'participant' => $participant,
 			'invitations' => $experiment->userInvitations,
 			'host' => $experiment->host
 		]);

@@ -2,7 +2,7 @@
 
 use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\StaringExperiment */
@@ -12,21 +12,17 @@ $this->params['breadcrumbs'][] = ['label' => 'Staring Experiments', 'url' => ['i
 $this->params['breadcrumbs'][] = $this->title;
 
 $isHost = ($host->id == Yii::$app->user->identity->id);
-if ($isHost) {
-	$enterUrl = Url::to(['']);
-} else{
-	$enterUrl = Url::to(['']);
-}
 ?>
+
+<style>
+	.has-error input[type="text"].form-control { background-color: #fdd; }
+</style>
 
 <div class="staring-experiment-view col-md-6 col-md-offset-3">
 
     <div class="panel panel-default" style="padding:8px;">
 		<h4>
 			<b>Experiment: <?= Html::encode($experiment->name) ?></b>
-			<?php if ( !$experiment->datecompleted ): ?>
-				<a class="btn btn-sm btn-default pull-right" href="<?=$enterUrl;?>">Enter</a>
-			<?php endif; ?>
 		</h4>
 		<table class="table table-condensed">
 			<tr valign="middle">
@@ -73,4 +69,55 @@ if ($isHost) {
 		</div>
 	<?php endif; ?>
 	
+	<?php if ( !$experiment->datecompleted ): ?>
+	
+		<?php if ($isHost): ?>
+			<div class="panel panel-default" style="padding:8px; text-align:right">
+				<?php $form = ActiveForm::begin([
+						'id' => 'form-participant',
+						'action' => Url::To(['staring-participant/create'])
+					]); ?>
+					<input type="hidden" id="staringexperiment-id" name="StaringParticipant[exp_id]" value="<?=$experiment->id;?>">
+					<input type="hidden" id="staringexperiment-id" name="StaringParticipant[observers]" value="0">
+					<input type="hidden" id="staringexperiment-id" name="StaringParticipant[relationship]" value="0">
+					<?= Html::submitButton(Yii::t('app', 'Enter Experiment &raquo;'), ['class' => 'btn btn-default btn-sm', 'name' => 'login-button']) ?>
+				<?php ActiveForm::end(); ?>
+			</div>
+		<?php else: ?>
+			<div class="panel panel-default" style="padding:8px;">
+				<?php $form = ActiveForm::begin([
+						'id'		=> 'create-form',
+						'action'	=> Url::To(['staring-participant/create']),
+						'fieldConfig' => [
+							'template' => "{label}\n{beginWrapper}\n{input}\n{endWrapper}"
+						]
+					]); ?>
+					<input type="hidden" id="staringexperiment-id" name="StaringParticipant[exp_id]" value="<?=$experiment->id;?>">
+					<div class="row">
+						<div class="col-sm-6">
+							<?= $form->field($participant, "observers")
+								->label('Observers')
+								->textInput(['placeholder'=>'']);
+							?>
+						</div>
+						<div class="col-sm-6">
+							<?= $form->field($participant, "relationship")
+								->label('Relationship')
+								->dropDownList([
+									'' => 'Select...',
+									'1'	=> 'Close friend',
+									'2'	=> 'Acquaintance',
+									'3' => 'Not known'
+								]);
+							?>
+						</div>
+					</div>
+					<div style="text-align:right">
+						<?= Html::submitButton(Yii::t('app', 'Enter Experiment &raquo;'), ['class' => 'btn btn-default btn-sm', 'name' => 'login-button']) ?>
+					</div>
+				<?php ActiveForm::end(); ?>
+			</div>
+		<?php endif; ?>
+		
+	<?php endif; ?>
 </div>

@@ -61,16 +61,30 @@ class StaringParticipantController extends Controller
      */
     public function actionCreate()
     {
-        $model = new StaringParticipant();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'user_id' => $model->user_id, 'exp_id' => $model->exp_id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+       	$model = new StaringParticipant();
+       	
+       	/* in this case, db entry may already exist */
+        if ( Yii::$app->request->isPost ) {
+			$model = StaringParticipant::findOne( ['user_id'=>Yii::$app->user->identity->id, 'exp_id'=>Yii::$app->request->post('StaringParticipant')['exp_id']] );
+			if (!$model) {
+       			$model = new StaringParticipant();
+			}
+   			$model->load(Yii::$app->request->post());
+			$model->user_id = Yii::$app->user->identity->id;
+			$model->latitude = Yii::$app->session['latitude'];
+			$model->longitude = Yii::$app->session['longitude'];
+			$model->ipaddress = $_SERVER['REMOTE_ADDR'];
+			
+        	if ($model->save()) {
+            	return $this->redirect(['view', 'user_id' => $model->user_id, 'exp_id' => $model->exp_id]);
+            }
         }
+        
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
+
 
     /**
      * Updates an existing StaringParticipant model.

@@ -27,7 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'user_id',
             'exp_id',
-            'datejoined',
             'observers',
             'relationship',
             // 'status',

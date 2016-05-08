@@ -19,7 +19,7 @@ class StaringParticipantSearch extends StaringParticipant
     {
         return [
             [['user_id', 'exp_id', 'observers', 'relationship', 'status'], 'integer'],
-            [['datejoined', 'ipaddress'], 'safe'],
+            [['ipaddress'], 'safe'],
             [['latitude', 'longitude'], 'number'],
         ];
     }
@@ -59,7 +59,6 @@ class StaringParticipantSearch extends StaringParticipant
         $query->andFilterWhere([
             'user_id' => $this->user_id,
             'exp_id' => $this->exp_id,
-            'datejoined' => $this->datejoined,
             'observers' => $this->observers,
             'relationship' => $this->relationship,
             'status' => $this->status,

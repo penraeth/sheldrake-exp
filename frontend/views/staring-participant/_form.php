@@ -16,8 +16,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'exp_id')->textInput() ?>
 
-    <?= $form->field($model, 'datejoined')->textInput() ?>
-
     <?= $form->field($model, 'observers')->textInput() ?>
 
     <?= $form->field($model, 'relationship')->textInput() ?>
