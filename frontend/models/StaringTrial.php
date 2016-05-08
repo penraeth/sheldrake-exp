@@ -31,7 +31,7 @@ class StaringTrial extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['exp_id', 'trial'], 'required'],
+            [['exp_id', 'trial','observers','judgment'], 'required'],
             [['exp_id', 'trial', 'observers', 'judgment'], 'integer'],
             [['created_at'], 'safe']
         ];

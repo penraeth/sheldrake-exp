@@ -33,6 +33,14 @@ return [
                 ],
             ],
         ],
+        'urlManager' => [
+        	'enablePrettyUrl' => true,
+        	'showScriptName' => false,
+        	'rules' => [
+        		'api/<action:([\-\w]+)>/<id:(\d+)>/<key:(\w+)>' => 'api/<action>',
+        		'<controller:([\-\w]+)>/<action:([\-\w]+)>/<id:(\d+)>' => '<controller>/<action>',
+        	]
+        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],

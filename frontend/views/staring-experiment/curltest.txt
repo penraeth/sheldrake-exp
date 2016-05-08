@@ -1,0 +1,1 @@
+curl -X POST -v --data "observers=3&judgment=8" http://dev.sheldrake.org/api/log-trial/202/8a2e09ce154511e6929a44de8f3043c1

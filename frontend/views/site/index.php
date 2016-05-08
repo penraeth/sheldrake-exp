@@ -38,7 +38,7 @@ $this->title = Yii::t('app', Yii::$app->name);
             </div>
             <div class="col-sm-4">
             	<div class="panel panel-default" style="padding:12px">
-					<p><a class="btn btn-default" href="<?= Url::to(['staring-experiment/create']) ?>">JOIN Staring Experiment &raquo;</a></p>
+					<p><a class="btn btn-default" href="<?= Url::to(['staring-experiment/list-by-invite']) ?>">JOIN Staring Experiment &raquo;</a></p>
 					<p>Become an observer in an experiment you've been invited to.</p>
 					<p>
 						<a href="<?=Url::to(['staring-experiment/list-by-invite', 'status'=>'active']);?>">
