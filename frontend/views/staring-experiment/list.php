@@ -3,6 +3,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use common\helpers\TzHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\StaringExperiment */
@@ -25,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				<?php foreach ($experiments as $experiment): ?>
 					<tr valign="middle">
 						<td><?=$experiment['name'];?></td>
-						<td><?=($status=='active')?$experiment['created_at']:$experiment['datecompleted'];?></td>
+						<td><?=TzHelper::convertLocal( ($status=='active')?$experiment['created_at']:$experiment['datecompleted'] );?></td>
 						<td><a href="<?=Url::to(['view', 'id' => $experiment['id']]);?>">View</a></td>
 					</tr>
 				<?php endforeach; ?>

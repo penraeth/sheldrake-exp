@@ -13,6 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //$this->registerJsFile('//cdn.temasys.com.sg/skylink/skylinkjs/0.6.x/skylink.complete.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('/js/getLocation.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('/js/jstimezonedetect/dist/jstz.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 //$script = "function test() {console.log('a meesage logged in console.'); alert('Hello World');}";  
 //$this->registerJs($script, View::POS_END); 
 
@@ -32,6 +33,7 @@ $this->registerJsFile('/js/getLocation.js', ['depends' => [\yii\web\JqueryAsset:
         	<!--<input type="hidden" name="compatibility" id="compatibility" value="">-->
         	<input type="hidden" name="latitude" id="latitude" value="">
         	<input type="hidden" name="longitude" id="longitude" value="">
+        	<input type="hidden" name="timezone" id="timezone" value="">
 
 			<?= $form->field($model, 'email') ?>        
 			<?= $form->field($model, 'password')->passwordInput() ?>
