@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "staring_trial".
@@ -24,6 +26,16 @@ class StaringTrial extends \yii\db\ActiveRecord
     {
         return 'staring_trial';
     }
+
+	public function behaviors()
+	{
+		return [[
+            'class' => TimestampBehavior::className(),
+            'createdAtAttribute' => 'created_at',
+            'updatedAtAttribute' => false,
+            'value' => new Expression('NOW()')
+		]];
+	}
 
     /**
      * @inheritdoc

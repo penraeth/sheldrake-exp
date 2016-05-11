@@ -76,6 +76,8 @@ class SiteController extends Controller
             ],
         ];
     }
+   
+   
     
 //------------------------------------------------------------------------------------------------//
 // STATIC PAGES
@@ -113,54 +115,7 @@ class SiteController extends Controller
         
     }
 
-    /**
-     * Displays the about static page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
 
-    /**
-     * Displays the about static page.
-     *
-     * @return string
-     */
-    public function actionIncompatible()
-    {
-        return $this->render('incompatible');
-    }
-
-    /**
-     * Displays the contact static page and sends the contact email.
-     *
-     * @return string|\yii\web\Response
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) 
-        {
-            if ($model->contact(Yii::$app->params['adminEmail'])) 
-            {
-                Yii::$app->session->setFlash('success', 
-                    'Thank you for contacting us. We will respond to you as soon as possible.');
-            } 
-            else 
-            {
-                Yii::$app->session->setFlash('error', 'There was an error sending email.');
-            }
-
-            return $this->refresh();
-        } 
-        
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
 
 //------------------------------------------------------------------------------------------------//
 // LOG IN / LOG OUT / PASSWORD RESET
@@ -325,4 +280,5 @@ class SiteController extends Controller
             'model' => $model,
         ]);     
     }
+
 }

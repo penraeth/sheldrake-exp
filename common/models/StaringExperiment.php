@@ -4,6 +4,8 @@ namespace common\models;
 
 use Yii;
 use common\models\User;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "staring_experiment".
@@ -28,7 +30,17 @@ class StaringExperiment extends \yii\db\ActiveRecord
         return 'staring_experiment';
     }
 
-    /**
+	public function behaviors()
+	{
+		return [[
+            'class' => TimestampBehavior::className(),
+            'createdAtAttribute' => 'created_at',
+            'updatedAtAttribute' => false,
+            'value' => new Expression('NOW()')
+		]];
+	}
+
+   /**
      * @inheritdoc
      */
     public function rules()

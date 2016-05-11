@@ -48,11 +48,19 @@ return [
      */
     'supportEmail' => 'support@example.com',
 
+    /**
+     * Not used in template.
+     * Used only by internal auto-generated e-mails.
+     */
+    'fromEmail' => 'nobody@sheldrake.org',
+
+
 //------------------------//
 // MISC
 //------------------------//
 
     'genders' => ['0' => 'Female', '1' => 'Male'],
+    'serverTimezone' => 'America/Los_Angeles',
     
     
     
