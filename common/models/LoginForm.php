@@ -88,6 +88,9 @@ class LoginForm extends Model
 			// Yii::$app->session['compatibility'] = $_POST['compatibility'];
 			Yii::$app->session['latitude'] = null;
 			Yii::$app->session['longitude'] = null;
+			Yii::$app->session['timezone'] = null;
+			
+			// location
 			if (isset($_POST['latitude'])  &&  $_POST['latitude']!='') {
 				// values passed from browser-based location services
 				Yii::$app->session['latitude'] = $_POST['latitude'];
@@ -105,7 +108,12 @@ class LoginForm extends Model
 					Yii::$app->session['longitude'] = $data['longitude'];
 				}
 			}
-
+			
+			// timezone
+			if (isset($_POST['timezone'])  &&  $_POST['timezone']!='') {
+				Yii::$app->session['timezone'] = $_POST['timezone'];
+			}
+			
             return Yii::$app->user->login($this->getUser(), 3600 * 24 * 30);
         } 
         else 

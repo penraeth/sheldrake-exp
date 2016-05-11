@@ -3,10 +3,10 @@
 namespace frontend\controllers;
 
 use Yii;
-use app\models\StaringExperiment;
-use app\models\StaringParticipant;
-use app\models\StaringTrial;
-use app\models\UserInvitation;
+use common\models\StaringExperiment;
+use common\models\StaringParticipant;
+use common\models\StaringTrial;
+use common\models\UserInvitation;
 use frontend\models\StaringExperimentSearch;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -121,6 +121,7 @@ class StaringExperimentController extends Controller
      */
     public function actionCreate()
     {
+		$errorText = '';
     	$experiment = new StaringExperiment();
 		$invitations = [new UserInvitation()];
         
@@ -138,19 +139,23 @@ class StaringExperimentController extends Controller
 					$inviteCount = 0;
 					foreach ($invitations as $i=>$invitation) {
 						if ($invitation['email']) {
-							$invitation->exp_id = $experiment->id;
-							try {
-								if ( $invitation->save() ) {
-									$inviteCount++;
-								} else {
-									$errorCount++;
-								}
-							} catch (\yii\db\Exception $e) {
-								if ($e->errorInfo[1] == 1062) {
-									//pk error on duplicate entry; ignore
-								} else {
-									$errorCount++;
-									throw new \Exception($e);
+							if ($invitation['email'] == Yii::$app->user->identity->email) {
+								$errorText = 'You cannot invite yourself to join an experiement.';
+							} else {
+								$invitation->exp_id = $experiment->id;
+								try {
+									if ( $invitation->save() ) {
+										$inviteCount++;
+									} else {
+										$errorCount++;
+									}
+								} catch (\yii\db\Exception $e) {
+									if ($e->errorInfo[1] == 1062) {
+										//pk error on duplicate entry; ignore
+									} else {
+										$errorCount++;
+										throw new \Exception($e);
+									}
 								}
 							}
 						}
@@ -161,6 +166,9 @@ class StaringExperimentController extends Controller
 				
 				if ($errorCount  ||  $inviteCount==0) {
 					$transaction->rollBack();
+					if (!$errorText) {
+						$errorText = 'Please enter at least one valid e-mail address.';
+					}
 				} else {
 					$transaction->commit();
 					$this->sendInvites($experiment->id);
@@ -173,6 +181,7 @@ class StaringExperimentController extends Controller
 			'identity' => Yii::$app->user->identity,
 			'experiment' => $experiment,
 			'invitations' => $invitations,
+			'errorText' => $errorText
 		]);
     }
     
