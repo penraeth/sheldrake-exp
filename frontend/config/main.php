@@ -22,7 +22,7 @@ return [
         ],
         'user' => [
             'identityClass' => 'common\models\UserIdentity',
-            'enableAutoLogin' => true,
+            'enableAutoLogin' => false,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
