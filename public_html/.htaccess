@@ -4,7 +4,7 @@ RewriteEngine on
 RedirectMatch 404 /_protected
 RedirectMatch 404 /\.git
 RedirectMatch 404 /composer\.
-RedirectMatch 404 /.bowerrc
+RedirectMatch 404 /\.bowerrc
 
 # If a directory or a file exists, use the request directly
 RewriteCond %{REQUEST_FILENAME} !-f
