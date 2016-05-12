@@ -1,6 +1,6 @@
 /*!
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2015
- * @version 2.0.7
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
+ * @version 2.0.8
  *
  * Additional enhancements for Select2 widget extension for Yii 2.0.
  *
@@ -9,6 +9,7 @@
  * For more Yii related demos visit http://demos.krajee.com
  */
 var initS2ToggleAll = function () {
+}, initS2Order = function () {
 }, initS2Loading = function () {
 }, initS2Open = function () {
 }, initS2Unselect = function () {
@@ -35,19 +36,19 @@ var initS2ToggleAll = function () {
         if (!$el.attr('multiple')) {
             return;
         }
-        $el.on('select2:open', function () {
+        $el.on('select2:open.krajees2', function () {
             if ($tog.parent().attr('id') === 'parent-' + togId || !$el.attr('multiple')) {
                 return;
             }
             $('#select2-' + id + '-results').closest('.select2-dropdown').prepend($tog);
             $('#parent-' + togId).remove();
-        }).on('change', function () {
+        }).on('change.krajeeselect2', function () {
             if (!$el.attr('multiple')) {
                 return;
             }
             var tot = 0, sel = $el.val() ? $el.val().length : 0;
             $tog.removeClass('s2-togall-select s2-togall-unselect');
-            $el.find('option:enabled').each(function() {
+            $el.find('option:enabled').each(function () {
                 if ($(this).val().length) {
                     tot++;
                 }
@@ -58,7 +59,7 @@ var initS2ToggleAll = function () {
                 $tog.addClass('s2-togall-unselect');
             }
         });
-        $tog.on('click', function () {
+        $tog.off('.krajees2').on('click.krajees2', function () {
             var isSelect = $tog.hasClass('s2-togall-select'), flag = true, ev = 'selectall';
             if (!isSelect) {
                 flag = false;
@@ -92,6 +93,15 @@ var initS2ToggleAll = function () {
     initS2Unselect = function () {
         $(this).data('unselecting', true);
     };
+    initS2Order = function(id, val) {
+        var $el = $('#' + id);
+        if (val && val.length) {
+            $.each(val, function(k, v) {
+                $el.find('option[value="' + v + '"]').appendTo($el);
+            });
+            $el.find('option:not(:selected)').appendTo($el);
+        }
+    };
     initS2Loading = function (id, optVar) {
         /**
          * @namespace opts.id
@@ -104,6 +114,7 @@ var initS2ToggleAll = function () {
         var opts = window[optVar] || {}, themeCss = opts.themeCss, sizeCss = opts.sizeCss, doOrder = opts.doOrder,
             doReset = opts.doReset, doToggle = opts.doToggle, $el = $('#' + id), $container = $(themeCss),
             $loading = $('.kv-plugin-loading.loading-' + id), $group = $('.group-' + id);
+        $el.off('.krajees2');
         if (!$container.length) {
             $el.show();
         }
@@ -117,7 +128,7 @@ var initS2ToggleAll = function () {
             $el.next(themeCss).removeClass(sizeCss).addClass(sizeCss);
         }
         if (doReset) {
-            $el.closest("form").on("reset", function () {
+            $el.closest("form").off('.krajees2').on("reset.krajees2", function () {
                 setTimeout(function () {
                     $el.trigger("change").trigger("krajeeselect2:reset");
                 }, 100);
@@ -127,16 +138,15 @@ var initS2ToggleAll = function () {
             initS2ToggleAll(id);
         }
         if (doOrder) {
-            $el.on('select2:select', function (evt) {
+            $el.on('select2:select.krajees2 select2:unselect.krajees2', function (evt) {
                 var $selected = $(evt.params.data.element);
+                if (!$selected || !$selected.length) {
+                    return;
+                }
                 $selected.detach();
-                $el.append($selected).trigger('select2:selection');
-                $el.find('option:not(:selected)').each(function() {
-                    $el.append($(this));
-                });
-                $el.trigger('select2:selection');
+                $el.append($selected).find('option:not(:selected)').appendTo($el);
             });
         }
-        $el.on('select2:open', initS2Open).on('select2:unselecting', initS2Unselect);
+        $el.on('select2:open.krajees2', initS2Open).on('select2:unselecting.krajees2', initS2Unselect);
     };
 }));

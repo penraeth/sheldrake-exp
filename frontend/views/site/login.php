@@ -10,45 +10,63 @@ use yii\helpers\Url;
 $this->title = Yii::t('app', 'Login');
 $this->params['breadcrumbs'][] = $this->title;
 
-
-//$this->registerJsFile('//cdn.temasys.com.sg/skylink/skylinkjs/0.6.x/skylink.complete.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('/js/getLocation.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('/js/jstimezonedetect/dist/jstz.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-//$script = "function test() {console.log('a meesage logged in console.'); alert('Hello World');}";  
-//$this->registerJs($script, View::POS_END); 
+$this->registerJsFile('@exp/js/getLocation.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@exp/js/jstimezonedetect/dist/jstz.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 ?>
-<div class="site-login col-md-6 col-md-offset-3">
+<div class="site-login">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-	
-	<p>
-		Don't have a login? <a href="<?= Url::to(['signup']) ?>"><?= Yii::t('app', 'Signup here.') ?></a>
-	</p>
-	
-    <div class="col-lg-5 well bs-component">
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+		
+			<div class="panel panel-primary" style="margin-bottom:12px;">
+				<div class="panel-heading">
+					<h3 class="panel-title">Experiments Login</h3>
+				</div>
+				<div class="panel-body">
+				
+					<?php $form = ActiveForm::begin([
+							'id'						=> 'login-form',
+							'fieldConfig' => [
+								'template' => "{beginWrapper}\n{input}\n{endWrapper}"
+							],
+						]); ?>
+		
+						<!--<input type="hidden" name="compatibility" id="compatibility" value="">-->
+						<input type="hidden" name="latitude" id="latitude" value="">
+						<input type="hidden" name="longitude" id="longitude" value="">
+						<input type="hidden" name="timezone" id="timezone" value="">
 
-        <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-        	
-        	<!--<input type="hidden" name="compatibility" id="compatibility" value="">-->
-        	<input type="hidden" name="latitude" id="latitude" value="">
-        	<input type="hidden" name="longitude" id="longitude" value="">
-        	<input type="hidden" name="timezone" id="timezone" value="">
+						<?= $form->field($model, "email")
+							->label('')
+							->textInput(['placeholder'=>'E-mail']);
+						?>
+						<?= $form->field($model, "password")
+							->label('')
+							->passwordInput(['placeholder'=>'Password']);
+						?>
+						
+						<div class="row">
+							<div class="col-sm-6">
+								<a href="<?=Url::To(['site/request-password-reset']);?>">
+									<span class="glyphicon glyphicon-question-sign" style="font-size: 24px; margin-top:4px; color:#080" aria-hidden="true"></span>
+									<span style="vertical-align:25%;">I forgot my password</span>
+								</a>
+							</div>
+							<div class="col-sm-6 pull-right last" style="text-align:right">
+								<?= Html::submitButton('Login&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>', ['class'=>'btn btn-info']) ?>
+							</div>
+						</div>
 
-			<?= $form->field($model, 'email') ?>        
-			<?= $form->field($model, 'password')->passwordInput() ?>
-	
-			<div style="color:#999;margin:1em 0">
-				<?= Yii::t('app', 'If you forgot your password you can') ?>
-				<?= Html::a(Yii::t('app', 'reset it'), ['site/request-password-reset']) ?>.
+					<?php ActiveForm::end(); ?>
+				
+				</div>
 			</div>
-	
-			<div class="form-group">
-				<?= Html::submitButton(Yii::t('app', 'Login'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+			<div class="small" style="text-align:center">
+				Don't have a login? <a href="<?= Url::to(['signup']) ?>"><?= Yii::t('app', 'Signup here.') ?></a>
 			</div>
 
-        <?php ActiveForm::end(); ?>
-
-    </div>
+		</div>
+	</div>
   
 </div>

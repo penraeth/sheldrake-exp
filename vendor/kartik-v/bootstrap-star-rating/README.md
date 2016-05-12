@@ -2,7 +2,8 @@ bootstrap-star-rating
 =====================
 
 [![Bower version](https://badge.fury.io/bo/bootstrap-star-rating.svg)](http://badge.fury.io/bo/bootstrap-star-rating)
-[![Latest Stable Version](https://poser.pugx.org/kartik-v/bootstrap-star-rating/v/stable)](https://packagist.org/packages/kartik-v/bootstrap-star-rating)
+[![Stable Version](https://poser.pugx.org/kartik-v/bootstrap-star-rating/v/stable)](https://packagist.org/packages/kartik-v/bootstrap-star-rating)
+[![Unstable Version](https://poser.pugx.org/kartik-v/bootstrap-star-rating/v/unstable)](https://packagist.org/packages/kartik-v/bootstrap-star-rating)
 [![License](https://poser.pugx.org/kartik-v/bootstrap-star-rating/license)](https://packagist.org/packages/kartik-v/bootstrap-star-rating)
 [![Packagist Downloads](https://poser.pugx.org/kartik-v/bootstrap-star-rating/downloads)](https://packagist.org/packages/kartik-v/bootstrap-star-rating)
 [![Monthly Downloads](https://poser.pugx.org/kartik-v/bootstrap-star-rating/d/monthly)](https://packagist.org/packages/kartik-v/bootstrap-star-rating)
@@ -12,7 +13,9 @@ Developed with a focus on utlizing pure CSS-3 styling to render the control. The
 can be overridden with any other CSS markup. View the [documentation](http://plugins.krajee.com/star-rating) or a [complete demo](http://plugins.krajee.com/star-rating/demo) 
 at Krajee JQuery plugins. 
 
-![Star Rating Screenshot](https://lh6.googleusercontent.com/-DHlzpGa1SQU/U8ywh-ZEfVI/AAAAAAAAAJ0/ZwBxK1nH8Fw/w519-h426-no/bootstrap-star-rating.jpg)
+> NOTE: Release v4.0.0 is a modified rewrite with various new enhancements and BC breaking features. It allows rendering richer markup for star symbols and offers theming support.
+
+![Star Rating Screenshot](https://lh3.googleusercontent.com/puCbNL9LlBMty8DmaZxAq0yM8teuhM_hEvox-NuJ2x7xWedNhs8nwSk1Zo8FISFAsyt8=w1366-h768-rw-no)
 
 ## Features  
 
@@ -20,7 +23,7 @@ at Krajee JQuery plugins.
 - The plugin automatically converts an input to a star rating control if you set its `class = rating`. 
   All options to the input can be passed as HTML5 `data` attributes.
 - You can use the HTML 5 number input for polyfill and the plugin will automatically use the number attributes like `min`, `max`, and `step`.
-  However, number inputs have a problem with decimal values on the Chrome Browser. Read the Browser Support section below.
+  However, number inputs have a problem with decimal values on the Chrome Browser. Read the Browser Support section in the documentation.
 - Involves pure CSS3 styling of the stars. Say goodbye to image sprites or playing with image backgrounds. Offers clean scalable vector 
   icons for consistent display across devices. Optionally one can use the Unicode character set to override symbols.
 - Use any of your favorite font icon frameworks to render your star symbols (for example you can easily use the icons from the FontAwesome library).
@@ -39,11 +42,26 @@ at Krajee JQuery plugins.
 - Change stars and caption on slide and drag for mobile/touch devices (new feature since v3.1.0).
 - Support for translations and locales.
 
+### New features/changes since release v4.0.0
+
+- **BC Breaking Change**: The `symbol`, `glyphicon`, `ratingClass` properties have been removed. The functionality is replaced with the `theme` property (and can also be complemented or implemented separately using the `containerClass` property).
+- New property `theme` will assign a CSS class with the `rating-<theme-name>` to the rating container.
+    - Themes included
+        - The default (blank) theme (for displaying bootstrap glyphicons)
+        - `krajee-svg` (for displaying svg icons)
+        - `krajee-uni` (for displaying unicode symbols as stars)
+        - `krajee-fa` (for displaying font awesome icons)
+    - Add ability to override and add one's own themes
+- Stars now have a better padding and spacing that can be configured via CSS and themes
+- New property `filledStar` - will allow one to set the markup for `filledStar` - will default to 
+    - `<i class="glyphicon glyphicon-star"></i>`
+- New property `emptyStar` - will allow one to set the markup for `emptyStar` - will default to 
+    - `<i class="glyphicon glyphicon-star-empty"></i>`
+- Exclusive support for SVG (and a prebuilt `krajee-svg` theme that contains two different ready to use SVG icons).
+- Ability to easily set the widget as a "display only" rating via `displayOnly` property.
+- New property `animate` to control animation of highlighted stars on hover or click.
+
 > NOTE: Refer [change log](https://github.com/kartik-v/bootstrap-star-rating/blob/master/CHANGE.md) for details on plugin enhancements, fixes, and changes.
-
-## Documentation and Demo
-
-View the [plugin documentation](http://plugins.krajee.com/star-rating) and [plugin demos](http://plugins.krajee.com/star-rating/demo) at Krajee JQuery plugins. 
 
 ## Pre-requisites  
 
@@ -69,6 +87,9 @@ or add:
 
 to your composer.json file
 
+> NOTE: You can use the [sass branch](https://github.com/kartik-v/bootstrap-star-rating/tree/sass) for installation using `bootstrap-sass` dependency.
+The [master branch](https://github.com/kartik-v/bootstrap-star-rating/tree/master) can be used for installation using plain `bootstrap` dependency.
+
 ### Manual Install
 
 You can also manually install the plugin easily to your project. Just download the source [ZIP](https://github.com/kartik-v/bootstrap-star-rating/zipball/master) or [TAR ball](https://github.com/kartik-v/bootstrap-star-rating/tarball/master) and extract the plugin assets (css and js folders) into your project.
@@ -78,10 +99,15 @@ You can also manually install the plugin easily to your project. Just download t
 Step 1: Load the following assets in your header. 
 
 ```html
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-<link href="path/to/css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="path/to/js/star-rating.min.js" type="text/javascript"></script>
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
+<link href="path/to/css/star-rating.css" media="all" rel="stylesheet" type="text/css" />
+
+<!-- optionally if you need to use a theme, then include the theme file as mentioned below -->
+<link href="path/to/css/theme-krajee-svg.css" media="all" rel="stylesheet" type="text/css" />
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
+<script src="path/to/js/star-rating.js" type="text/javascript"></script>
+
 <!-- optionally if you need translation for your language then include locale file as mentioned below -->
 <script src="path/to/js/star-rating_locale_<lang>.js"></script>
 ```
@@ -91,7 +117,7 @@ the plugin to work with default settings.
 
 Step 2: Setup your input markup to automatically initialize the rating
 ```html
-<input id="input-id" type="number" class="rating" min=0 max=5 step=0.5 data-size="lg" >
+<input id="input-id" class="rating" data-size="lg" >
 ```
 
 Step 3: Initialize the plugin on your page for other input types. For example,
@@ -100,13 +126,17 @@ Step 3: Initialize the plugin on your page for other input types. For example,
 // initialize with defaults
 $("#input-id").rating();
 
-// with plugin options
+// with plugin options (do not attach the CSS class "rating" to your input if using this approach)
 $("#input-id").rating({'size':'lg'});
 ```
 
-The `#input-id` is the identifier for the input (e.g. `type=number`) on your page, which is hidden automatically by the plugin. 
+The `#input-id` is the identifier for the input on your page, which is hidden automatically by the plugin. 
 
 Alternatively, you can directly call the plugin options by setting data attributes to your input field.
+
+## Documentation and Demo
+
+View the [plugin documentation](http://plugins.krajee.com/star-rating) and [plugin demos](http://plugins.krajee.com/star-rating/demo) at Krajee JQuery plugins. 
 
 ## License
 

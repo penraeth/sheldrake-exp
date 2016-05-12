@@ -9,7 +9,9 @@ use kartik\widgets\ActiveForm;
 
 $this->title = Yii::t('app', 'Signup to participate in experiments');
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerJsFile('/js/getLocation.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile('@exp/js/getLocation.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@exp/js/jstimezonedetect/dist/jstz.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 
 ?>
@@ -25,6 +27,7 @@ $this->registerJsFile('/js/getLocation.js', ['depends' => [\yii\web\JqueryAsset:
         
         	<input type="hidden" name="latitude" id="latitude" value="">
         	<input type="hidden" name="longitude" id="longitude" value="">
+			<input type="hidden" name="timezone" id="timezone" value="">
 
             <?= $form->field($model, 'email', [
 				'feedbackIcon' => [

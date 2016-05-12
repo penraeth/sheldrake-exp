@@ -32,6 +32,7 @@ return [
             'class' => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            'baseUrl' => '/exp',
         ],
         'session' => [
             'class' => 'yii\web\DbSession',

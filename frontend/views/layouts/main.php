@@ -28,7 +28,7 @@ AppAsset::register($this);
     
         <?php
             NavBar::begin([
-                'brandLabel' => Html::img('../../templates/penraeth/images/Rupert-Sheldrake.gif'),
+                'brandLabel' => Html::img('@exp/templates/penraeth/images/Rupert-Sheldrake.gif'),
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
                     'class' => 'navbar-default navbar-fixed-top',

@@ -85,7 +85,7 @@
 								</a>
 							</div>
 							<div class="col-sm-6" style="text-align:right">
-								<?= Html::submitButton('Create&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>', ['class'=>'btn btn-primary']) ?>
+								<?= Html::submitButton('Create&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>', ['class'=>'btn btn-info']) ?>
 							</div>
 						</div>
 					<?php ActiveForm::end(); ?>
