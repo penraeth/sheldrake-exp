@@ -28,13 +28,13 @@
         "codeception/verify": "*"
     },
     "config": {
-        "vendor-dir": "../../sheldrake-exp/vendor",
+        "vendor-dir": "../vendor",
         "process-timeout": 1800
     },
     "extra": {
         "asset-installer-paths": {
-            "npm-asset-library": "../../sheldrake-exp/vendor/npm",
-            "bower-asset-library": "../../sheldrake-exp/vendor/bower"
+            "npm-asset-library": "../vendor/npm",
+            "bower-asset-library": "../vendor/bower"
         }
     }
 }
