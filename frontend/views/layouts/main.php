@@ -1,6 +1,6 @@
 <?php
 use frontend\assets\AppAsset;
-use frontend\widgets\Alert;
+use kartik\widgets\Growl;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -77,8 +77,27 @@ AppAsset::register($this);
         ?>
 
         <div class="container">
-			<?= Alert::widget() ?>
+			<?php
+				foreach (Yii::$app->session->getAllFlashes() as $key=>$message) {
+					echo \kartik\widgets\Growl::widget([
+						'type' => $key,
+						'body' => $message,
+						'pluginOptions' => [
+							'showProgressbar' => false,
+							'placement' => ['from'=>'top', 'align'=>'left'],
+							'delay' => 5000,
+							'offset' => ['x'=>0,'y'=>42],
+							'z_index' => 999
+						],
+						'options' => [
+							'class' => 'col-sm-3 small square',
+						]
+					]);
+				}
+			?>
+			
 			<?= $content ?>
+			
         </div>
     </div>
 

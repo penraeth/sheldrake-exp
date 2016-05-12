@@ -12,7 +12,7 @@ use common\helpers\TzHelper;
 $this->params['breadcrumbs'][] = ['label' => 'Staring Experiments', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="staring-experiment-view col-md-6 col-md-offset-3">
+<div class="staring-experiment-view col-sm-6 col-sm-offset-3">
 
     <div class="panel panel-default" style="padding:8px;">
 		<h4><b><?=$title;?></b></h4>

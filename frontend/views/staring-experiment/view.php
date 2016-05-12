@@ -18,7 +18,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 	.has-error input[type="text"].form-control { background-color: #fdd; }
 </style>
 
-<div class="staring-experiment-view col-md-6 col-md-offset-3">
+<div class="staring-experiment-view col-sm-6 col-sm-offset-3">
 
     <div class="panel panel-default" style="padding:8px;">
 		<h4>

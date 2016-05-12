@@ -17,9 +17,9 @@ $this->registerJsFile('@exp/js/jstimezonedetect/dist/jstz.min.js', ['depends' =>
 <div class="site-login">
 
 	<div class="row">
-		<div class="col-md-6 col-md-offset-3">
+		<div class="col-sm-6 col-sm-offset-3">
 		
-			<div class="panel panel-primary" style="margin-bottom:12px;">
+			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">Experiments Login</h3>
 				</div>

@@ -224,3 +224,10 @@ hr.article-devider {
 }
 .has-error input[type="text"].form-control { background-color: #fdd; }
 .has-error input[type="password"].form-control { background-color: #fdd; }
+.square {
+	border-radius: 0 !important;
+}
+.field-signupform-gender .radio-inline {
+	padding-top: 8px;
+	font-size: 90%;
+}

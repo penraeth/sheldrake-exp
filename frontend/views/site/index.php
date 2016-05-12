@@ -15,7 +15,7 @@ $this->title = Yii::t('app', Yii::$app->name);
     <div class="body-content">
   
 		<div class="row">
-			<div class="col-md-8 col-md-offset-2">
+			<div class="col-sm-8 col-sm-offset-2">
 			
 				<div class="panel panel-primary">
 					<div class="panel-heading">

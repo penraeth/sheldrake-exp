@@ -9,24 +9,39 @@ use yii\bootstrap\ActiveForm;
 $this->title = Yii::t('app', 'Request password reset');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-request-password-reset col-md-6 col-md-offset-3">
+<div class="site-request-password-reset">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+	<div class="row">
+		<div class="col-sm-6 col-sm-offset-3">
+		
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+				</div>
+				<div class="panel-body">
+					<p class="small"><?= Yii::t('app', 'Please enter your e-mail address below. If it exists in our system, you will be sent a link to reset your password.') ?></p>
 
-    <div class="col-lg-5 well bs-component">
+					<?php $form = ActiveForm::begin([
+							'id'						=> 'request-password-reset-form',
+							'fieldConfig' => [
+								'template' => "{beginWrapper}\n{input}\n{endWrapper}"
+							],
+						]); ?>
+						<?= $form->field($model, "email")
+							->label('')
+							->textInput(['placeholder'=>'E-mail']);
+						?>
+						<div class="row">
+							<div class="col-sm-12 pull-right last" style="text-align:right">
+								<?= Html::submitButton('Send&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>', ['class'=>'btn btn-info']) ?>
+							</div>
+						</div>
 
-        <p><?= Yii::t('app', 'A link to reset password will be sent to your email.') ?></p>
-
-        <?php $form = ActiveForm::begin(['id' => 'request-password-reset-form']); ?>
-
-            <?= $form->field($model, 'email')->textInput(['placeholder' => Yii::t('app', 'Please fill out your email.')]) ?>
-
-            <div class="form-group">
-                <?= Html::submitButton(Yii::t('app', 'Send'), ['class' => 'btn btn-primary']) ?>
-            </div>
-
-        <?php ActiveForm::end(); ?>
-
+					<?php ActiveForm::end(); ?>
+				</div>
+			</div>
+			
+		</div>
     </div>
 
 </div>
