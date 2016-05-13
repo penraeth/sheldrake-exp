@@ -46,7 +46,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 								<td><?=($experiment->datecompleted)?$experiment->datecompleted:'pending';?></td>
 							</tr>
 						</table>
-						<?php if ($isHost): ?>
+						<?php if ($isHost  &&  !$experiment->datecompleted): ?>
 							<div style="padding-bottom:12px; padding-top:0px; text-align:right">
 								<?php $form = ActiveForm::begin([
 										'id' => 'form-participant',
