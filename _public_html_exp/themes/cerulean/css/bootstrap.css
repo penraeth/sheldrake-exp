@@ -6335,7 +6335,7 @@ button.close {
 	position:fixed;
 	left:0;
 	top:0;
-	background:url('http://sheldrake.org/templates/penraeth/images/menu-BG.gif') repeat-x;
+	background:url('/templates/penraeth/images/menu-BG.gif') repeat-x;
 	text-shadow: 1px 1px #004400;
 	height:43px;
 	padding:0;
