@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use Yii;
-use app\models\StaringParticipant;
-use app\models\StaringParticipantSearch;
+use common\models\StaringParticipant;
+use common\models\StaringParticipantSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -75,4 +75,22 @@ class StaringParticipantController extends Controller
         ]);
     }
 
+
+    /**
+     * Finds the StaringParticipant model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $user_id
+     * @param integer $exp_id
+     * @return StaringParticipant the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($user_id, $exp_id)
+    {
+        if (($model = StaringParticipant::findOne(['user_id' => $user_id, 'exp_id' => $exp_id])) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+    
 }

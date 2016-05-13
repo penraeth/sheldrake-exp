@@ -96,13 +96,14 @@ class SiteController extends Controller
 		
 		if (!Yii::$app->user->isGuest) 
         {
-        	$badges = [];
-        	$badges['host_open'] = StaringExperiment::getByUserId(Yii::$app->user->identity->id, 'active', true);
-        	$badges['host_done'] = StaringExperiment::getByUserId(Yii::$app->user->identity->id, 'completed', true);
-        	$badges['guest_open'] = StaringExperiment::getByInvitation(Yii::$app->user->identity->id, true);
-        	$badges['guest_done'] = StaringExperiment::getByParticipant(Yii::$app->user->identity->id, true);
-        	return $this->render('index', [
-				'badges' => $badges
+        	$data = [];
+        	$data['host_open'] = StaringExperiment::getByUserId(Yii::$app->user->identity->id, 'active');
+        	$data['host_done'] = StaringExperiment::getByUserId(Yii::$app->user->identity->id, 'completed');
+        	$data['guest_open'] = StaringExperiment::getByInvitation(Yii::$app->user->identity->id);
+        	$data['guest_done'] = StaringExperiment::getByParticipant(Yii::$app->user->identity->id);
+
+	       	return $this->render('index', [
+				'data' => $data,
 			]);
         } else {
         

@@ -69,6 +69,7 @@ class StaringExperiment extends \yii\db\ActiveRecord
 			case 'active': $query->andWhere('datecompleted IS NULL'); break;
 			case 'completed': $query->andWhere('datecompleted IS NOT NULL'); break;
 		}
+		$query->orderBy('created_at DESC');
 		if ($count) {
 			return $query->count();
 		} else {

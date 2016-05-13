@@ -18,54 +18,85 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 	.has-error input[type="text"].form-control { background-color: #fdd; }
 </style>
 
-<div class="staring-experiment-view col-sm-6 col-sm-offset-3">
+<div class="staring-experiment-view">
 
-    <div class="panel panel-default" style="padding:8px;">
-		<h4>
-			<b>Experiment: <?= Html::encode($experiment->name) ?></b>
-		</h4>
-		<table class="table table-condensed">
-			<tr valign="middle">
-				<td>Host</td>
-				<td><?=$host->first_name;?></td>
-			</tr>
-			<tr valign="middle">
-				<td>Created</td>
-				<td><?=$experiment->created_at;?></td>
-			</tr>
-			<tr valign="middle">
-				<td>Started</td>
-				<td><?=($experiment->datestarted)?$experiment->datestarted:'pending';?></td>
-			</tr>
-			<tr valign="middle">
-				<td>Completed</td>
-				<td><?=($experiment->datecompleted)?$experiment->datecompleted:'pending';?></td>
-			</tr>
-		</table>
-	</div>
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+			
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Experiment: <?= Html::encode($experiment->name) ?></h3>
+					</div>
+					<div class="panel-body panel-table-data">
+						<table class="table table-condensed">
+							<tr valign="middle">
+								<td>Host</td>
+								<td><?=$host->first_name;?></td>
+							</tr>
+							<tr valign="middle">
+								<td>Created</td>
+								<td><?=$experiment->created_at;?></td>
+							</tr>
+							<tr valign="middle">
+								<td>Started</td>
+								<td><?=($experiment->datestarted)?$experiment->datestarted:'pending';?></td>
+							</tr>
+							<tr valign="middle">
+								<td>Completed</td>
+								<td><?=($experiment->datecompleted)?$experiment->datecompleted:'pending';?></td>
+							</tr>
+						</table>
+						<?php if ($isHost): ?>
+							<div style="padding-bottom:12px; padding-top:0px; text-align:right">
+								<?php $form = ActiveForm::begin([
+										'id' => 'form-participant',
+										'action' => Url::To(['staring-participant/create'])
+									]); ?>
+									<input type="hidden" id="staringexperiment-id" name="StaringParticipant[exp_id]" value="<?=$experiment->id;?>">
+									<input type="hidden" id="staringexperiment-id" name="StaringParticipant[observers]" value="0">
+									<input type="hidden" id="staringexperiment-id" name="StaringParticipant[relationship]" value="0">
+									<?= Html::submitButton('Enter Experiment&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>', ['class'=>'btn btn-info']) ?>
+								<?php ActiveForm::end(); ?>
+							</div>
+						<?php endif; ?>
+					</div>
+				</div>
+			
+			</div>
+		</div>
     
     <?php if ($isHost): ?>
-		<div class="panel panel-default" style="padding:8px;">
-			<h4><b>Invitees</b></h4>
-			<table class="table table-condensed">
-				<tr>
-					<th>E-mail</th>
-					<th>Status</th>
-				</tr>
-				<?php foreach ($invitations as $invitation): ?>
-					<?php
-						switch($invitation->email_status) {
-							case 1: $status = 'sent'; break;
-							case -1: $status = 'failed'; break;
-							default: $status = 'pending';
-						}
-					?>
-					<tr valign="middle">
-						<td><?=$invitation->email;?></td>
-						<td><?=$status;?></td>
-					</tr>
-				<?php endforeach; ?>
-			</table>
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+			
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Invitees</h3>
+					</div>
+					<div class="panel-body panel-table-data">
+						<table class="table table-condensed">
+							<tr>
+								<th>E-mail</th>
+								<th>Status</th>
+							</tr>
+							<?php foreach ($invitations as $invitation): ?>
+								<?php
+									switch($invitation->email_status) {
+										case 1: $status = 'sent'; break;
+										case -1: $status = 'failed'; break;
+										default: $status = 'pending';
+									}
+								?>
+								<tr valign="middle">
+									<td><?=$invitation->email;?></td>
+									<td><?=$status;?></td>
+								</tr>
+							<?php endforeach; ?>
+						</table>
+					</div>
+				</div>
+			
+			</div>
 		</div>
 	<?php endif; ?>
 	
@@ -73,77 +104,83 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 	<?php if ( $experiment->datecompleted ): ?>
 		<!-- completed -->
 		
-		<div class="panel panel-default" style="padding:8px">
-			<h4><b>Results</b></h4>
-			<table class="table table-condensed">
-				<tr>
-					<td align="right"><b>Trial</b></th>
-					<td align="left"><b>Time</b></th>
-					<td align="right"><b>Observers</b></th>
-					<td align="right"><b>Judgment</b></th>
-				</tr>
-				<?php foreach ($trials as $trial): ?>
-					<tr valign="middle">
-						<td align="right"><?=$trial->trial;?></td>
-						<td align="left"><?=$trial->created_at;?></td>
-						<td align="right"><?=$trial->observers;?></td>
-						<td align="right"><?=$trial->judgment;?></td>
-					</tr>
-				<?php endforeach; ?>
-			</table>
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+			
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Results</h3>
+					</div>
+					<div class="panel-body panel-table-data">
+						<table class="table table-condensed">
+							<tr>
+								<td align="right"><b>Trial</b></th>
+								<td align="left"><b>Time</b></th>
+								<td align="right"><b>Observers</b></th>
+								<td align="right"><b>Judgment</b></th>
+							</tr>
+							<?php foreach ($trials as $trial): ?>
+								<tr valign="middle">
+									<td align="right"><?=$trial->trial;?></td>
+									<td align="left"><?=$trial->created_at;?></td>
+									<td align="right"><?=$trial->observers;?></td>
+									<td align="right"><?=$trial->judgment;?></td>
+								</tr>
+							<?php endforeach; ?>
+						</table>
+					</div>
+				</div>
+			
+			</div>
 		</div>
 	
 	<?php else: ?>
 		<!-- active -->
 		
-		<?php if ($isHost): ?>
-			<div class="panel panel-default" style="padding:8px; text-align:right">
-				<?php $form = ActiveForm::begin([
-						'id' => 'form-participant',
-						'action' => Url::To(['staring-participant/create'])
-					]); ?>
-					<input type="hidden" id="staringexperiment-id" name="StaringParticipant[exp_id]" value="<?=$experiment->id;?>">
-					<input type="hidden" id="staringexperiment-id" name="StaringParticipant[observers]" value="0">
-					<input type="hidden" id="staringexperiment-id" name="StaringParticipant[relationship]" value="0">
-					<?= Html::submitButton(Yii::t('app', 'Enter Experiment &raquo;'), ['class' => 'btn btn-default btn-sm', 'name' => 'login-button']) ?>
-				<?php ActiveForm::end(); ?>
-			</div>
-		<?php else: ?>
-			<div class="panel panel-default" style="padding:8px;">
-				<?php $form = ActiveForm::begin([
-						'id'		=> 'create-form',
-						'action'	=> Url::To(['staring-participant/create']),
-						'fieldConfig' => [
-							'template' => "{label}\n{beginWrapper}\n{input}\n{endWrapper}"
-						]
-					]); ?>
-					<input type="hidden" id="staringexperiment-id" name="StaringParticipant[exp_id]" value="<?=$experiment->id;?>">
-					<div class="row">
-						<div class="col-sm-6">
-							<?= $form->field($participant, "observers")
-								->label('Observers')
-								->textInput(['placeholder'=>'']);
-							?>
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<?php if (!$isHost): ?>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">Please provide your observer information</h3>
 						</div>
-						<div class="col-sm-6">
-							<?= $form->field($participant, "relationship")
-								->label('Relationship')
-								->dropDownList([
-									'' => 'Select...',
-									'1'	=> 'Close friend',
-									'2'	=> 'Acquaintance',
-									'3' => 'Not known'
-								]);
-							?>
+						<div class="panel-body">
+							<?php $form = ActiveForm::begin([
+									'id'		=> 'create-form',
+									'action'	=> Url::To(['staring-participant/create']),
+									'fieldConfig' => [
+										'template' => "{label}\n{beginWrapper}\n{input}\n{endWrapper}"
+									]
+								]); ?>
+								<input type="hidden" id="staringexperiment-id" name="StaringParticipant[exp_id]" value="<?=$experiment->id;?>">
+								<div class="row">
+									<div class="col-sm-6">
+										<?= $form->field($participant, "observers")
+											->label('Number of observers')
+											->textInput(['placeholder'=>'']);
+										?>
+									</div>
+									<div class="col-sm-6">
+										<?= $form->field($participant, "relationship")
+											->label('Relationship to host')
+											->dropDownList([
+												'' => 'Select...',
+												'1'	=> 'Close friend',
+												'2'	=> 'Acquaintance',
+												'3' => 'Not known'
+											]);
+										?>
+									</div>
+								</div>
+								<div style="text-align:right">
+									<?= Html::submitButton('Enter Experiment&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>', ['class'=>'btn btn-info']) ?>
+								</div>
+							<?php ActiveForm::end(); ?>
 						</div>
 					</div>
-					<div style="text-align:right">
-						<?= Html::submitButton(Yii::t('app', 'Enter Experiment &raquo;'), ['class' => 'btn btn-default btn-sm', 'name' => 'login-button']) ?>
-					</div>
-				<?php ActiveForm::end(); ?>
+				<?php endif; ?>
 			</div>
-		<?php endif; ?>
-				
+		</div>
 	<?php endif; ?>
 
 </div>
