@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use Yii;
-use app\models\StaringExperiment;
-use app\models\StaringTrial;
+use common\models\StaringExperiment;
+use common\models\StaringTrial;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
@@ -51,6 +51,7 @@ class ApiController extends Controller
     	} else {
  			Yii::$app->response->statusCode = 202;
    		}
+   		print json_encode(['message'=>'ok']);
     }
 
     public function actionCompleteExperiment($id, $key) {
@@ -61,32 +62,57 @@ class ApiController extends Controller
     	} else {
  			Yii::$app->response->statusCode = 202;
    		}
+   		print json_encode(['message'=>'ok']);
     }
+    
+    
+    public function actionGetNextTrial($id, $key) {
+    	$this->verifyCall($id, $key);
+    	$count = StaringTrial::getByExperimentId($id, true);
+    	$count++;
+    	print json_encode(['message'=>'ok','next' => $count]);
+    }
+    
     
     public function actionLogTrial($id, $key) {
     	$this->verifyCall($id, $key);
+    	$current = StaringTrial::getByExperimentId($id, true) + 1;
     	$trial = new StaringTrial();
     	
         if ( $trial->load(Yii::$app->request->post(), '') ) {
+        	if ($trial->trial < 1  ||  $trial->trial > $current) {
+	 			Yii::$app->response->statusCode = 406;
+        		Yii::$app->response->statusText = "Trial out of range (1-{$count})";
+	 			return;
+        	}
+        	
         	$trial->exp_id = $id;
         	try {
         		if ( !$trial->save() ) {
-        			print_r($model->getErrors());
 	 				Yii::$app->response->statusCode = 500;
+        			Yii::$app->response->statusText = $model->getFirstError();
+	 				return;
 	 			}
 			} catch (\yii\db\Exception $e) {
 				if ($e->errorInfo[1] == 1062) {
 					//pk error on duplicate entry; ignore
 	 				Yii::$app->response->statusCode = 202;
+    				print json_encode(['message'=>'ok','next' => $current]);
+    				return;
 				} else {
-					print $e->getMessage();
 	 				Yii::$app->response->statusCode = 501;
+					Yii::$app->response->statusText = $e->getMessage();
+					return;
 				}
         	}
         } else {
-        	print 'invalid post data';
  			Yii::$app->response->statusCode = 400;
+ 			Yii::$app->response->statusText = 'Invalid post data';
+ 			return;
         }
-    }
+        
+        $current++;
+    	print json_encode(['message'=>'ok','next' => $current]);
+   }
     
 }

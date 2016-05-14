@@ -70,4 +70,13 @@ class StaringTrial extends \yii\db\ActiveRecord
     {
         return $this->hasOne(StaringExperiment::className(), ['id' => 'exp_id']);
     }
+
+	public static function getByExperimentId($exp_id, $count=false) {
+		$query = static::find()->where(['exp_id' => $exp_id]);
+		if ($count) {
+			return $query->count();
+		} else {
+			return $query->all();
+		}
+	} 
 }
