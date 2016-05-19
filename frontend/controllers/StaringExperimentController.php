@@ -47,7 +47,7 @@ class StaringExperimentController extends Controller
 //------------------------------------------------------------------------------------------------//
 
     /**
-     * Displays a the StaringExperiment.
+     * Displays a StaringExperiment.
      * @param integer $id
      */
     public function actionExperiment($id)

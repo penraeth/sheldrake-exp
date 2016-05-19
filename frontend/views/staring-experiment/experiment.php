@@ -17,13 +17,13 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [BootstrapAsset::cl
 ?>
 
 <script language="javascript">
-	var expId<?=$experiment->id; ?>;
-	var apiKey<?=$experiment->apiKey; ?>;
-	var isSubject<?=$isSubject; ?>;
-	var userName<?=Yii::$app->user->identity->first_name . " " Yii::$app->user->identity->last_name; ?>;
-	var userEmail<?=Yii::$app->user->identity->username; ?>;
-	var observers<?=$observers; ?>;
-	var exitURL<?=Url::to(['staring-experiment/view', 'id' => $experiment->id]); ?>;
+	var expId=<?=$experiment->id; ?>;
+	var apiKey=<?=$experiment->apiKey; ?>;
+	var isSubject=<?=$isSubject; ?>;
+	var userName=<?=Yii::$app->user->identity->first_name . " " Yii::$app->user->identity->last_name; ?>;
+	var userEmail=<?=Yii::$app->user->identity->username; ?>;
+	var observers=<?=$observers; ?>;
+	var exitURL=<?=Url::to(['staring-experiment/view', 'id' => $experiment->id]); ?>;
 </script>
 
 

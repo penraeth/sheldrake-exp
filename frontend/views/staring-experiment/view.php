@@ -49,8 +49,8 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 						<?php if ($isHost  &&  !$experiment->datecompleted): ?>
 							<div style="padding-bottom:12px; padding-top:0px; text-align:right">
 								<?php $form = ActiveForm::begin([
-										'id' => $experiment->id,
-										'action' => Url::To(['staring-experiment/experiment'])
+										'id' => 'form-participant',
+										'action' => Url::To(['staring-participant/create'])
 									]); ?>
 									<input type="hidden" id="staringexperiment-id" name="StaringParticipant[exp_id]" value="<?=$experiment->id;?>">
 									<input type="hidden" id="staringexperiment-id" name="StaringParticipant[observers]" value="0">
