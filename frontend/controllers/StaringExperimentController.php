@@ -47,6 +47,30 @@ class StaringExperimentController extends Controller
 //------------------------------------------------------------------------------------------------//
 
     /**
+     * Displays a the StaringExperiment.
+     * @param integer $id
+     */
+    public function actionExperiment($id)
+    {
+		$experiment = StaringExperiment::getViewAccess($id, Yii::$app->user->identity->id);
+		if (!$experiment) {
+			return $this->redirect(['site/index']);
+		}
+		
+		if ($experiment->datecompleted) {
+			return $this->redirect(['staring-experiment/view', 'id' => $experiment->id]);
+		}
+		
+		$participant = StaringParticipant::findOne( ['user_id'=>Yii::$app->user->identity->id, 'exp_id'=>$id] );
+		
+		return $this->render('view', [
+			'experiment' => $experiment,
+			'isSubject' => ($experiment->host->id == Yii::$app->user->identity->id),
+			'observers' => $participant->observers
+		]);
+    }
+    
+    /**
      * Displays a single StaringExperiment model.
      * @param integer $id
      */

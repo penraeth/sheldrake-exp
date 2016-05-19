@@ -102,7 +102,7 @@ $this->registerJsFile('@exp/js/data-table.js', ['depends' => [\yii\web\JqueryAss
 								<tr>
 									<td><?=$experiment['name'];?></td>
 									<td><?=TzHelper::convertLocal( $experiment['created_at'] );?></td>
-									<td><a href="<?=Url::to(['staring-experiment/view', 'id' => $experiment['id']]);?>">View</a></td>
+									<td><a class="btn btn-info small" href="<?=Url::to(['staring-experiment/view', 'id' => $experiment['id']]);?>">View</a></td>
 								</tr>
 							<?php endforeach; ?>
 							</tbody>
@@ -128,7 +128,7 @@ $this->registerJsFile('@exp/js/data-table.js', ['depends' => [\yii\web\JqueryAss
 								<tr>
 									<td><?=$experiment['name'];?></td>
 									<td><?=TzHelper::convertLocal( $experiment['datecompleted'] );?></td>
-									<td><a href="<?=Url::to(['staring-experiment/view', 'id' => $experiment['id']]);?>">View</a></td>
+									<td><a class="btn btn-info" href="<?=Url::to(['staring-experiment/view', 'id' => $experiment['id']]);?>">View</a></td>
 								</tr>
 							<?php endforeach; ?>
 							</tbody>
@@ -154,7 +154,7 @@ $this->registerJsFile('@exp/js/data-table.js', ['depends' => [\yii\web\JqueryAss
 								<tr>
 									<td><?=$experiment['name'];?></td>
 									<td><?=TzHelper::convertLocal( $experiment['created_at'] );?></td>
-									<td><a href="<?=Url::to(['staring-experiment/view', 'id' => $experiment['id']]);?>">View</a></td>
+									<td><a class="btn btn-info" href="<?=Url::to(['staring-experiment/view', 'id' => $experiment['id']]);?>">View</a></td>
 								</tr>
 							<?php endforeach; ?>
 							</tbody>
@@ -180,7 +180,7 @@ $this->registerJsFile('@exp/js/data-table.js', ['depends' => [\yii\web\JqueryAss
 								<tr>
 									<td><?=$experiment['name'];?></td>
 									<td><?=TzHelper::convertLocal( $experiment['datecompleted'] );?></td>
-									<td><a href="<?=Url::to(['staring-experiment/view', 'id' => $experiment['id']]);?>">View</a></td>
+									<td><a class="btn btn-info" href="<?=Url::to(['staring-experiment/view', 'id' => $experiment['id']]);?>">View</a></td>
 								</tr>
 							<?php endforeach; ?>
 							</tbody>

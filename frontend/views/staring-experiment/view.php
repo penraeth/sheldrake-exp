@@ -49,8 +49,8 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 						<?php if ($isHost  &&  !$experiment->datecompleted): ?>
 							<div style="padding-bottom:12px; padding-top:0px; text-align:right">
 								<?php $form = ActiveForm::begin([
-										'id' => 'form-participant',
-										'action' => Url::To(['staring-participant/create'])
+										'id' => $experiment->id,
+										'action' => Url::To(['staring-experiment/experiment'])
 									]); ?>
 									<input type="hidden" id="staringexperiment-id" name="StaringParticipant[exp_id]" value="<?=$experiment->id;?>">
 									<input type="hidden" id="staringexperiment-id" name="StaringParticipant[observers]" value="0">
@@ -123,8 +123,23 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 								<tr valign="middle">
 									<td align="right"><?=$trial->trial;?></td>
 									<td align="left"><?=$trial->created_at;?></td>
-									<td align="right"><?=$trial->observers;?></td>
-									<td align="right"><?=$trial->judgment;?></td>
+									<td align="right">
+										<?php
+											switch($trial->observers) {
+												case 0: $status = 'none'; break;
+												default: $status = $trial->observers;
+											}
+										?>
+									</td>
+									<td align="right">
+										<?php
+											switch($trial->judgment) {
+												case 0: $status = 'no'; break;
+												case 1: $status = 'yes'; break;
+												default: $status = 'pass';
+											}
+										?>
+									</td>
 								</tr>
 							<?php endforeach; ?>
 						</table>

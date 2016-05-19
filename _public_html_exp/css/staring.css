@@ -1,0 +1,111 @@
+#videoContainer,
+#beginExperiment,
+#trialContainer,
+#subjectDeterimation {
+  display: none;
+}
+
+#trialContainer {
+  text-align:center;
+  clear:both;
+}
+
+#videoContainer {
+	text-align:center;
+	z-index:100;
+}
+
+#videoContainer video,
+#videoContainer object {
+	display:inline-block;
+	width: 40%;
+	height: 40%;
+	margin:.8em;
+	z-index: 5;
+}
+
+#videoContainer #subjectVideo.showSubject video,
+#videoContainer #subjectVideo.showSubject object {
+	display:inline-block;
+	width:auto;
+	width: 90%;
+	height:90%;
+}
+
+.selfVideo {
+	transform: rotateY(-180deg);
+}
+
+#subjectDeterimation {
+	text-align:center;
+	position:absolute;
+    top: 45%;
+    width: 100%;
+    z-index: 100;
+}
+
+#subjectDeterimation b {
+    display: inline-block;
+    font-size: 1.8em;
+    margin: 0 1em 0 -2em;
+    vertical-align: middle;
+}
+
+#subjectDeterimation p {
+    margin: 0 0 0 -17em;
+}
+
+.animateBackground {
+	--background: linear-gradient(270deg, #b85a6c, #905ab8, #417fcf, #01ad85);
+	-webkit-animation: backgroundAnimation 16s;
+	-moz-animation: backgroundAnimation 16s;
+	animation: backgroundAnimation 16s;
+}
+
+@-webkit-keyframes backgroundAnimation {
+    0%{background:#01ad85;}
+    50%{background:#905ab8;}
+    75%{background:#417fcf;}
+    100%{background:#f6f6f6;}
+}
+@-moz-keyframes backgroundAnimation {
+    0%{background:#01ad85;}
+    50%{background:#905ab8;}
+    75%{background:#417fcf;}
+    100%{background:#f6f6f6;}
+}
+@keyframes backgroundAnimation {
+    0%{background:#01ad85;}
+    50%{background:#905ab8;}
+    75%{background:#417fcf;}
+    100%{background:#f6f6f6;}
+}
+
+
+#peerList .list-group-item-warning::before {
+  position: relative;
+  top: 1px;
+  margin-right:8px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: bold;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\e023";
+}
+
+#peerList .list-group-item-success::before {
+  position: relative;
+  top: 1px;
+  margin-right:8px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: bold;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\e084";
+}

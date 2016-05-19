@@ -66,7 +66,7 @@ class StaringParticipantController extends Controller
 			$model->ipaddress = $_SERVER['REMOTE_ADDR'];
 			
         	if ($model->save()) {
-            	return $this->redirect(['view', 'user_id' => $model->user_id, 'exp_id' => $model->exp_id]);
+            	return $this->redirect(['staring-experiment/experiment', 'id' => $model->exp_id]);
             }
         }
         

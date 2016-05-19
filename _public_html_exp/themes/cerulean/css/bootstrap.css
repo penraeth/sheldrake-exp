@@ -2759,6 +2759,11 @@ white-space: nowrap;
   -ms-user-select: none;
   user-select: none;
 }
+.btn.small {
+	font-size:12px;
+	padding:1px 12px;
+	vertical-align:top;
+}
 .btn:focus,
 .btn:active:focus,
 .btn.active:focus,
