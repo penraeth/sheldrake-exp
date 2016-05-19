@@ -12,18 +12,18 @@ $this->title = $experiment->name;
 
 $this->registerJsFile('@exp/js/staring.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('//cdn.temasys.com.sg/skylink/skylinkjs/0.6.12/skylink.complete.min.js');
-$this->registerCssFile('@exp/css/staring.css', ['depends' => [BootstrapAsset::className()]]);
+$this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 
 ?>
 
 <script language="javascript">
 	var expId=<?=$experiment->id; ?>;
-	var apiKey=<?=$experiment->apiKey; ?>;
+	var apiKey='<?=$experiment->apiKey; ?>';
 	var isSubject=<?=$isSubject; ?>;
-	var userName=<?=Yii::$app->user->identity->first_name . " " Yii::$app->user->identity->last_name; ?>;
-	var userEmail=<?=Yii::$app->user->identity->username; ?>;
+	var userName='<?=Yii::$app->user->identity->first_name . " ". Yii::$app->user->identity->last_name; ?>';
+	var userEmail='<?=Yii::$app->user->identity->email; ?>';
 	var observers=<?=$observers; ?>;
-	var exitURL=<?=Url::to(['staring-experiment/view', 'id' => $experiment->id]); ?>;
+	var exitURL='<?=Url::to(['staring-experiment/view', 'id' => $experiment->id]); ?>';
 </script>
 
 

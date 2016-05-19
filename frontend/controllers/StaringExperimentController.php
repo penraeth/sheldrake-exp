@@ -63,9 +63,9 @@ class StaringExperimentController extends Controller
 		
 		$participant = StaringParticipant::findOne( ['user_id'=>Yii::$app->user->identity->id, 'exp_id'=>$id] );
 		
-		return $this->render('view', [
+		return $this->render('experiment', [
 			'experiment' => $experiment,
-			'isSubject' => ($experiment->host->id == Yii::$app->user->identity->id),
+			'isSubject' => ($experiment->host->id == Yii::$app->user->identity->id) ? true : false,
 			'observers' => $participant->observers
 		]);
     }
