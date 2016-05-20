@@ -79,6 +79,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 	
 <?php endif; ?>
 
+
 	<div id="trialContainer">
 		<p id="trialInformation">
 			<span style="margin:0 25px 0 0">Trial <b><span id="currentTrial"></span></b> of <span id="totalTrials"></span></span> Countdown: <b><span class="countdown"></span></b>

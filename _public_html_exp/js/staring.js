@@ -67,12 +67,16 @@ var peerData = [];
 		if (isSelf) return;
 		var vid = document.getElementById('video_'+peerId);
 		attachMediaStream(vid, stream);
+		sizeVideos();
 		
 		if (isObserver  &&  peerId == subjectPeerId) {
 			userData = skylink.getUserData();
 			userData.status = 'ready';
 			skylink.setUserData(userData);
 		}
+		
+		
+		
 	});
 	
 	skylink.on('mediaAccessSuccess', function(stream) {
@@ -89,10 +93,8 @@ var peerData = [];
 		if (peerInfo.userData.user == "subject" && Number(message.content) > currentTrial) {
 			if (!observerStarted) {
 				skylink.muteStream({ videoMuted: true, audioMuted: true });
-				$('#waitingScreen').empty();
-				$('#selftest').remove();
-				$('#trialContainer').show();
-				$('#totalTrials').html(totalTrials);
+				trialDisplaySettings();
+				sizeVideos();
 				observerStarted=true;
 			}
 			observer_startTrial(peerInfo.mediaStatus.videoMuted);
@@ -133,15 +135,11 @@ var peerData = [];
 //-------------------------------------- button controls
 
 	$('#beginExperiment').bind('click', function(e){
-		debugmessage("Beginning experiment " + roomName);
 		e.preventDefault();
-		$('#waitingScreen').empty();
-		$('#selftest').remove();
-		$('#peerVideo').empty();
-		$('#trialContainer').show();
-		$('#totalTrials').html(totalTrials);
-		skylink.lockRoom();
+		debugmessage("Beginning experiment " + roomName);
 		callApi('startExperiment');
+		trialDisplaySettings();
+		skylink.lockRoom();
 		subject_startTrial();
 	});
 	
@@ -168,19 +166,18 @@ var peerData = [];
 		startTime = new Date().getTime();
 		debugmessage("New trial: " + startTime);
 
-		callApi('getNextTrial');
+		//callApi('getNextTrial');
+		currentTrial++;
 		$('#currentTrial').html(currentTrial);
 		$('.wrap').removeClass('animateBackground');
 		
 		if (videoMuted) {
 			// hide video and display distraction
 			$("#subjectVideo").hide();
-			$("#subjectVideo").removeClass('showSubject');
 			$('.wrap').addClass('animateBackground');
 		} else {
 			// show video
 			$("#subjectVideo").show();
-			$("#subjectVideo").addClass('showSubject');
 		}
 		
 		trialTime=0;
@@ -213,7 +210,9 @@ var peerData = [];
 //-------------------------------------- subject trial handling
 
 	function subject_startTrial() {
-		callApi('getNextTrial');
+		//callApi('getNextTrial');
+		
+		currentTrial++;
 		$('#currentTrial').html(currentTrial);
 		$('.wrap').addClass('animateBackground');
 		
@@ -321,11 +320,30 @@ var peerData = [];
 		}
 	}
 	
-	function totalObservers() {
+	function countObservers() {
 		totalObservers = 0;
 		for (peerId in peerData) {
 			totalObservers+=observers;
 		}
+	}
+	
+	function sizeVideos() {
+		var numberOfVideos = $('#videoContainer video').length + $('#videoContainer object').length;
+		var windowWidth = $('#videoContainer').width();
+		var newWidth = (windowWidth / numberOfVideos)-50;
+		$('#videoContainer video').width(newWidth);
+		$('#videoContainer object').width(newWidth);
+		$('#videoContainer video').height(newWidth*.7);
+		$('#videoContainer object').height(newWidth*.7);
+		console.debug("window=" + windowWidth + " new video width=" + newWidth);
+	}
+	
+	function trialDisplaySettings() {
+		$('#waitingScreen').empty();
+		$('#selftest').remove();
+		$('#peerVideo').empty();
+		$('#trialContainer').show();
+		$('#totalTrials').html(totalTrials);
 	}
 
 
@@ -351,7 +369,7 @@ var peerData = [];
 	// main API call
 	function callApi(method, data) {
 		urlMethod = method.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-		urlString = '/exp/api/'+urlMethod+'/'+_expId+'/'+_apiKey;
+		urlString = '/exp/api/'+urlMethod+'/'+expId+'/'+apiKey;
 		
 		fd = new FormData();
 		for (key in data) {  fd.append(key, data[key]);  }
@@ -381,7 +399,7 @@ var peerData = [];
 	
 	// prepare data for log call
 	function logTrial(judgment) {
-		totalObservers();
+		countObservers();
 		apiData = new Array();
 		apiData['trial'] = currentTrial;
 		apiData['observers'] = showVideo ? totalObservers : 0 ;

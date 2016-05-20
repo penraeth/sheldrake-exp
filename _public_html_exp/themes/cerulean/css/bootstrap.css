@@ -2777,8 +2777,8 @@ white-space: nowrap;
 .btn:hover,
 .btn:focus,
 .btn.focus {
-  color: #555555;
-  text-decoration: none;
+ /* color: #555555;
+  text-decoration: none;*/
 }
 .btn:active,
 .btn.active {
@@ -2808,9 +2808,9 @@ fieldset[disabled] .btn {
 .btn-default:active,
 .btn-default.active,
 .open > .dropdown-toggle.btn-default {
-  color: #555555;
+  /*color: #555555;
   background-color: #e6e6e6;
-  border-color: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.1);*/
 }
 .btn-default:active,
 .btn-default.active,

@@ -65,7 +65,7 @@ class StaringExperimentController extends Controller
 		
 		return $this->render('experiment', [
 			'experiment' => $experiment,
-			'isSubject' => ($experiment->host->id == Yii::$app->user->identity->id) ? true : false,
+			'isSubject' => ($experiment->host->id == Yii::$app->user->identity->id) ? 'true' : 'false',
 			'observers' => $participant->observers
 		]);
     }

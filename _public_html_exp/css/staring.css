@@ -18,8 +18,6 @@
 #videoContainer video,
 #videoContainer object {
 	display:inline-block;
-	width: 40%;
-	height: 40%;
 	margin:.8em;
 	z-index: 5;
 }
@@ -27,9 +25,7 @@
 #videoContainer #subjectVideo.showSubject video,
 #videoContainer #subjectVideo.showSubject object {
 	display:inline-block;
-	width:auto;
-	width: 90%;
-	height:90%;
+	width: 90% !important;
 }
 
 .selfVideo {
