@@ -3,13 +3,12 @@
 
 	// ----------->
 	// make sure these are populated from the database
-	var _expId = '240';
-	var _apiKey = '13d85ced18c111e69fe1f23c9170f017';
+	var _expId = '1';
+	var _apiKey = '6d6bb54e1deb11e69d2b5d0e30c75659';
 	// ----------->
 
 	
 	// these functions get called on successful completion of each API method
-	
 	var resultFunctions = {
 		startExperiment: function(data, status) {
 			// started
@@ -29,7 +28,6 @@
 	
 	
 	// main API call
-	
 	function callApi(method, data) {
 		urlMethod = method.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 		urlString = '/exp/api/'+urlMethod+'/'+_expId+'/'+_apiKey;
@@ -61,7 +59,6 @@
 	
 	
 	// prepare data for log call
-	
 	function logTrial() {
 		apiData = new Array();
 		apiData['trial'] = $('#currentTrial').val();

@@ -18,8 +18,9 @@
 #videoContainer video,
 #videoContainer object {
 	display:inline-block;
+	width: 40%;
 	margin:.8em;
-	z-index: 5;
+	z-index: 200;
 }
 
 #videoContainer #subjectVideo.showSubject video,

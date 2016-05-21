@@ -8,6 +8,7 @@ var userType = isSubject ? "subject" : "observer";
 var isObserver = isSubject ? false : true;
 var subjectPeerId = false;
 var observerStarted = false;
+var showSubject = false;
 
 var peerData = [];
 
@@ -16,6 +17,24 @@ var peerData = [];
 
 	var skylink = new Skylink();
 	skylink.setLogLevel(1);
+	
+	skylink.on('incomingMessage', function(message, peerId, peerInfo, isSelf) {
+		if (isSelf) return;
+		
+		var mytime=new Date().getTime();
+		debugmessage("subject sent message ------------- " + message.content + " " + mytime );
+		// if peer is subject and a new trial has begin
+		if (peerInfo.userData.user == "subject" && Number(message.content) > currentTrial) {
+			if (!observerStarted) {
+				skylink.muteStream({ videoMuted: true, audioMuted: true });
+				trialDisplaySettings();
+				sizeVideos();
+				observerStarted=true;
+			}
+			showSubject=peerInfo.mediaStatus.videoMuted;
+			callApi('getNextTrial');
+		}
+	});
 	
 	skylink.on('peerJoined', function(peerId, peerInfo, isSelf) {
 		if (isSubject) {
@@ -73,32 +92,12 @@ var peerData = [];
 			userData = skylink.getUserData();
 			userData.status = 'ready';
 			skylink.setUserData(userData);
-		}
-		
-		
-		
+		}		
 	});
 	
 	skylink.on('mediaAccessSuccess', function(stream) {
 		var vid = $('#selftest')[0];
 		attachMediaStream(vid, stream);
-	});
-	
-	skylink.on('incomingMessage', function(message, peerId, peerInfo, isSelf) {
-		if (isSelf) return;
-		
-		var mytime=new Date().getTime();
-		debugmessage("subject sent message ------------- " + message.content + " " + mytime );
-		// if peer is subject and a new trial has begin
-		if (peerInfo.userData.user == "subject" && Number(message.content) > currentTrial) {
-			if (!observerStarted) {
-				skylink.muteStream({ videoMuted: true, audioMuted: true });
-				trialDisplaySettings();
-				sizeVideos();
-				observerStarted=true;
-			}
-			observer_startTrial(peerInfo.mediaStatus.videoMuted);
-		}
 	});
 	
 	skylink.init({
@@ -138,9 +137,9 @@ var peerData = [];
 		e.preventDefault();
 		debugmessage("Beginning experiment " + roomName);
 		callApi('startExperiment');
+		callApi('getNextTrial');
 		trialDisplaySettings();
 		skylink.lockRoom();
-		subject_startTrial();
 	});
 	
 	$('#yes').bind('click', function(e){
@@ -162,16 +161,15 @@ var peerData = [];
 	
 //-------------------------------------- observer trial handling
 	
-	function observer_startTrial(videoMuted) {
+	function observer_startTrial() {
 		startTime = new Date().getTime();
 		debugmessage("New trial: " + startTime);
 
-		//callApi('getNextTrial');
-		currentTrial++;
+		//currentTrial++;
 		$('#currentTrial').html(currentTrial);
 		$('.wrap').removeClass('animateBackground');
 		
-		if (videoMuted) {
+		if (showSubject) {
 			// hide video and display distraction
 			$("#subjectVideo").hide();
 			$('.wrap').addClass('animateBackground');
@@ -210,9 +208,8 @@ var peerData = [];
 //-------------------------------------- subject trial handling
 
 	function subject_startTrial() {
-		//callApi('getNextTrial');
 		
-		currentTrial++;
+		//currentTrial++;
 		$('#currentTrial').html(currentTrial);
 		$('.wrap').addClass('animateBackground');
 		
@@ -245,7 +242,7 @@ var peerData = [];
 				$('#subjectDeterimation').show(); // are you being stared at?
 			}
 			var processingDelay = (currentTime - startTime) - trialTime;
-			debugmessage("countdown: " + countdown + " adjustment:" + processingDelay);
+			//debugmessage("countdown: " + countdown + " adjustment:" + processingDelay);
 			trialTime+=1000;
 			timerId = setTimeout(subject_displayCountdown, (1000-processingDelay));
 		}
@@ -264,7 +261,7 @@ var peerData = [];
 			callApi('completeExperiment');
 			location.href = exitURL;
 		} else { // continue
-			subject_startTrial();
+			callApi('getNextTrial');
 		}
 	}
 	
@@ -284,7 +281,7 @@ var peerData = [];
 	function sendMessageAll(msg) {
 		if (isSubject) {
 			for (peerId in peerData) {
-				debugmessage('msgto:'+peerId);
+				debugmessage('sendMessageAll:'+peerId + " trial:" + msg);
 				skylink.sendMessage(msg, peerId);
 			}
 		}
@@ -359,6 +356,12 @@ var peerData = [];
 		},
 		getNextTrial: function(data, status) {
 			currentTrial = data.next;
+			debugmessage("api set current trial to " + currentTrial);
+			if (isSubject) {
+				subject_startTrial();
+			} else {
+				observer_startTrial();
+			}
 		},
 		logTrial: function(data, status) {
 			//currentTrial = data.next;
@@ -380,12 +383,10 @@ var peerData = [];
 			timeout: 5000,
 			data: fd,
 			error: function(xhr, status, error){
-				console.log(xhr.status+': '+error);
-				$('#apiResult').val(xhr.status+"\n"+error);  // for debug only
+				debugmessage(xhr.status+': '+error);
 			},
 			success: function(data, status, xhr) {
-				$('#apiResult').val(xhr.status+"\n"+data.message);  // for debug only
-				console.log(xhr.status+': '+data.message);
+				debugmessage(xhr.status+': '+data.message);
 				if (resultFunctions[method]) {
 					resultFunctions[method](data, status);
 				}

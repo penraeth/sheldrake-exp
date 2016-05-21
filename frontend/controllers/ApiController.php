@@ -68,8 +68,7 @@ class ApiController extends Controller
     
     public function actionGetNextTrial($id, $key) {
     	$this->verifyCall($id, $key);
-    	$count = StaringTrial::getByExperimentId($id, true);
-    	$count++;
+    	$count = StaringTrial::getByExperimentId($id, true) + 1;
     	print json_encode(['message'=>'ok','next' => $count]);
     }
     
@@ -82,7 +81,7 @@ class ApiController extends Controller
         if ( $trial->load(Yii::$app->request->post(), '') ) {
         	if ($trial->trial < 1  ||  $trial->trial > $current) {
 	 			Yii::$app->response->statusCode = 406;
-        		Yii::$app->response->statusText = "Trial out of range (1-{$count})";
+        		Yii::$app->response->statusText = "Trial out of range (1-{$current})";
 	 			return;
         	}
         	

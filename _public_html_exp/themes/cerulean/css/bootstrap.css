@@ -2777,8 +2777,8 @@ white-space: nowrap;
 .btn:hover,
 .btn:focus,
 .btn.focus {
- /* color: #555555;
-  text-decoration: none;*/
+	color: #fff;
+	text-decoration: none;
 }
 .btn:active,
 .btn.active {
