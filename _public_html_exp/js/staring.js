@@ -163,7 +163,6 @@ var peerData = [];
 	
 	function observer_startTrial() {
 		startTime = new Date().getTime();
-		debugmessage("New trial: " + startTime);
 
 		//currentTrial++;
 		$('#currentTrial').html(currentTrial);
@@ -177,6 +176,8 @@ var peerData = [];
 			// show video
 			$("#subjectVideo").show();
 		}
+		
+		debugmessage("New trial: " + startTime + " subject visible? " + showSubject);
 		
 		trialTime=0;
 		
@@ -257,9 +258,7 @@ var peerData = [];
 		logTrial(judgment);
 		
 		if (currentTrial==totalTrials) { // end of experiment
-			skylink.leaveRoom();
 			callApi('completeExperiment');
-			location.href = exitURL;
 		} else { // continue
 			callApi('getNextTrial');
 		}
@@ -320,7 +319,8 @@ var peerData = [];
 	function countObservers() {
 		totalObservers = 0;
 		for (peerId in peerData) {
-			totalObservers+=observers;
+			peerInfo = peerData[peerId];
+			totalObservers+=peerInfo.observers;
 		}
 	}
 	
@@ -352,7 +352,8 @@ var peerData = [];
 			// started
 		},
 		completeExperiment: function(data, status) {
-			// completed
+			skylink.leaveRoom();
+			location.href = exitURL;
 		},
 		getNextTrial: function(data, status) {
 			currentTrial = data.next;
