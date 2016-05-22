@@ -360,6 +360,7 @@ var peerData = [];
 			if (isSubject) {
 				subject_startTrial();
 			}
+		},
 		logTrial: function(data, status) {
 			//currentTrial = data.next;
 		}
