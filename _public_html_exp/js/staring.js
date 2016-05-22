@@ -320,8 +320,7 @@ var peerData = [];
 		totalObservers = 0;
 		for (peerId in peerData) {
 			peerInfo = peerData[peerId];
-			totalObservers+=Number(peerInfo.observers);
-			debugmessage("observers added: " + peerInfo.observers);
+			totalObservers+=peerInfo.userData.observers;
 		}
 		debugmessage("observers present: " + totalObservers);
 	}
