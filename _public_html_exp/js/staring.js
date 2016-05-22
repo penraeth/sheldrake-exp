@@ -8,7 +8,7 @@ var userType = isSubject ? "subject" : "observer";
 var isObserver = isSubject ? false : true;
 var subjectPeerId = false;
 var observerStarted = false;
-var showSubject = false;
+var hideSubject = true;
 
 var peerData = [];
 
@@ -31,7 +31,7 @@ var peerData = [];
 				sizeVideos();
 				observerStarted=true;
 			}
-			showSubject=peerInfo.mediaStatus.videoMuted;
+			hideSubject=peerInfo.mediaStatus.videoMuted;
 			currentTrial=Number(message.content);
 			observer_startTrial();
 		}
@@ -164,20 +164,20 @@ var peerData = [];
 	
 	function observer_startTrial() {
 		startTime = new Date().getTime();
-		debugmessage("New trial: " + startTime + " subject visible? " + showSubject);
+		debugmessage("New trial: " + startTime + " hide subject? " + hideSubject);
 
 		$('#currentTrial').html(currentTrial);
 		$('.wrap').removeClass('animateBackground');
 		
-		if (showSubject) {
-			// show video
-			debugmessage("showing subject");
-			$("#subjectVideo").show();
-		} else {
+		if (hideSubject) {
 			// hide video and display distraction
 			debugmessage("hiding subject");
 			$("#subjectVideo").hide();
 			$('.wrap').addClass('animateBackground');
+		} else {
+			// show video
+			debugmessage("showing subject");
+			$("#subjectVideo").show();
 		}
 		
 		
@@ -321,6 +321,7 @@ var peerData = [];
 		for (peerId in peerData) {
 			peerInfo = peerData[peerId];
 			totalObservers+=Number(peerInfo.observers);
+			debugmessage("observers added: " + peerInfo.observers);
 		}
 		debugmessage("observers present: " + totalObservers);
 	}
@@ -333,7 +334,6 @@ var peerData = [];
 		$('#videoContainer object').width(newWidth);
 		$('#videoContainer video').height(newWidth*.7);
 		$('#videoContainer object').height(newWidth*.7);
-		console.debug("window=" + windowWidth + " new video width=" + newWidth);
 	}
 	
 	function trialDisplaySettings() {
