@@ -256,12 +256,6 @@ var peerData = [];
 		
 		// update database
 		logTrial(judgment);
-		
-		if (currentTrial==totalTrials) { // end of experiment
-			callApi('completeExperiment');
-		} else { // continue
-			callApi('getNextTrial');
-		}
 	}
 	
 
@@ -362,7 +356,11 @@ var peerData = [];
 			}
 		},
 		logTrial: function(data, status) {
-			//currentTrial = data.next;
+			if (currentTrial==totalTrials) { // end of experiment
+				callApi('completeExperiment');
+			} else { // continue
+				callApi('getNextTrial');
+			}
 		}
 	}
 	
