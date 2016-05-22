@@ -32,7 +32,8 @@ var peerData = [];
 				observerStarted=true;
 			}
 			showSubject=peerInfo.mediaStatus.videoMuted;
-			callApi('getNextTrial');
+			currentTrial=message.content;
+			observer_startTrial();
 		}
 	});
 	
@@ -164,16 +165,17 @@ var peerData = [];
 	function observer_startTrial() {
 		startTime = new Date().getTime();
 
-		//currentTrial++;
 		$('#currentTrial').html(currentTrial);
 		$('.wrap').removeClass('animateBackground');
 		
 		if (showSubject) {
 			// hide video and display distraction
+			debugmessage("hiding subject");
 			$("#subjectVideo").hide();
 			$('.wrap').addClass('animateBackground');
 		} else {
 			// show video
+			debugmessage("showing subject");
 			$("#subjectVideo").show();
 		}
 		
@@ -209,8 +211,6 @@ var peerData = [];
 //-------------------------------------- subject trial handling
 
 	function subject_startTrial() {
-		
-		//currentTrial++;
 		$('#currentTrial').html(currentTrial);
 		$('.wrap').addClass('animateBackground');
 		
@@ -357,13 +357,9 @@ var peerData = [];
 		},
 		getNextTrial: function(data, status) {
 			currentTrial = data.next;
-			debugmessage("api set current trial to " + currentTrial);
 			if (isSubject) {
 				subject_startTrial();
-			} else {
-				observer_startTrial();
 			}
-		},
 		logTrial: function(data, status) {
 			//currentTrial = data.next;
 		}
