@@ -32,7 +32,7 @@ var peerData = [];
 				observerStarted=true;
 			}
 			showSubject=peerInfo.mediaStatus.videoMuted;
-			currentTrial=message.content;
+			currentTrial=Number(message.content);
 			observer_startTrial();
 		}
 	});
@@ -164,22 +164,22 @@ var peerData = [];
 	
 	function observer_startTrial() {
 		startTime = new Date().getTime();
+		debugmessage("New trial: " + startTime + " subject visible? " + showSubject);
 
 		$('#currentTrial').html(currentTrial);
 		$('.wrap').removeClass('animateBackground');
 		
 		if (showSubject) {
+			// show video
+			debugmessage("showing subject");
+			$("#subjectVideo").show();
+		} else {
 			// hide video and display distraction
 			debugmessage("hiding subject");
 			$("#subjectVideo").hide();
 			$('.wrap').addClass('animateBackground');
-		} else {
-			// show video
-			debugmessage("showing subject");
-			$("#subjectVideo").show();
 		}
 		
-		debugmessage("New trial: " + startTime + " subject visible? " + showSubject);
 		
 		trialTime=0;
 		
@@ -320,8 +320,9 @@ var peerData = [];
 		totalObservers = 0;
 		for (peerId in peerData) {
 			peerInfo = peerData[peerId];
-			totalObservers+=peerInfo.observers;
+			totalObservers+=Number(peerInfo.observers);
 		}
+		debugmessage("observers present: " + totalObservers);
 	}
 	
 	function sizeVideos() {
