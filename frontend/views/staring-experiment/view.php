@@ -99,7 +99,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				elseif ($accuracy <= 45 && !$isHost){
 					print "This is <i>very</i> low; well below chance. You are a <b>Tiger</b> level hunter!"; }
 				elseif ($accuracy < 50){
-					print "This is slightly below chance and could indicate something more than guessswork was involved. Keep trying!"; }
+					print "This is slightly below chance and could indicate something more than guesswork was involved. Keep trying!"; }
 				
 			?>
 			</p>
