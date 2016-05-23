@@ -72,7 +72,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				if ($pass > 0) {
 					print ucfirst($subject)." passed on $pass trials, leaving $totalTrials in play.";
 				}
-				print " Of $totalTrials trials $subject guessed correctly $right times and incorrectly $wrong times, giving an accuracy rating of $accuracy%. ";
+				print " Of $totalTrials trials $subject guessed correctly <b>$right</b> times and incorrectly <b>$wrong</b> times, giving an accuracy rating of <b>$accuracy%</b>. ";
 				
 				if ($accuracy >= 90){ 
 					print "This is <i>scary</i> high; astonishingly above chance. Congradulations, $subject $subjectIs a <b>Savant</b> level detector!"; }
