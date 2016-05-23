@@ -67,39 +67,39 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				}
 					
 				$totalTrials = $right + $wrong;
-				$accuracy = $right / $totalTrials * 100;
+				$accuracy = round($right / $totalTrials * 100);
 				
 				if ($pass > 0) {
 					print ucfirst($subject)." passed on $pass trials, leaving $totalTrials in play.";
 				}
 				print " Of $totalTrials trials $subject guessed correctly $right times and incorrectly $wrong times, giving an accuracy rating of $accuracy%. ";
 				
-	if ($accuracy >= 90){ 
-		print "This is <i>scary</i> high; astonishingly above chance. Congradulations, $subject $subjectIs a <b>Savant</b> level detector!"; }
-	elseif ($accuracy >= 75){
-		print "This is <i>incredibly</i> high; significantly above chance. Congradulations, $subject $subjectIs an <b>Owl</b> level detector!"; }
-	elseif ($accuracy >= 55){
-		print "This is <i>very</i> high; well above chance. Congradulations, $subject $subjectIs an <b>Deer</b> level detector!"; }
-	elseif ($accuracy > 50){
-		print "This is slightly above chane and could indicate something more than guessswork was involved. Keep trying!"; }
-	
-	elseif ($accuracy == 50){
-		print "This is right at the chance level, but don't be discouraged. It may take several tries to see an effect."; }
-		
-	elseif ($accuracy <= 10 && $isHost){
-		print "This is <i>scary</i> low; astonishingly below chance. The observers are <b>Shadow</b> level hunters!"; }
-	elseif ($accuracy <= 10 && !$isHost){
-		print "This is <i>scary</i> low; astonishingly below chance. You are a <b>Shadow</b> level hunter!"; }
-	elseif ($accuracy <= 25 && $isHost){
-		print "This is <i>incredibly</i> low; significantly below chance. The observers are <b>Ninja</b> level hunters!"; }
-	elseif ($accuracy <= 25 && !$isHost){
-		print "This is <i>incredibly</i> low; significantly below chance. You are a <b>Ninja</b> level hunter!"; }
-	elseif ($accuracy <= 45 && $isHost){
-		print "This is <i>very</i> low; well below chance. The observers are <b>Tiger</b> level hunters!"; }
-	elseif ($accuracy <= 45 && !$isHost){
-		print "This is <i>very</i> low; well below chance. You are a <b>Tiger</b> level hunter!"; }
-	elseif ($accuracy < 50){
-		print "This is slightly below chance and could indicate something more than guessswork was involved. Keep trying!"; }
+				if ($accuracy >= 90){ 
+					print "This is <i>scary</i> high; astonishingly above chance. Congradulations, $subject $subjectIs a <b>Savant</b> level detector!"; }
+				elseif ($accuracy >= 75){
+					print "This is <i>incredibly</i> high; significantly above chance. Congradulations, $subject $subjectIs an <b>Owl</b> level detector!"; }
+				elseif ($accuracy >= 55){
+					print "This is <i>very</i> high; well above chance. Congradulations, $subject $subjectIs an <b>Deer</b> level detector!"; }
+				elseif ($accuracy > 50){
+					print "This is slightly above chane and could indicate something more than guessswork was involved. Keep trying!"; }
+				
+				elseif ($accuracy == 50){
+					print "This is right at the chance level, but don't be discouraged. It may take several tries to see an effect."; }
+					
+				elseif ($accuracy <= 10 && $isHost){
+					print "This is <i>scary</i> low; astonishingly below chance. The observers are <b>Shadow</b> level hunters!"; }
+				elseif ($accuracy <= 10 && !$isHost){
+					print "This is <i>scary</i> low; astonishingly below chance. You are a <b>Shadow</b> level hunter!"; }
+				elseif ($accuracy <= 25 && $isHost){
+					print "This is <i>incredibly</i> low; significantly below chance. The observers are <b>Ninja</b> level hunters!"; }
+				elseif ($accuracy <= 25 && !$isHost){
+					print "This is <i>incredibly</i> low; significantly below chance. You are a <b>Ninja</b> level hunter!"; }
+				elseif ($accuracy <= 45 && $isHost){
+					print "This is <i>very</i> low; well below chance. The observers are <b>Tiger</b> level hunters!"; }
+				elseif ($accuracy <= 45 && !$isHost){
+					print "This is <i>very</i> low; well below chance. You are a <b>Tiger</b> level hunter!"; }
+				elseif ($accuracy < 50){
+					print "This is slightly below chance and could indicate something more than guessswork was involved. Keep trying!"; }
 				
 			?>
 			</p>
