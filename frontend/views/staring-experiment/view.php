@@ -75,13 +75,13 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				print " Of $totalTrials trials $subject guessed correctly <b>$right</b> times and incorrectly <b>$wrong</b> times, giving an accuracy rating of <b>$accuracy%</b>. ";
 				
 				if ($accuracy >= 90){ 
-					print "This is <i>scary</i> high; astonishingly above chance. Congradulations, $subject $subjectIs a <b>Savant</b> level detector!"; }
+					print "This is <i>scary</i> high; astonishingly above chance. Congratulations, $subject $subjectIs a <b>Savant</b> level detector!"; }
 				elseif ($accuracy >= 75){
-					print "This is <i>incredibly</i> high; significantly above chance. Congradulations, $subject $subjectIs an <b>Owl</b> level detector!"; }
+					print "This is <i>incredibly</i> high; significantly above chance. Congratulations, $subject $subjectIs an <b>Owl</b> level detector!"; }
 				elseif ($accuracy >= 55){
-					print "This is <i>very</i> high; well above chance. Congradulations, $subject $subjectIs a <b>Deer</b> level detector!"; }
+					print "This is <i>very</i> high; well above chance. Congratulations, $subject $subjectIs a <b>Deer</b> level detector!"; }
 				elseif ($accuracy > 50){
-					print "This is slightly above chane and could indicate something more than guessswork was involved. Keep trying!"; }
+					print "This is slightly above chance and could indicate something more than guesswork was involved. Keep trying!"; }
 				
 				elseif ($accuracy == 50){
 					print "This is right at the chance level, but don't be discouraged. It may take several tries to see an effect."; }
