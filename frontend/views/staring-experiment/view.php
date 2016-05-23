@@ -16,9 +16,97 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 
 <style>
 	.has-error input[type="text"].form-control { background-color: #fdd; }
+	.right {
+		color:green;
+		font-weight:bold;
+	}
+	.wrong {
+		color:red;
+		font-weight:normal;
+	}
+	.pass {
+		color:grey;
+		font-weight:normal;
+	}
+	.statement {
+	    background-color: #dff0d8;
+		color: #468847;
+		border-radius:4px;
+		border: 1px solid #dddddd;
+		padding: 10px 15px;
+		margin: 0 0 2em 0;
+	}
 </style>
 
 <div class="staring-experiment-view">
+
+
+	<?php if ( $experiment->datecompleted ): ?>
+		
+		<!-- result statement -->
+		<div class="col-sm-8 col-sm-offset-2">
+			<p class="statement">
+			<?php 
+				$right=0;
+				$wrong=0;
+				$pass=0;
+				$subject = ($isHost) ? "you" : $host->first_name;
+				$subjectIs = ($isHost) ? "are" : "is";
+				$observer = ($isHost) ? "the observers" : "you";
+				
+				foreach ($trials as $trial) {
+	
+					$observed = ($trial->observers == 0) ? 0 : 1;
+					if ($trial->judgment == $observed) {
+						$right++;
+					} elseif ($trial->judgment > 1) {
+						$pass++;
+					} else {
+						$wrong++;
+					}
+				}
+					
+				$totalTrials = $right + $wrong;
+				$accuracy = $right / $totalTrials * 100;
+				
+				if ($pass > 0) {
+					print ucfirst($subject)." passed on $pass trials, leaving $totalTrials in play.";
+				}
+				print " Of $totalTrials trials $subject guessed correctly $right times and incorrectly $wrong times, giving an accuracy rating of $accuracy%. ";
+				
+	if ($accuracy >= 90){ 
+		print "This is <i>scary</i> high; astonishingly above chance. Congradulations, $subject $subjectIs a <b>Savant</b> level detector!"; }
+	elseif ($accuracy >= 75){
+		print "This is <i>incredibly</i> high; significantly above chance. Congradulations, $subject $subjectIs an <b>Owl</b> level detector!"; }
+	elseif ($accuracy >= 55){
+		print "This is <i>very</i> high; well above chance. Congradulations, $subject $subjectIs an <b>Deer</b> level detector!"; }
+	elseif ($accuracy > 50){
+		print "This is slightly above chane and could indicate something more than guessswork was involved. Keep trying!"; }
+	
+	elseif ($accuracy == 50){
+		print "This is right at the chance level, but don't be discouraged. It may take several tries to see an effect."; }
+		
+	elseif ($accuracy <= 10 && $isHost){
+		print "This is <i>scary</i> low; astonishingly below chance. The observers are <b>Shadow</b> level hunters!"; }
+	elseif ($accuracy <= 10 && !$isHost){
+		print "This is <i>scary</i> low; astonishingly below chance. You are a <b>Shadow</b> level hunter!"; }
+	elseif ($accuracy <= 25 && $isHost){
+		print "This is <i>incredibly</i> low; significantly below chance. The observers are <b>Ninja</b> level hunters!"; }
+	elseif ($accuracy <= 25 && !$isHost){
+		print "This is <i>incredibly</i> low; significantly below chance. You are a <b>Ninja</b> level hunter!"; }
+	elseif ($accuracy <= 45 && $isHost){
+		print "This is <i>very</i> low; well below chance. The observers are <b>Tiger</b> level hunters!"; }
+	elseif ($accuracy <= 45 && !$isHost){
+		print "This is <i>very</i> low; well below chance. You are a <b>Tiger</b> level hunter!"; }
+	elseif ($accuracy < 50){
+		print "This is slightly below chance and could indicate something more than guessswork was involved. Keep trying!"; }
+				
+			?>
+			</p>
+		</div>
+		
+			
+	<?php endif; ?>
 
 		<div class="row">
 			<div class="col-sm-6 col-sm-offset-3">
@@ -30,7 +118,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 					<div class="panel-body panel-table-data">
 						<table class="table table-condensed">
 							<tr valign="middle">
-								<td>Host</td>
+								<td>Subject</td>
 								<td><?=$host->first_name;?></td>
 							</tr>
 							<tr valign="middle">
@@ -109,37 +197,36 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 			
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title">Results</h3>
+						<h3 class="panel-title">Trial Results</h3>
 					</div>
 					<div class="panel-body panel-table-data">
 						<table class="table table-condensed">
 							<tr>
-								<td align="right"><b>Trial</b></th>
-								<td align="left"><b>Time</b></th>
-								<td align="right"><b>Observers</b></th>
-								<td align="right"><b>Judgment</b></th>
+								<td align="right"><b>trial</b></th>
+								<td align="center"><b># of observers</b></th>
+								<td align="center"><b>subject guessed</b></th>
 							</tr>
 							<?php foreach ($trials as $trial): ?>
+								<?php
+									switch($trial->observers) {
+										case 0: $observers = 'none'; $observed = 0; break;
+										default: $observers = $trial->observers; $observed = 1;
+									}
+									if ($trial->judgment == $observed) {
+										$class ='right';
+										$judgment = 'right';
+									} elseif ($trial->judgment > 1) {
+										$class ='pass';
+										$judgment = 'pass';
+									} else {
+										$class ='wrong';
+										$judgment = 'wrong';
+									}
+								?>
 								<tr valign="middle">
-									<td align="right"><?=$trial->trial;?></td>
-									<td align="left"><?=$trial->created_at;?></td>
-									<td align="right">
-										<?php
-											switch($trial->observers) {
-												case 0: $status = 'none'; break;
-												default: $status = $trial->observers;
-											}
-										?>
-									</td>
-									<td align="right">
-										<?php
-											switch($trial->judgment) {
-												case 0: $status = 'no'; break;
-												case 1: $status = 'yes'; break;
-												default: $status = 'pass';
-											}
-										?>
-									</td>
+									<td align="right" title="<?=$trial->created_at;?>"><?=$trial->trial;?></td>
+									<td align="center"><?=$observers;?></td>
+									<td align="center" class="<?=$class;?>"><?=$judgment;?></td>
 								</tr>
 							<?php endforeach; ?>
 						</table>
