@@ -67,7 +67,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				}
 					
 				$totalTrials = $right + $wrong;
-				$accuracy = round($right / $totalTrials * 100);
+				$accuracy = ($right > 0) ? round($right / $totalTrials * 100) : 0;
 				
 				if ($pass > 0) {
 					print ucfirst($subject)." passed on $pass trials, leaving $totalTrials in play.";
