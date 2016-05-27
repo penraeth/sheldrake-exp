@@ -119,7 +119,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 						<table class="table table-condensed">
 							<tr valign="middle">
 								<td>Subject</td>
-								<td><?=$host->first_name;?></td>
+								<td><?=$host->first_name;?> <?=$host->last_name;?></td>
 							</tr>
 							<tr valign="middle">
 								<td>Created</td>
@@ -244,7 +244,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				<?php if (!$isHost): ?>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">Please provide your observer information</h3>
+							<h3 class="panel-title">Number of observers & relationship</h3>
 						</div>
 						<div class="panel-body">
 							<?php $form = ActiveForm::begin([
@@ -258,13 +258,14 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 								<div class="row">
 									<div class="col-sm-6">
 										<?= $form->field($participant, "observers")
-											->label('Number of observers')
-											->textInput(['placeholder'=>'']);
+											->label('No. of observers, including yourself')
+											->textInput(['placeholder'=>'1']);
 										?>
+										If it's just you looking at the screen put 1, if another perosn is watching with you put 2, etc.
 									</div>
 									<div class="col-sm-6">
 										<?= $form->field($participant, "relationship")
-											->label('Relationship to host')
+											->label('Your relationship to the subject')
 											->dropDownList([
 												'' => 'Select...',
 												'1'	=> 'Close friend',
@@ -272,6 +273,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 												'3' => 'Not known'
 											]);
 										?>
+										If more are watching with you, select the closest relationship.
 									</div>
 								</div>
 								<div style="text-align:right">
