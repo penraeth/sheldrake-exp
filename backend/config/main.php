@@ -1,7 +1,7 @@
 <?php
 $params = array_merge(
-    require(__DIR__ . '/../../common/config/params.php'),
-    require(__DIR__ . '/../../common/config/params-local.php'),
+    require(__DIR__ . '/../../../sheldrake-exp/common/config/params.php'),
+    require(__DIR__ . '/../../../sheldrake-exp/common/config/params-local.php'),
     require(__DIR__ . '/params.php'),
     require(__DIR__ . '/params-local.php')
 );
@@ -17,8 +17,8 @@ return [
         // - template comes with: 'default', 'slate', 'spacelab' and 'cerulean'
         'view' => [
             'theme' => [
-                'pathMap' => ['@app/views' => '@webroot/themes/slate/views'],
-                'baseUrl' => '@web/themes/slate',
+                'pathMap' => ['@app/views' => '@webroot/themes/yeti/views'],
+                'baseUrl' => '@web/themes/yeti',
             ],
         ],
         'user' => [
@@ -34,7 +34,10 @@ return [
                 ],
             ],
         ],
-        'errorHandler' => [
+		'urlManager' => [
+            'baseUrl' => '/exp/backend',
+        ],
+       'errorHandler' => [
             'errorAction' => 'site/error',
         ],
     ],

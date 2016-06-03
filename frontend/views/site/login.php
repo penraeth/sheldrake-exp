@@ -32,7 +32,6 @@ $this->registerJsFile('@exp/js/jstimezonedetect/dist/jstz.min.js', ['depends' =>
 							],
 						]); ?>
 		
-						<!--<input type="hidden" name="compatibility" id="compatibility" value="">-->
 						<input type="hidden" name="latitude" id="latitude" value="">
 						<input type="hidden" name="longitude" id="longitude" value="">
 						<input type="hidden" name="timezone" id="timezone" value="">

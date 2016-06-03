@@ -1,32 +1,66 @@
 <?php
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \common\models\LoginForm */
 
 $this->title = Yii::t('app', 'Login');
+
+$this->registerJsFile('@exp/js/getLocation.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@exp/js/jstimezonedetect/dist/jstz.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
 <div class="site-login">
 
-    <h1 class="login"><?= Html::encode($this->title) ?></h1>
-
-    <div class="col-lg-5 well bs-component">
-
-        <p><?= Yii::t('app', 'Please fill out the following fields to login:') ?></p>
-
-        <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+	<div class="row">
+		<div class="col-sm-6 col-sm-offset-3">
 		
-		<?= $form->field($model, 'email') ?>
-        <?= $form->field($model, 'password')->passwordInput() ?>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Admin Login</h3>
+				</div>
+				<div class="panel-body">
+				
+					<?php $form = ActiveForm::begin([
+							'id'						=> 'login-form',
+							'fieldConfig' => [
+								'template' => "{beginWrapper}\n{input}\n{endWrapper}"
+							],
+						]); ?>
+						
+						<input type="hidden" name="latitude" id="latitude" value="">
+						<input type="hidden" name="longitude" id="longitude" value="">
+						<input type="hidden" name="timezone" id="timezone" value="">
 
-        <div class="form-group">
-            <?= Html::submitButton(Yii::t('app', 'Login'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-        </div>
+						<?= $form->field($model, "email")
+							->label('')
+							->textInput(['placeholder'=>'E-mail']);
+						?>
+						<?= $form->field($model, "password")
+							->label('')
+							->passwordInput(['placeholder'=>'Password']);
+						?>
+						
+						<div class="row">
+							<div class="col-sm-6">
+								<a href="<?=Url::To(['site/request-password-reset']);?>">
+									<span class="glyphicon glyphicon-question-sign text-primary" style="font-size: 24px; margin-top:4px" aria-hidden="true"></span>
+									<span style="vertical-align:25%;">I forgot my password</span>
+								</a>
+							</div>
+							<div class="col-sm-6 pull-right last" style="text-align:right">
+								<?= Html::submitButton('Login&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>', ['class'=>'btn btn-info']) ?>
+							</div>
+						</div>
 
-        <?php ActiveForm::end(); ?>
+					<?php ActiveForm::end(); ?>
+				
+				</div>
+			</div>
 
-    </div>
+		</div>
+	</div>
   
 </div>

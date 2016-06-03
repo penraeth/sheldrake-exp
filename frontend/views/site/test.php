@@ -17,6 +17,7 @@
 			// completed
 		},
 		getNextTrial: function(data, status) {
+			alert(data);
 			currentTrial = data.next;
 			$('#currentTrial').val(currentTrial);
 		},
