@@ -268,9 +268,10 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 											->label('Your relationship to the subject')
 											->dropDownList([
 												'' => 'Select...',
-												'1'	=> 'Close friend',
-												'2'	=> 'Acquaintance',
-												'3' => 'Not known'
+												'1'	=> 'Close friend, partner or close family member',
+												'2'	=> 'Friend, colleague or familiar person',
+												'3' => 'Acquaintance or person seen infrequently',
+												'4' => 'Never met before'
 											]);
 										?>
 										If more are watching with you, select the closest relationship.
