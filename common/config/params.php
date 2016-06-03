@@ -52,7 +52,7 @@ return [
      * Not used in template.
      * Used only by internal auto-generated e-mails.
      */
-    'fromEmail' => 'nobody@sheldrake.org',
+    'fromEmail' => 'experiment@sheldrake.org',
 
 
 //------------------------//

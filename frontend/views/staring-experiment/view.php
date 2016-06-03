@@ -67,7 +67,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				}
 					
 				$totalTrials = $right + $wrong;
-				$accuracy = round($right / $totalTrials * 100);
+				$accuracy = ($right > 0) ? round($right / $totalTrials * 100) : 0;
 				
 				if ($pass > 0) {
 					print ucfirst($subject)." passed on $pass trials, leaving $totalTrials in play.";
@@ -75,13 +75,13 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				print " Of $totalTrials trials $subject guessed correctly <b>$right</b> times and incorrectly <b>$wrong</b> times, giving an accuracy rating of <b>$accuracy%</b>. ";
 				
 				if ($accuracy >= 90){ 
-					print "This is <i>scary</i> high; astonishingly above chance. Congradulations, $subject $subjectIs a <b>Savant</b> level detector!"; }
+					print "This is <i>scary</i> high; astonishingly above chance. Congratulations, $subject $subjectIs a <b>Savant</b> level detector!"; }
 				elseif ($accuracy >= 75){
-					print "This is <i>incredibly</i> high; significantly above chance. Congradulations, $subject $subjectIs an <b>Owl</b> level detector!"; }
+					print "This is <i>incredibly</i> high; significantly above chance. Congratulations, $subject $subjectIs an <b>Owl</b> level detector!"; }
 				elseif ($accuracy >= 55){
-					print "This is <i>very</i> high; well above chance. Congradulations, $subject $subjectIs a <b>Deer</b> level detector!"; }
+					print "This is <i>very</i> high; well above chance. Congratulations, $subject $subjectIs a <b>Deer</b> level detector!"; }
 				elseif ($accuracy > 50){
-					print "This is slightly above chane and could indicate something more than guessswork was involved. Keep trying!"; }
+					print "This is slightly above chance and could indicate something more than guesswork was involved. Keep trying!"; }
 				
 				elseif ($accuracy == 50){
 					print "This is right at the chance level, but don't be discouraged. It may take several tries to see an effect."; }
@@ -99,7 +99,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				elseif ($accuracy <= 45 && !$isHost){
 					print "This is <i>very</i> low; well below chance. You are a <b>Tiger</b> level hunter!"; }
 				elseif ($accuracy < 50){
-					print "This is slightly below chance and could indicate something more than guessswork was involved. Keep trying!"; }
+					print "This is slightly below chance and could indicate something more than guesswork was involved. Keep trying!"; }
 				
 			?>
 			</p>
@@ -119,7 +119,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 						<table class="table table-condensed">
 							<tr valign="middle">
 								<td>Subject</td>
-								<td><?=$host->first_name;?></td>
+								<td><?=$host->first_name;?> <?=$host->last_name;?></td>
 							</tr>
 							<tr valign="middle">
 								<td>Created</td>
@@ -244,7 +244,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				<?php if (!$isHost): ?>
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">Please provide your observer information</h3>
+							<h3 class="panel-title">Number of observers & relationship</h3>
 						</div>
 						<div class="panel-body">
 							<?php $form = ActiveForm::begin([
@@ -258,20 +258,23 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 								<div class="row">
 									<div class="col-sm-6">
 										<?= $form->field($participant, "observers")
-											->label('Number of observers')
-											->textInput(['placeholder'=>'']);
+											->label('No. of observers, including yourself')
+											->textInput(['placeholder'=>'1']);
 										?>
+										If it's just you looking at the screen put 1, if another perosn is watching with you put 2, etc.
 									</div>
 									<div class="col-sm-6">
 										<?= $form->field($participant, "relationship")
-											->label('Relationship to host')
+											->label('Your relationship to the subject')
 											->dropDownList([
 												'' => 'Select...',
-												'1'	=> 'Close friend',
-												'2'	=> 'Acquaintance',
-												'3' => 'Not known'
+												'1'	=> 'Close friend, partner or close family member',
+												'2'	=> 'Friend, colleague or familiar person',
+												'3' => 'Acquaintance or person seen infrequently',
+												'4' => 'Never met before'
 											]);
 										?>
+										If more are watching with you, select the closest relationship.
 									</div>
 								</div>
 								<div style="text-align:right">
