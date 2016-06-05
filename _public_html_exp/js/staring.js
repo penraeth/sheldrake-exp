@@ -167,13 +167,15 @@ var peerData = [];
 		debugmessage("New trial: " + startTime + " hide subject? " + hideSubject);
 
 		$('#currentTrial').html(currentTrial);
-		$('.wrap').removeClass('animateBackground');
+		$('.wrap').css('background-image', 'none');
 		
 		if (hideSubject) {
 			// hide video and display distraction
 			debugmessage("hiding subject");
 			$("#subjectVideo").hide();
-			$('.wrap').addClass('animateBackground');
+			var imgId=Math.floor(Math.random() * 30) + 1;
+			var imageUrl="/exp/images/staring/"+imgId+".jpg";
+			$('.wrap').css('background-image', imageUrl);
 		} else {
 			// show video
 			debugmessage("showing subject");
@@ -213,9 +215,11 @@ var peerData = [];
 	function subject_startTrial() {
 		$('#currentTrial').html(currentTrial);
 		$('.wrap').addClass('animateBackground');
+		$('#subjectDeterimation p').html('Please answer in the next <span class="countdown"></span> seconds.');
 		
 		// show or hide video
 		showVideo = Boolean(Math.round(Math.random()));
+		feedback = Boolean(Math.round(Math.random()));
 		if (showVideo) {
 			skylink.muteStream({ videoMuted: false, audioMuted: true });
 		} else {
@@ -236,8 +240,8 @@ var peerData = [];
 		var countdown = Math.ceil((trialDuration) - ((currentTime - startTime) /1000));
 		$('.countdown').html(countdown);
 		
-		if (countdown <= 0) { // finished before answering, mark as pass
-			endTrial(3);
+		if (countdown <= 0) {
+			$('#subjectDeterimation p').html('Trial over: <i>Please Answer</i>');
 		} else { // still going
 			if (countdown == showQuestionAt) {
 				$('#subjectDeterimation').show(); // are you being stared at?
@@ -250,12 +254,23 @@ var peerData = [];
 	}
 	
 	function endTrial(judgment) {
-		try{ clearTimeout(timerId); } catch(err){}
+		//try{ clearTimeout(timerId); } catch(err){}
 		$('.wrap').removeClass('animateBackground');
-		$('#subjectDeterimation').hide();
-		
-		// update database
-		logTrial(judgment);
+		if (feedback) {
+			if ((showVideo && judgment == 1) || (!showVideo && judgment == 0)) {
+				$('#subjectDeterimation p').html('<span class="correct">Correct</span>');
+			} else {
+				$('#subjectDeterimation p').html('<span class="incorrect">Incorrect</span>');
+			}
+			setTimeout(
+				function(){
+					$('#subjectDeterimation').hide();
+					logTrial(judgment);
+				}, 1000);
+		} else {
+			$('#subjectDeterimation').hide();
+			logTrial(judgment);
+		}
 	}
 	
 
@@ -369,6 +384,7 @@ var peerData = [];
 	function callApi(method, data) {
 		urlMethod = method.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 		urlString = '/exp/api/'+urlMethod+'/'+expId+'/'+apiKey;
+		alert(urlString);
 		
 		fd = new FormData();
 		for (key in data) {  fd.append(key, data[key]);  }
