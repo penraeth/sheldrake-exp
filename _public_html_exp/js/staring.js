@@ -384,7 +384,6 @@ var peerData = [];
 	function callApi(method, data) {
 		urlMethod = method.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 		urlString = '/exp/api/'+urlMethod+'/'+expId+'/'+apiKey;
-		alert(urlString);
 		
 		fd = new FormData();
 		for (key in data) {  fd.append(key, data[key]);  }
