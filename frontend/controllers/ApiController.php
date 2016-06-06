@@ -20,7 +20,7 @@ class ApiController extends Controller
     public function init() {
 		$this->layout = false;
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    }
+   }
         
 	public function behaviors() {
 		return [
@@ -51,7 +51,7 @@ class ApiController extends Controller
     	} else {
  			Yii::$app->response->statusCode = 202;
    		}
-   		print json_encode(['message'=>'ok']);
+   		return(['message'=>'ok']);
     }
 
     public function actionCompleteExperiment($id, $key) {
@@ -62,14 +62,14 @@ class ApiController extends Controller
     	} else {
  			Yii::$app->response->statusCode = 202;
    		}
-   		print json_encode(['message'=>'ok']);
+   		return(['message'=>'ok']);
     }
     
     
     public function actionGetNextTrial($id, $key) {
     	$this->verifyCall($id, $key);
     	$count = StaringTrial::getByExperimentId($id, true) + 1;
-    	print json_encode(['message'=>'ok','next' => $count]);
+    	return(['message'=>'ok','next' => $count]);
     }
     
     
@@ -96,7 +96,7 @@ class ApiController extends Controller
 				if ($e->errorInfo[1] == 1062) {
 					//pk error on duplicate entry; ignore
 	 				Yii::$app->response->statusCode = 202;
-    				print json_encode(['message'=>'ok','next' => $current]);
+    				return(['message'=>'ok','next' => $current]);
     				return;
 				} else {
 	 				Yii::$app->response->statusCode = 501;
@@ -111,7 +111,7 @@ class ApiController extends Controller
         }
         
         $current++;
-    	print json_encode(['message'=>'ok','next' => $current]);
+    	return(['message'=>'ok','next' => $current]);
    }
     
 }
