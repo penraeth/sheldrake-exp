@@ -259,7 +259,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 									<div class="col-sm-6">
 										<?= $form->field($participant, "observers")
 											->label('No. of observers, including yourself')
-											->textInput(['placeholder'=>'1']);
+											->textInput(['value'=>'1']);
 										?>
 										If it's just you looking at the screen put 1, if another perosn is watching with you put 2, etc.
 									</div>

@@ -1,3 +1,8 @@
+.wrap {
+	background-size: cover;
+	background-repeat:none;
+}
+
 #videoContainer,
 #beginExperiment,
 #trialContainer,
@@ -50,6 +55,18 @@
 
 #subjectDeterimation p {
     margin: 0 0 0 -17em;
+}
+
+#subjectDeterimation .correct {
+    font-style:bold;
+    font-size: 1.8em;
+    color:#008800;
+}
+
+#subjectDeterimation .incorrect {
+    font-style:bold;
+    font-size: 1.8em;
+    color:#880000;
 }
 
 .animateBackground {
