@@ -69,6 +69,11 @@
     color:#880000;
 }
 
+#trialInformation {
+    font-style:bold;
+    font-size: 1.4em;
+}
+
 .animateBackground {
 	--background: linear-gradient(270deg, #b85a6c, #905ab8, #417fcf, #01ad85);
 	-webkit-animation: backgroundAnimation 16s;

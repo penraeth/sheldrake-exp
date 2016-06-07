@@ -14,6 +14,7 @@ use yii\db\Expression;
  * @property string $created_at
  * @property integer $observers
  * @property integer $judgment
+ * @property integer $feedback
  *
  * @property StaringExperiment $exp
  */
@@ -43,8 +44,8 @@ class StaringTrial extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['exp_id', 'trial','observers','judgment'], 'required'],
-            [['exp_id', 'trial', 'observers', 'judgment'], 'integer'],
+            [['exp_id', 'trial','observers','judgment','feedback'], 'required'],
+            [['exp_id', 'trial', 'observers', 'judgment','feedback'], 'integer'],
             [['created_at'], 'safe']
         ];
     }
@@ -60,6 +61,7 @@ class StaringTrial extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'observers' => 'Observers',
             'judgment' => 'Judgment',
+            'feedback' => 'Feedback',
         ];
     }
 

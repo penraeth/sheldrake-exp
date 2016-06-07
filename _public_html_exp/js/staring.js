@@ -167,7 +167,7 @@ var peerData = [];
 		debugmessage("New trial: " + startTime + " hide subject? " + hideSubject);
 
 		$('#currentTrial').html(currentTrial);
-		$('.wrap').css('background-image', 'none');
+		$("#trialInformation").css("text-shadow","0px 1px #fff, 0px 2px 3px #fff, 0px 3px 4px #fff, -2px -2px 4px #fff");
 		
 		if (hideSubject) {
 			// hide video and display distraction
@@ -175,13 +175,13 @@ var peerData = [];
 			$("#subjectVideo").hide();
 			var imgId=Math.floor(Math.random() * 30) + 1;
 			var imageUrl="/exp/images/staring/"+imgId+".jpg";
-			$('.wrap').css('background-image', imageUrl);
+			$('.wrap').css({'background-image': 'url(' + imageUrl + ')', });
 		} else {
 			// show video
 			debugmessage("showing subject");
+			$('.wrap').css('background-image', '');
 			$("#subjectVideo").show();
 		}
-		
 		
 		trialTime=0;
 		
@@ -195,6 +195,7 @@ var peerData = [];
 		$('.countdown').html(countdown);
 		
 		if (countdown <= 0) {  // finished
+			debugmessage("trial over");
 			clearTimeout(timerId);
 			if (currentTrial==totalTrials) { // end of experiment
 				skylink.leaveRoom();
@@ -219,7 +220,6 @@ var peerData = [];
 		
 		// show or hide video
 		showVideo = Boolean(Math.round(Math.random()));
-		feedback = Boolean(Math.round(Math.random()));
 		if (showVideo) {
 			skylink.muteStream({ videoMuted: false, audioMuted: true });
 		} else {
@@ -232,6 +232,7 @@ var peerData = [];
 		debugmessage("New trial: " + startTime);
 		
 		trialTime=0;
+		feedback=Math.round(Math.random());
 		subject_displayCountdown();
 	}
 	
@@ -256,17 +257,20 @@ var peerData = [];
 	function endTrial(judgment) {
 		//try{ clearTimeout(timerId); } catch(err){}
 		$('.wrap').removeClass('animateBackground');
-		if (feedback) {
+		debugmessage("ending trial");
+		if (feedback == 1) {
 			if ((showVideo && judgment == 1) || (!showVideo && judgment == 0)) {
 				$('#subjectDeterimation p').html('<span class="correct">Correct</span>');
+				debugmessage("ending trial with feedback");
 			} else {
 				$('#subjectDeterimation p').html('<span class="incorrect">Incorrect</span>');
+				debugmessage("ending trial without feedback");
 			}
 			setTimeout(
 				function(){
 					$('#subjectDeterimation').hide();
 					logTrial(judgment);
-				}, 1000);
+				}, 400);
 		} else {
 			$('#subjectDeterimation').hide();
 			logTrial(judgment);
@@ -412,10 +416,12 @@ var peerData = [];
 	// prepare data for log call
 	function logTrial(judgment) {
 		countObservers();
+		debugmessage("logging trial with: " + totalObservers + " observers, " + feedback + " feedback and a judgement of " + judgment);
 		apiData = new Array();
 		apiData['trial'] = currentTrial;
 		apiData['observers'] = showVideo ? totalObservers : 0 ;
 		apiData['judgment'] = judgment;
+		apiData['feedback'] = feedback;
 		
 		callApi('logTrial', apiData);
 	}
