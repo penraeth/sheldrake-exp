@@ -12,6 +12,10 @@ var hideSubject = true;
 
 var peerData = [];
 
+if (showError){
+	$('#showError').show();
+}
+
 
 //-------------------------------------- skylink
 
@@ -23,17 +27,23 @@ var peerData = [];
 		
 		var mytime=new Date().getTime();
 		debugmessage("subject sent message ------------- " + message.content + " " + mytime );
-		// if peer is subject and a new trial has begin
-		if (peerInfo.userData.user == "subject" && Number(message.content) > currentTrial) {
-			if (!observerStarted) {
-				skylink.muteStream({ videoMuted: true, audioMuted: true });
-				trialDisplaySettings();
-				sizeVideos();
-				observerStarted=true;
+		
+		// if subject is sending message
+		if (peerInfo.userData.user == "subject") {
+			if (message.content == "done") { // If the experiment is over
+				skylink.leaveRoom();
+				location.href = exitURL;
+			} else if (Number(message.content) > currentTrial) { // If a new trial has begin
+				if (!observerStarted) {
+					skylink.muteStream({ videoMuted: true, audioMuted: true });
+					trialDisplaySettings();
+					sizeVideos();
+					observerStarted=true;
+				}
+				hideSubject=peerInfo.mediaStatus.videoMuted;
+				currentTrial=Number(message.content);
+				observer_startTrial();
 			}
-			hideSubject=peerInfo.mediaStatus.videoMuted;
-			currentTrial=Number(message.content);
-			observer_startTrial();
 		}
 	});
 	
@@ -65,13 +75,17 @@ var peerData = [];
 
 		// host is gone; return to main room
 		if (isObserver  &&  peerInfo.userData.user == "subject") {
-			setTimeout(window.location.reload(), 500);
+			setTimeout(location.href = expURL+'?error=true', 500);
 		}
 		
 		// remove from viewable list of participants
 		if (isSubject) {
-			delete peerData[peerId];
-			checkBeginSubject();
+			if (observerStarted){
+				setTimeout(location.href = expURL +'?error=true', 500);
+			} else {
+				delete peerData[peerId];
+				checkBeginSubject();
+			}
 		}
 	});
 	
@@ -197,10 +211,6 @@ var peerData = [];
 		if (countdown <= 0) {  // finished
 			debugmessage("trial over");
 			clearTimeout(timerId);
-			if (currentTrial==totalTrials) { // end of experiment
-				skylink.leaveRoom();
-				location.href = exitURL;
-			}
 		} else { // still going
 			var processingDelay = (currentTime - startTime) - trialTime;
 			//debugmessage("countdown: " + countdown + " adjustment:" + processingDelay);
@@ -255,22 +265,20 @@ var peerData = [];
 	}
 	
 	function endTrial(judgment) {
-		//try{ clearTimeout(timerId); } catch(err){}
 		$('.wrap').removeClass('animateBackground');
 		debugmessage("ending trial");
 		if (feedback == 1) {
+			var message= showVideo ? "You were stared at" : "You were NOT stared at"
 			if ((showVideo && judgment == 1) || (!showVideo && judgment == 0)) {
-				$('#subjectDeterimation p').html('<span class="correct">Correct</span>');
-				debugmessage("ending trial with feedback");
+				$('#subjectDeterimation p').html('<span class="correct">' +message+ '</span>');
 			} else {
-				$('#subjectDeterimation p').html('<span class="incorrect">Incorrect</span>');
-				debugmessage("ending trial without feedback");
+				$('#subjectDeterimation p').html('<span class="incorrect">' +message+ '</span>');
 			}
 			setTimeout(
 				function(){
 					$('#subjectDeterimation').hide();
 					logTrial(judgment);
-				}, 400);
+				}, 2000);
 		} else {
 			$('#subjectDeterimation').hide();
 			logTrial(judgment);
@@ -377,6 +385,7 @@ var peerData = [];
 		logTrial: function(data, status) {
 			if (currentTrial==totalTrials) { // end of experiment
 				callApi('completeExperiment');
+				sendMessageAll("done");
 			} else { // continue
 				callApi('getNextTrial');
 			}
