@@ -24,8 +24,9 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 	var userEmail='<?=Yii::$app->user->identity->email; ?>';
 	var observers=<?=$observers; ?>;
 	var exitURL='<?=Url::to(['staring-experiment/view', 'id' => $experiment->id]); ?>';
+	var expURL='<?=Url::to(['staring-experiment/experiment', 'id' => $experiment->id]); ?>';
+	var showError=<? if ($_GET["error"]) { print 'true'; } else { print 'false'; } ?>;
 </script>
-
 
 <?php if ($isSubject): ?>
 
@@ -49,6 +50,13 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 			<ul class="list-group">
 			</ul>
 		</div>
+		
+		<div id="showError" class="alert alert-danger">
+			<b>Sorry, one of the participants has left or lost their connection</b>
+			<p>
+				You may continue, picking up where you left off. For best results, we highly recommend using the latest version of either <a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Firefox</a> or <a href="https://www.google.com/chrome/browser/" target="_blank">Chrome</a>. 
+			</p>
+		</div>
 			
 		<p>
 			<a id="beginExperiment" class="btn btn-default" alt="Begin Experiment" href="" target="_blank">Begin Experiment</a>
@@ -71,8 +79,16 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 			<li> While visible, stare intently at the subject and avoid distractions.
 			<li> After a few seconds, the subject will determine whether you're staring at them, then the next trial begins.
 			<li> At the end of all trials you'll see the results of this experiment.
-		</ol>	
+		</ol>
+		
+		<div id="showError" class="alert alert-danger">
+			<b>Sorry, one of the participants has left or lost their connection</b>
+			<p>
+				You may continue, picking up where you left off. For best results, we highly recommend using the latest version of either <a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Firefox</a> or <a href="https://www.google.com/chrome/browser/" target="_blank">Chrome</a>.
+			</p>
+		</div>
 	</div>
+	
 	<div id="waitingOnSubject">
 		<b>Please wait for the subject to join the experiment...</b>
 	</div>
