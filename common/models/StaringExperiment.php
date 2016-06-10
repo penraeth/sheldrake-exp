@@ -105,10 +105,14 @@ class StaringExperiment extends \yii\db\ActiveRecord
 	}
      
      
-    public function getStaringParticipants()
-    {
-        return $this->hasMany(StaringParticipant::className(), ['exp_id' => 'id']);
+    public function getStaringParticipants() {
+        return $this->hasMany(StaringParticipant::className(), ['exp_id' => 'id'])->onCondition(['>', 'relationship', 0]);
     }
+    
+    public function getSubject() {
+        return $this->hasOne(StaringParticipant::className(), ['exp_id' => 'id'])->onCondition(['relationship' => 0]);
+    }
+    
 
     public function getUserInvitations()
     {

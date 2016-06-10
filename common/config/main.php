@@ -54,6 +54,9 @@ return [
                 ],
             ],
         ],
+        'distance' => [
+        	'class' => 'common\components\DistanceComponent',
+        ],
         
     ], // components
 

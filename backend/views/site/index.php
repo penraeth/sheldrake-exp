@@ -1,67 +1,98 @@
 <?php
+	use yii\helpers\Html;
+	use yii\helpers\Url;
+	use yii\grid\GridView;
+	use yii\widgets\ListView;
+	use common\models\Product;
+	use common\helpers\TzHelper;
 
-/* @var $this yii\web\View */
-$this->title = 'My Yii Application';
+	$this->title = 'Customer Documents';
+	
+	function col_dateStarted($model, $key, $index, $column) {
+		return TzHelper::convertLocal($model->created_at);
+	}
+
+	function col_participants($model, $key, $index, $column) {
+		$data = '';
+		foreach ($model->staringParticipants as $participant) {
+			$data .= $participant->user->first_name.' '.$participant->user->last_name;
+			$data .= '<br>';
+		}
+		return $data;
+	}
+
+	function col_relationship($model, $key, $index, $column) {
+		$data = '';
+		foreach ($model->staringParticipants as $participant) {
+			$data .= 'Very Well';
+			$data .= '<br>';
+		}
+		return $data;
+	}
+
+	function col_gender($model, $key, $index, $column) {
+		$data = '';
+		foreach ($model->staringParticipants as $participant) {
+			$data .= 'X';
+			$data .= '<br>';
+		}
+		return $data;
+	}
+
+	function col_observers($model, $key, $index, $column) {
+		$data = '';
+		foreach ($model->staringParticipants as $participant) {
+			$data .= $participant->observers;
+			$data .= '<br>';
+		}
+		return $data;
+	}
+
+	function col_distance($model, $key, $index, $column) {
+		$data = '';
+		foreach ($model->staringParticipants as $participant) {
+			if ($participant->distance >= 0) {
+				$data .= number_format($participant->distance / 5280, 1) .' mi';
+			} else {
+				$data = 'n/a';
+			}
+			$data .= '<br>';
+		}
+		return $data;
+	}
 ?>
-<div class="site-index">
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
+<div class="document-index">
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+    <h3><?= Html::encode($this->title) ?></h3>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['attribute' => 'datestarted', 'label' => 'Date', 'content' => 'col_dateStarted'],
+            ['attribute' => 'name', 'value' => 'name', 'filterInputOptions' => ['class'=>'form-control input-xs']],
+            ['attribute' => 'subject', 'value' => function($model) { return $model->subject->user->first_name.' '.$model->subject->user->last_name; }, 'filterInputOptions' => ['class'=>'form-control input-xs']],
+         	['attribute' => 'G', 'value' => 'subject.user.gender'],
+         	
+         	['attribute' => 'Participants', 'content' => 'col_participants'],
+         	['attribute' => 'Relation', 'content' => 'col_relationship'],
+         	['attribute' => 'G', 'content' => 'col_gender'],
+         	['attribute' => 'Obs', 'content' => 'col_observers'],
+         	['attribute' => 'Distance', 'content' => 'col_distance'],
+         	
+         	['attribute' => 'Trials', 'value' => function($model) { return 0; }, 'headerOptions' => ['style'=>'text-align:right'], 'contentOptions' => ['align'=>'right', 'width'=>'48px']],
+         	['attribute' => 'Right', 'value' => function($model) { return 0; }, 'contentOptions' => ['align'=>'right', 'width'=>'48px']],
+         	['attribute' => 'FB', 'value' => function($model) { return 0; }, 'contentOptions' => ['align'=>'right', 'width'=>'48px']],
+         	['attribute' => 'Right', 'value' => function($model) { return 0; }, 'contentOptions' => ['align'=>'right', 'width'=>'48px']],
+         	['attribute' => 'No FB', 'value' => function($model) { return 0; }, 'contentOptions' => ['align'=>'right', 'width'=>'48px']],
+         	['attribute' => 'Right', 'value' => function($model) { return 0; }, 'contentOptions' => ['align'=>'right', 'width'=>'48px'] ],
 
-    <div class="body-content">
+       ],
+        'headerRowOptions' => ['class'=>'small'],
+        'rowOptions' => ['class'=>'small'],
+        'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
+    ]); ?>
 
-        <div class="row">
-            <div class="col-lg-3">
-                <h3>Yii documentation</h3>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-3">
-                <h3>Yii forum</h3>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-3">
-                <h3>Yii extensions</h3>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-            <div class="col-lg-3">
-                <h3>Freetuts.org</h3>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.freetuts.org/">Freetuts.org &raquo;</a></p>
-            </div>
-        </div>
-
-    </div>
 </div>
-

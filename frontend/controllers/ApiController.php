@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\StaringExperiment;
+use common\models\StaringParticipant;
 use common\models\StaringTrial;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -56,7 +57,55 @@ class ApiController extends Controller
 
     public function actionCompleteExperiment($id, $key) {
     	$this->verifyCall($id, $key);
+    	
     	if (!$this->experiment->datecompleted) {
+    		// set result data
+    		$this->experiment->result_observers = 0;
+    		$this->experiment->result_genders = null;
+    		$this->experiment->result_relations = null;
+    		$this->experiment->result_distance = null;
+    		
+    		// get participant data
+    		$participants = StaringParticipant::getExpResults($id);
+    		foreach ($participants as $participant) {
+    			// calculate individual distance
+				$participant->distance  = Yii::$app->distance->calculate(
+					$this->experiment->subject->latitude,
+					$this->experiment->subject->longitude,
+					$participant->latitude,
+					$participant->longitude,
+					'ft'
+				);
+				$participant->distance_code = -1;
+    			foreach (Yii::$app->params['distance_ranges'] as $code=>$value) {
+    				if ($participant->distance > $value) {
+    					$participant->distance_code = $code;
+    				}
+    			}
+    			$participant->save();
+    		
+    			// aggregate results
+    			$this->experiment->result_observers += $participant->observers;
+    			
+    			if ($this->experiment->result_genders == null) {
+    				$this->experiment->result_genders = $participant->user->gender;
+    			} else if ($this->experiment->result_genders >= 0  &&  $this->experiment->result_genders != $participant->user->gender) {
+ 					$this->experiment->result_genders = -1;
+    			}
+
+    			if ($this->experiment->result_relations == null) {
+    				$this->experiment->result_relations = $participant->relationship;
+    			} else if ($this->experiment->result_relations >= 0  &&  $this->experiment->result_relations != $participant->relationship) {
+ 					$this->experiment->result_relations = -1;
+    			}
+
+    			if ($this->experiment->result_distance == null) {
+    				$this->experiment->result_distance = $participant->distance_code;
+    			} else if ($this->experiment->result_distance >= 0  &&  $this->experiment->result_distance != $participant->distance_code) {
+ 					$this->experiment->result_distance = -1;
+    			}
+    		}
+    		
     		$this->experiment->datecompleted = new Expression('NOW()');
     		$this->experiment->save();
     	} else {

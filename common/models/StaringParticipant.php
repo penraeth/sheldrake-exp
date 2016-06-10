@@ -80,6 +80,14 @@ class StaringParticipant extends \yii\db\ActiveRecord
 		}
 	} 
 
+	public static function getExpResults($id) {
+		$query = static::find()->joinWith('user');
+		$query->where(['staring_participant.exp_id' => $id]);
+		$query->andWhere('staring_participant.relationship > 0');
+		$query->andWhere('staring_participant.status > 0');
+		return $query->all();
+	} 
+
 
 
     public function getStaringExperiment()

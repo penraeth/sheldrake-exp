@@ -2,6 +2,7 @@
 namespace backend\controllers;
 
 use common\models\LoginForm;
+use backend\models\ExperimentSearch;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -64,10 +65,20 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
-    {
-        return $this->render('index');
-    }
+     
+	public function actionIndex()
+	{
+		$searchModel = new ExperimentSearch();
+		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+		$dataProvider->pagination = ['pageSize'=>16];
+		$dataProvider->sort = ['defaultOrder' => ['created_at'=>SORT_DESC]];
+
+		return $this->render('index', [
+			'searchModel' => $searchModel,
+			'dataProvider' => $dataProvider,
+		]);
+	}
+
 
     /**
      * Logs in the user if his account is activated,
