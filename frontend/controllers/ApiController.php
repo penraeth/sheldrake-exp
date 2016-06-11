@@ -44,16 +44,24 @@ class ApiController extends Controller
 	}
 
 
-    public function actionStartExperiment($id, $key) {
-    	$this->verifyCall($id, $key);
-    	if (!$this->experiment->datestarted) {
-    		$this->experiment->datestarted = new Expression('NOW()');
-    		$this->experiment->save();
-    	} else {
- 			Yii::$app->response->statusCode = 202;
-   		}
-   		return(['message'=>'ok']);
-    }
+	public function actionStartExperiment($id, $key) {
+		$this->verifyCall($id, $key);
+		if (!$this->experiment->datestarted) {
+			$this->experiment->datestarted = new Expression('NOW()');
+			$this->experiment->save();
+			$participantIds=Yii::$app->request->post("participantIds");
+			if(participantIds) {
+				Yii::$app->db->createCommand("UPDATE staring_participant SET status=1 WHERE exp_id=:expId AND user_id IN (:participantIds)")
+					->bindValue(':expId', $id)
+					->bindValue(':participantIds', $participantIds)
+					->execute();
+			}
+		} else {
+			Yii::$app->response->statusCode = 202;
+		}
+		return(['message'=>'ok']);
+	}
+	
 
     public function actionCompleteExperiment($id, $key) {
     	$this->verifyCall($id, $key);

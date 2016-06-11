@@ -17,6 +17,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 ?>
 
 <script language="javascript">
+	var userId=<?=Yii::$app->user->identity->id; ?>;
 	var expId=<?=$experiment->id; ?>;
 	var apiKey='<?=$experiment->apiKey; ?>';
 	var isSubject=<?=$isSubject; ?>;

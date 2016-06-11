@@ -125,6 +125,7 @@ if (showError){
 		skylink.joinRoom(roomName, {
 			userData: {
 				user: userType,
+				userId: userId,
 				experiment: expId,
 				trial: currentTrial,
 				name: userName,
@@ -151,7 +152,7 @@ if (showError){
 	$('#beginExperiment').bind('click', function(e){
 		e.preventDefault();
 		debugmessage("Beginning experiment " + roomName);
-		callApi('startExperiment');
+		startExperiment();
 		callApi('getNextTrial');
 		trialDisplaySettings();
 		skylink.lockRoom();
@@ -339,11 +340,13 @@ if (showError){
 	
 	function countObservers() {
 		totalObservers = 0;
+		participantIds = [];
 		for (peerId in peerData) {
 			peerInfo = peerData[peerId];
 			totalObservers+=peerInfo.userData.observers;
+			participantIds.push(peerInfo.userData.userId);
 		}
-		debugmessage("observers present: " + totalObservers);
+		debugmessage("observers present: " + totalObservers + ", participant ids: " + participantIds.join());
 	}
 	
 	function sizeVideos() {
@@ -433,5 +436,15 @@ if (showError){
 		apiData['feedback'] = feedback;
 		
 		callApi('logTrial', apiData);
+	}
+	
+	
+	// prepare data for start experiment call
+	function startExperiment() {
+		countObservers();
+		apiData = new Array();
+		apiData['participantIds'] = participantIds.join();
+		
+		callApi('startExperiment', apiData);
 	}
 	
