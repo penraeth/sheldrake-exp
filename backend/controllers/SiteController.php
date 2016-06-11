@@ -71,7 +71,6 @@ class SiteController extends Controller
 		$searchModel = new ExperimentSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		$dataProvider->pagination = ['pageSize'=>16];
-		$dataProvider->sort = ['defaultOrder' => ['created_at'=>SORT_DESC]];
 
 		return $this->render('index', [
 			'searchModel' => $searchModel,

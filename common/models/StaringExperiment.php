@@ -22,6 +22,8 @@ use yii\db\Expression;
  */
 class StaringExperiment extends \yii\db\ActiveRecord
 {
+	public $row_totals;
+	
     /**
      * @inheritdoc
      */
@@ -48,7 +50,7 @@ class StaringExperiment extends \yii\db\ActiveRecord
         return [
             [['name'], 'filter', 'filter' => 'trim'],
             [['name'], 'required'],
-            [['name'], 'string', 'max' => 32]
+            [['name'], 'string', 'max' => 32],
         ];
     }
 
@@ -122,13 +124,14 @@ class StaringExperiment extends \yii\db\ActiveRecord
    /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsers()
-    {
+    public function getUsers() {
         return $this->hasMany(User::className(), ['id' => 'user_id'])->viaTable('staring_participant', ['exp_id' => 'id']);
     }
-    public function getHost()
-    {
+    public function getHost() {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+    public function getHostName() {
+    	return $this->host->name;
     }
 
     /**

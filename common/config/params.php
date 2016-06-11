@@ -63,12 +63,26 @@ return [
     	'0' => 'Female',
     	'1' => 'Male'
     ],
+    'genderFilter' => [
+    	null => '-',
+    	'0' => 'F',
+    	'1' => 'M',
+    	'-1' => 'Mx'
+    ],
     
     'relationships' => [
     	'1' => 'Close',
     	'2' => 'Friend',
     	'3' => 'Acquaintance',
     	'4' => 'Stranger'
+    ],
+    'relationshipFilter' => [
+    	null => '-',
+    	'1' => 'Close',
+    	'2' => 'Friend',
+    	'3' => 'Acquaintance',
+    	'4' => 'Stranger',
+    	'-1' => 'Mixed',
     ],
     
     'distances' => [
@@ -77,6 +91,15 @@ return [
     	'3' => '1+',
     	'4' => '100+',
     	'5' => '1,000+'
+    ],
+    'distanceFilter' => [
+    	null => '-',
+    	'1' => 'Near',
+    	'2' => '<1',
+    	'3' => '1+',
+    	'4' => '100+',
+    	'5' => '1,000+',
+    	'-1' => 'Mixed',
     ],
     
     'distance_ranges' => [

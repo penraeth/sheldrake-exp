@@ -195,3 +195,17 @@ hr.article-devider {
 .nz-meter-container {
     display: none;
 }
+
+
+
+.input-xs {
+  height: 20px;
+  padding: 4px 6px;
+  font-size: 10px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+.input-inline {
+	width: auto;
+	display: inline;
+}

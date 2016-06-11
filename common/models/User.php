@@ -108,6 +108,10 @@ class User extends UserIdentity
 	   return $this->gender == 1 ? 'male' : 'female';
 	}
 
+	public function getName() {
+		return $this->first_name . ' ' . $this->last_name;
+	}
+
 
     /**
      * Relation with Role model.
