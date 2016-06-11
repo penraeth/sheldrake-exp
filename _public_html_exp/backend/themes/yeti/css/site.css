@@ -209,3 +209,7 @@ hr.article-devider {
 	width: auto;
 	display: inline;
 }
+
+.pagination {
+	margin: 0px !important;
+}

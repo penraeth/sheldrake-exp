@@ -21,8 +21,8 @@ class ExperimentSearch extends StaringExperiment
     public function rules()
     {
         return [
-            [['name', 'hostName', 'hostGender', 'relations', 'genders', 'distances'], 'string'],
-            [['name', 'hostName', 'hostGender', 'relations', 'genders', 'distances'], 'safe'],
+            [['name', 'hostName', 'hostGender', 'relations', 'genders', 'distances', 'result_observers'], 'string'],
+            [['name', 'hostName', 'hostGender', 'relations', 'genders', 'distances', 'result_observers'], 'safe'],
         ];
     }
 
@@ -71,6 +71,7 @@ class ExperimentSearch extends StaringExperiment
 					'desc' => ['host.gender' => SORT_DESC],
 					'default' => SORT_ASC
             	],
+            	'result_observers'
             ]
         ]);
         $this->load($params);
@@ -94,6 +95,15 @@ class ExperimentSearch extends StaringExperiment
 		}
 		if ($this->distances != 0) {
 			$query->andFilterWhere(['result_distances' => $this->distances]);
+		}
+		if ($this->result_observers != '') {
+			if (is_numeric($this->result_observers)) {
+				$query->andFilterWhere(['result_observers' => $this->result_observers]);
+			} else if (preg_match('/^([\>\<]\={0,1})(\d+)$/', $this->result_observers, $ref)) {
+				$query->andFilterWhere([$ref[1], 'result_observers', $ref[2]]);
+			} else {
+				$this->result_observers = null;
+			}
 		}
         
         

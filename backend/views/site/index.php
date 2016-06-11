@@ -23,7 +23,13 @@
 		
 		
 		foreach ($model->staringTrials as $trial) {
-			$right = ($trial->observers == $trial->judgment)?1:0;
+			$right = 0;
+			if ($trial->observers > 0   &&  $trial->judgment > 0) {
+				$right = 1;
+			}
+			if ($trial->observers == 0   &&  $trial->judgment == 0) {
+				$right = 1;
+			}
 			
 			$model->row_totals['all_count']++;
 			$model->row_totals['all_right']+= $right;
@@ -48,7 +54,7 @@
 	// COLUMN FUNCTIONS 
 	
 	function col_date($model, $key, $index, $column) {
-		return TzHelper::convertLocal($model->datecompleted);
+		return TzHelper::convertLocal($model->datecompleted, 'm/d/y, H:i T');
 	}
 
 	function col_participants($model, $key, $index, $column) {
@@ -99,21 +105,48 @@
 		}
 		return $data;
 	}
+	
+	function col_result($model, $key, $index, $column) {
+		$data = '';
+		$attr = $column->attribute;
+		$chance = round($model->row_totals[$attr.'_count'] / 2, 1);
+		
+		if ($model->row_totals[$attr.'_right'] == 0) {
+			$data .= '<span class="glyphicon glyphicon-minus-sign" style="padding-right:4px; color:#cc0000" aria-hidden="true"></span>';
+		} else if ($model->row_totals[$attr.'_right'] == $model->row_totals[$attr.'_count']) {
+			$data .= '<span class="glyphicon glyphicon-plus-sign" style="padding-right:4px; color:#0088aa" aria-hidden="true"></span>';
+		} else if ($model->row_totals[$attr.'_right'] > $chance) {
+			$data .= '<span class="glyphicon glyphicon-plus-sign" style="padding-right:4px; color:#00aa00" aria-hidden="true"></span>';
+		} else if ($model->row_totals[$attr.'_right'] < $chance) {
+			$data .= '<span class="glyphicon glyphicon-minus-sign" style="padding-right:4px; color:#fab000" aria-hidden="true"></span>';
+		} else {
+			$data .= '<span class="glyphicon glyphicon-ok-sign" style="padding-right:4px; color:#F1DC00" aria-hidden="true"></span>';
+		}
+		
+		$data .= $model->row_totals[$attr.'_right'].'/'.$model->row_totals[$attr.'_count'];
+		return $data;
+	}
 
 ?>
 
 <div class="document-index">
 
-    <h3>Staring Experiment Results</h3>
+    <h4 style="font-weight:bold">Staring Experiment Results</h4>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'beforeRow' => 'row_totals',
+        'summaryOptions' => ['class' => 'small'],
+        'tableOptions' => ['class' => 'table table-striped table-bordered table-condensed'],
         'headerRowOptions' => ['class'=>'small'],
         'rowOptions' => ['class'=>'small'],
         'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
+        'layout' => "{items}{pager}",
+        'pager' => ['options' => ['class' => 'pagination pagination-sm pull-right'] ],
+        'summary' => '<span class="small" style="padding-top:0px;">Showing {begin}-{end} of {totalCount} records</span>',
+        
         'columns' => [
         	// DATE
             [
@@ -193,23 +226,59 @@
          	
          	// OBSERVERS
          	[
-         		'attribute'				=> 'Obs',
+         		'label'					=> 'Obs',
          		'content'				=> 'col_observers',
             	'contentOptions'		=> ['align'=>'right'],
             	'headerOptions'			=> ['style'=>'text-align:right'],
          	],
          	
-         	['attribute' => 'Total',  'value' => function($model) { return $model->result_observers; }, 'headerOptions' => ['style'=>'text-align:right'], 'contentOptions' => ['align'=>'right', 'style'=>'font-weight:bold']],
-         	['attribute' => 'Trials', 'value' => function($model) { return $model->row_totals['all_count']; }, 'headerOptions' => ['style'=>'text-align:right'], 'contentOptions' => ['align'=>'right']],
-         	['attribute' => 'Right',  'value' => function($model) { return $model->row_totals['all_right']; }, 'headerOptions' => ['style'=>'text-align:right'], 'contentOptions' => ['align'=>'right']],
-         	['attribute' => 'FB',     'value' => function($model) { return $model->row_totals['fby_count']; }, 'headerOptions' => ['style'=>'text-align:right'], 'contentOptions' => ['align'=>'right']],
-         	['attribute' => 'Right',  'value' => function($model) { return $model->row_totals['fby_right']; }, 'headerOptions' => ['style'=>'text-align:right'], 'contentOptions' => ['align'=>'right']],
-         	['attribute' => 'No FB',  'value' => function($model) { return $model->row_totals['fbn_count']; }, 'headerOptions' => ['style'=>'text-align:right'], 'contentOptions' => ['align'=>'right']],
-         	['attribute' => 'Right',  'value' => function($model) { return $model->row_totals['fbn_right']; }, 'headerOptions' => ['style'=>'text-align:right'], 'contentOptions' => ['align'=>'right']],
-         	['attribute' => 'Seen',   'value' => function($model) { return $model->row_totals['oby_count']; }, 'headerOptions' => ['style'=>'text-align:right'], 'contentOptions' => ['align'=>'right']],
-         	['attribute' => 'Right',  'value' => function($model) { return $model->row_totals['oby_right']; }, 'headerOptions' => ['style'=>'text-align:right'], 'contentOptions' => ['align'=>'right']],
-         	['attribute' => 'Unseen', 'value' => function($model) { return $model->row_totals['obn_count']; }, 'headerOptions' => ['style'=>'text-align:right'], 'contentOptions' => ['align'=>'right']],
-         	['attribute' => 'Right',  'value' => function($model) { return $model->row_totals['obn_right']; }, 'headerOptions' => ['style'=>'text-align:right'], 'contentOptions' => ['align'=>'right']],
+         	// TOTAL
+         	[
+         		'label'					=> 'Total',
+         		'attribute'				=> 'result_observers',
+         		'value'					=> function($model) { return $model->result_observers; },
+         		'contentOptions'		=> ['align'=>'right', 'style'=>'font-weight:bold'],
+            	'filter'				=> Html::activeTextInput($searchModel, 'result_observers', ['class'=>'form-control input-xs']),
+            	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
+         		'headerOptions'			=> ['style'=>'text-align:right']
+         	],
+         	
+         	// RESULTS
+         	[
+         		'label'					=> 'All',
+         		'attribute'				=> 'all',
+         		'content'				=> 'col_result',
+            	'contentOptions'		=> ['style'=>'white-space: nowrap', 'align'=>'center'],
+				'headerOptions'			=> ['style'=>'text-align:center'],
+			],
+         	[
+         		'label'					=> 'FB',
+         		'attribute'				=> 'fby',
+         		'content'				=> 'col_result',
+            	'contentOptions'		=> ['style'=>'white-space: nowrap', 'align'=>'center'],
+				'headerOptions'			=> ['style'=>'text-align:center'],
+			],
+         	[
+         		'label'					=> 'No FB',
+         		'attribute'				=> 'fbn',
+         		'content'				=> 'col_result',
+            	'contentOptions'		=> ['style'=>'white-space: nowrap', 'align'=>'center'],
+				'headerOptions'			=> ['style'=>'text-align:center'],
+			],
+         	[
+         		'label'					=> 'Seen',
+         		'attribute'				=> 'oby',
+         		'content'				=> 'col_result',
+            	'contentOptions'		=> ['style'=>'white-space: nowrap', 'align'=>'center'],
+				'headerOptions'			=> ['style'=>'text-align:center'],
+			],
+         	[
+         		'label'					=> 'Unseen',
+         		'attribute'				=> 'obn',
+         		'content'				=> 'col_result',
+            	'contentOptions'		=> ['style'=>'white-space: nowrap', 'align'=>'center'],
+				'headerOptions'			=> ['style'=>'text-align:center'],
+			],
 
        ],
     ]); ?>
