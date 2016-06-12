@@ -269,7 +269,7 @@ if (showError){
 		$('.wrap').removeClass('animateBackground');
 		debugmessage("ending trial");
 		if (feedback == 1) {
-			var message= showVideo ? "You were stared at" : "You were NOT stared at"
+			var message= showVideo ? "You were STARED AT" : "You were NOT stared at"
 			if ((showVideo && judgment == 1) || (!showVideo && judgment == 0)) {
 				$('#subjectDeterimation p').html('<span class="correct">' +message+ '</span>');
 			} else {

@@ -49,12 +49,9 @@ class ApiController extends Controller
 		if (!$this->experiment->datestarted) {
 			$this->experiment->datestarted = new Expression('NOW()');
 			$this->experiment->save();
-			$participantIds=Yii::$app->request->post("participantIds");
-			if(participantIds) {
-				Yii::$app->db->createCommand("UPDATE staring_participant SET status=1 WHERE exp_id=:expId AND user_id IN (:participantIds)")
-					->bindValue(':expId', $id)
-					->bindValue(':participantIds', $participantIds)
-					->execute();
+			$participantIds=explode(",", Yii::$app->request->post("participantIds"));
+			if($participantIds) {
+				StaringParticipant::updateAll(['status'=>1], ['exp_id'=>$id, 'user_id'=>$participantIds]);
 			}
 		} else {
 			Yii::$app->response->statusCode = 202;
