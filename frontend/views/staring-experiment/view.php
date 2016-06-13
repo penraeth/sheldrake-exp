@@ -49,58 +49,66 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 			<?php 
 				$right=0;
 				$wrong=0;
+				$fbRight=0;
+				$fbWrong=0;
 				$pass=0;
 				$subject = ($isHost) ? "you" : $host->first_name;
 				$subjectIs = ($isHost) ? "are" : "is";
+				$subjectWas = ($isHost) ? "were" : "was";
 				$observer = ($isHost) ? "the observers" : "you";
 				
 				foreach ($trials as $trial) {
 	
 					$observed = ($trial->observers == 0) ? 0 : 1;
+					$feedback = $trial->feedback;
 					if ($trial->judgment == $observed) {
 						$right++;
-					} elseif ($trial->judgment > 1) {
-						$pass++;
+						if ($feedback) { $fbRight++; }
 					} else {
 						$wrong++;
+						if ($feedback) { $fbWrong++; }
 					}
 				}
 					
 				$totalTrials = $right + $wrong;
+				$fbTotalTrials = $fbRight + $fbWrong;
 				$accuracy = ($right > 0) ? round($right / $totalTrials * 100) : 0;
+				$fbAccuracy = ($fbRight > 0) ? round($fbRight / $fbTotalTrials * 100) : 0;
 				
 				if ($pass > 0) {
 					print ucfirst($subject)." passed on $pass trials, leaving $totalTrials in play.";
 				}
-				print " Of $totalTrials trials $subject guessed correctly <b>$right</b> times and incorrectly <b>$wrong</b> times, giving an accuracy rating of <b>$accuracy%</b>. ";
-				
-				if ($accuracy >= 90){ 
-					print "This is <i>scary</i> high; astonishingly above chance. Congratulations, $subject $subjectIs a <b>Savant</b> level detector!"; }
-				elseif ($accuracy >= 75){
-					print "This is <i>incredibly</i> high; significantly above chance. Congratulations, $subject $subjectIs an <b>Owl</b> level detector!"; }
+				print " Of $totalTrials trials $subject guessed correctly <b>$right</b> times and incorrectly <b>$wrong</b> times, giving an overall accuracy rating of <b>$accuracy%</b>. ";
+
+				if ($accuracy >= 75){ 
+					print "This is <i>scary</i> high; astonishingly above chance."; }
+				elseif ($accuracy >= 65){
+					print "This is <i>incredibly</i> high; significantly above chance."; }
 				elseif ($accuracy >= 55){
-					print "This is <i>very</i> high; well above chance. Congratulations, $subject $subjectIs a <b>Deer</b> level detector!"; }
+					print "This is <i>very</i> high; well above chance."; }
 				elseif ($accuracy > 50){
 					print "This is slightly above chance and could indicate something more than guesswork was involved. Keep trying!"; }
 				
 				elseif ($accuracy == 50){
 					print "This is right at the chance level, but don't be discouraged. It may take several tries to see an effect."; }
 					
-				elseif ($accuracy <= 10 && $isHost){
-					print "This is <i>scary</i> low; astonishingly below chance. The observers are <b>Shadow</b> level hunters!"; }
-				elseif ($accuracy <= 10 && !$isHost){
-					print "This is <i>scary</i> low; astonishingly below chance. You are a <b>Shadow</b> level hunter!"; }
-				elseif ($accuracy <= 25 && $isHost){
-					print "This is <i>incredibly</i> low; significantly below chance. The observers are <b>Ninja</b> level hunters!"; }
-				elseif ($accuracy <= 25 && !$isHost){
-					print "This is <i>incredibly</i> low; significantly below chance. You are a <b>Ninja</b> level hunter!"; }
-				elseif ($accuracy <= 45 && $isHost){
-					print "This is <i>very</i> low; well below chance. The observers are <b>Tiger</b> level hunters!"; }
-				elseif ($accuracy <= 45 && !$isHost){
-					print "This is <i>very</i> low; well below chance. You are a <b>Tiger</b> level hunter!"; }
+				elseif ($accuracy <= 25){
+					print "This is <i>scary</i> low; astonishingly below chance."; }
+				elseif ($accuracy <= 35){
+					print "This is <i>incredibly</i> low; significantly below chance."; }
+				elseif ($accuracy <= 45){
+					print "This is <i>very</i> low; well below chance."; }
 				elseif ($accuracy < 50){
 					print "This is slightly below chance and could indicate something more than guesswork was involved. Keep trying!"; }
+
+
+				print "<BR><BR>After $fbTotalTrials trials, feedback on whether $subject $subjectWas observed or not was provided. For these $subject $subjectWas correct $fbRight times and incorrectly $fbWrong times, giving an accuracy of $fbAccuracy%.";
 				
+				if ($fbAccuracy > $accuracy){ 
+					print " ". ucfirst($subject) ." did better <i>with</i> feedback."; }
+				else {
+					print " ". ucfirst($subject) ." did better <i>without</i> feedback."; }
+
 			?>
 			</p>
 		</div>
@@ -204,6 +212,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 							<tr>
 								<td align="right"><b>trial</b></th>
 								<td align="center"><b># of observers</b></th>
+								<td align="center"><b>feedback</b></th>
 								<td align="center"><b>subject guessed</b></th>
 							</tr>
 							<?php foreach ($trials as $trial): ?>
@@ -222,10 +231,17 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 										$class ='wrong';
 										$judgment = 'wrong';
 									}
+									
+									if ($trial->feedback == 1) {
+										$feedback = 'yes';
+									} else {
+										$feedback = 'no';
+									}
 								?>
 								<tr valign="middle">
 									<td align="right" title="<?=$trial->created_at;?>"><?=$trial->trial;?></td>
 									<td align="center"><?=$observers;?></td>
+									<td align="center"><?=$feedback;?></td>
 									<td align="center" class="<?=$class;?>"><?=$judgment;?></td>
 								</tr>
 							<?php endforeach; ?>
