@@ -26,7 +26,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 	var observers=<?=$observers; ?>;
 	var exitURL='<?=Url::to(['staring-experiment/view', 'id' => $experiment->id]); ?>';
 	var expURL='<?=Url::to(['staring-experiment/experiment', 'id' => $experiment->id]); ?>';
-	var showError=<?php if ($_GET["error"]) { print 'true'; } else { print 'false'; } ?>;
+	var showError=<?php if (typeof $_GET['error'] !== 'undefined') { print 'true'; } else { print 'false'; } ?>;
 </script>
 
 <?php if ($isSubject): ?>
