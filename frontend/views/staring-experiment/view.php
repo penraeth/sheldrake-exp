@@ -24,10 +24,6 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 		color:red;
 		font-weight:normal;
 	}
-	.pass {
-		color:grey;
-		font-weight:normal;
-	}
 	.statement {
 	    background-color: #dff0d8;
 		color: #468847;
@@ -51,7 +47,6 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				$wrong=0;
 				$fbRight=0;
 				$fbWrong=0;
-				$pass=0;
 				$subject = ($isHost) ? "you" : $host->first_name;
 				$subjectIs = ($isHost) ? "are" : "is";
 				$subjectWas = ($isHost) ? "were" : "was";
@@ -75,17 +70,14 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				$accuracy = ($right > 0) ? round($right / $totalTrials * 100) : 0;
 				$fbAccuracy = ($fbRight > 0) ? round($fbRight / $fbTotalTrials * 100) : 0;
 				
-				if ($pass > 0) {
-					print ucfirst($subject)." passed on $pass trials, leaving $totalTrials in play.";
-				}
-				print " Of $totalTrials trials $subject guessed correctly <b>$right</b> times and incorrectly <b>$wrong</b> times, giving an overall accuracy rating of <b>$accuracy%</b>. ";
+				print "You have a 50% chance of guessing right for any staring trial. Of $totalTrials trials $subject guessed correctly <b>$right</b> times and incorrectly <b>$wrong</b> times, giving an overall accuracy rating of <b>$accuracy%</b>. ";
 
 				if ($accuracy >= 75){ 
 					print "This is <i>scary</i> high; astonishingly above chance."; }
 				elseif ($accuracy >= 65){
-					print "This is <i>incredibly</i> high; significantly above chance."; }
+					print "This is <i>very</i> high; significantly above chance."; }
 				elseif ($accuracy >= 55){
-					print "This is <i>very</i> high; well above chance."; }
+					print "This is above chance and could indicate something more than guesswork was involved. Keep trying!"; }
 				elseif ($accuracy > 50){
 					print "This is slightly above chance and could indicate something more than guesswork was involved. Keep trying!"; }
 				
@@ -95,9 +87,9 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				elseif ($accuracy <= 25){
 					print "This is <i>scary</i> low; astonishingly below chance."; }
 				elseif ($accuracy <= 35){
-					print "This is <i>incredibly</i> low; significantly below chance."; }
+					print "This is <i>very</i> low; significantly below chance."; }
 				elseif ($accuracy <= 45){
-					print "This is <i>very</i> low; well below chance."; }
+					print "This is below chance and could indicate something more than guesswork was involved. Keep trying!"; }
 				elseif ($accuracy < 50){
 					print "This is slightly below chance and could indicate something more than guesswork was involved. Keep trying!"; }
 
@@ -224,9 +216,6 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 									if ($trial->judgment == $observed) {
 										$class ='right';
 										$judgment = 'right';
-									} elseif ($trial->judgment > 1) {
-										$class ='pass';
-										$judgment = 'pass';
 									} else {
 										$class ='wrong';
 										$judgment = 'wrong';
