@@ -42,6 +42,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 		<!-- result statement -->
 		<div class="col-sm-8 col-sm-offset-2">
 			<p class="statement">
+			<b>Experiment: <?= Html::encode($experiment->name) ?> Completed <?=$experiment->datecompleted ?></b><BR><BR>
 			<?php 
 				$right=0;
 				$wrong=0;
@@ -70,31 +71,30 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				$accuracy = ($right > 0) ? round($right / $totalTrials * 100) : 0;
 				$fbAccuracy = ($fbRight > 0) ? round($fbRight / $fbTotalTrials * 100) : 0;
 				
-				print "You have a 50% chance of guessing right for any staring trial. Of $totalTrials trials $subject guessed correctly <b>$right</b> times and incorrectly <b>$wrong</b> times, giving an overall accuracy rating of <b>$accuracy%</b>. ";
+				print "Of $totalTrials trials $subject guessed correctly <b>$right</b> times and incorrectly <b>$wrong</b> times, giving an overall accuracy rating of <b>$accuracy%</b>. With a 50% chance of guessing right, this is ";
 
-				if ($accuracy >= 75){ 
-					print "This is <i>scary</i> high; astonishingly above chance."; }
-				elseif ($accuracy >= 65){
-					print "This is <i>very</i> high; significantly above chance."; }
-				elseif ($accuracy >= 55){
-					print "This is above chance and could indicate something more than guesswork was involved. Keep trying!"; }
+				if ($accuracy >= 80){ 
+					print "<i>extremely</i> high - significantly above chance - and strongly supports the hypothesis, that people can tell when they're stared at through a live video feed."; }
+				elseif ($accuracy >= 70){ 
+					print "<i>very</i> high - significantly above chance - and supports the hypothesis, that people can tell when they're stared at through a live video feed."; }
+				elseif ($accuracy >= 60){
+					print "well above the chance level and supports the hypothesis that people can tell when they're stared at through a live video feed."; }
 				elseif ($accuracy > 50){
-					print "This is slightly above chance and could indicate something more than guesswork was involved. Keep trying!"; }
+					print "slightly above chance. Keep trying!"; }
 				
 				elseif ($accuracy == 50){
-					print "This is right at the chance level, but don't be discouraged. It may take several tries to see an effect."; }
+					print "right at the chance level. Keep trying!"; }
 					
-				elseif ($accuracy <= 25){
-					print "This is <i>scary</i> low; astonishingly below chance."; }
-				elseif ($accuracy <= 35){
-					print "This is <i>very</i> low; significantly below chance."; }
-				elseif ($accuracy <= 45){
-					print "This is below chance and could indicate something more than guesswork was involved. Keep trying!"; }
+				elseif ($accuracy <= 20){
+					print "<i>extremely</i> low - significantly below chance - and may indicate that some people can disrupt another's ability to tell when they're being stared at."; }
+				elseif ($accuracy <= 30){
+					print "<i>very</i> low - significantly above chance - and may indicate that some people can disrupt another's ability to tell when they're being stared at."; }
+				elseif ($accuracy <= 40){
+					print "well below the chance level and may indicate that some people can disrupt another's ability to tell when they're being stared at."; }
 				elseif ($accuracy < 50){
-					print "This is slightly below chance and could indicate something more than guesswork was involved. Keep trying!"; }
+					print "slightly below chance. Keep trying!"; }
 
-
-				print "<BR><BR>After $fbTotalTrials trials, feedback on whether $subject $subjectWas observed or not was provided. For these $subject $subjectWas correct $fbRight times and incorrectly $fbWrong times, giving an accuracy of $fbAccuracy%.";
+				print "<BR><BR>In $fbTotalTrials trials $subject $subjectWas told at the end whether anyone was staring. For these $subject $subjectWas correct $fbRight times and incorrect $fbWrong times, giving an accuracy of $fbAccuracy%.";
 				
 				if ($fbAccuracy > $accuracy){ 
 					print " ". ucfirst($subject) ." did better <i>with</i> feedback."; }
@@ -105,6 +105,55 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 			</p>
 		</div>
 		
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+			
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Trial Results</h3>
+					</div>
+					<div class="panel-body panel-table-data">
+						<table class="table table-condensed">
+							<tr>
+								<td align="right"><b>trial</b></th>
+								<td align="center"><b># of observers</b></th>
+								<td align="center"><b>feedback</b></th>
+								<td align="center"><b>subject guessed</b></th>
+							</tr>
+							<?php foreach ($trials as $trial): ?>
+								<?php
+									switch($trial->observers) {
+										case 0: $observers = 'none'; $observed = 0; break;
+										default: $observers = $trial->observers; $observed = 1;
+									}
+									if ($trial->judgment == $observed) {
+										$class ='right';
+										$judgment = 'right';
+									} else {
+										$class ='wrong';
+										$judgment = 'wrong';
+									}
+									
+									if ($trial->feedback == 1) {
+										$feedback = 'yes';
+									} else {
+										$feedback = 'no';
+									}
+								?>
+								<tr valign="middle">
+									<td align="right" title="<?=$trial->created_at;?>"><?=$trial->trial;?></td>
+									<td align="center"><?=$observers;?></td>
+									<td align="center"><?=$feedback;?></td>
+									<td align="center" class="<?=$class;?>"><?=$judgment;?></td>
+								</tr>
+							<?php endforeach; ?>
+						</table>
+					</div>
+				</div>
+			
+			</div>
+		</div>
+	
 			
 	<?php endif; ?>
 
@@ -189,59 +238,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 	<?php endif; ?>
 	
 	
-	<?php if ( $experiment->datecompleted ): ?>
-		<!-- completed -->
-		
-		<div class="row">
-			<div class="col-sm-6 col-sm-offset-3">
-			
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title">Trial Results</h3>
-					</div>
-					<div class="panel-body panel-table-data">
-						<table class="table table-condensed">
-							<tr>
-								<td align="right"><b>trial</b></th>
-								<td align="center"><b># of observers</b></th>
-								<td align="center"><b>feedback</b></th>
-								<td align="center"><b>subject guessed</b></th>
-							</tr>
-							<?php foreach ($trials as $trial): ?>
-								<?php
-									switch($trial->observers) {
-										case 0: $observers = 'none'; $observed = 0; break;
-										default: $observers = $trial->observers; $observed = 1;
-									}
-									if ($trial->judgment == $observed) {
-										$class ='right';
-										$judgment = 'right';
-									} else {
-										$class ='wrong';
-										$judgment = 'wrong';
-									}
-									
-									if ($trial->feedback == 1) {
-										$feedback = 'yes';
-									} else {
-										$feedback = 'no';
-									}
-								?>
-								<tr valign="middle">
-									<td align="right" title="<?=$trial->created_at;?>"><?=$trial->trial;?></td>
-									<td align="center"><?=$observers;?></td>
-									<td align="center"><?=$feedback;?></td>
-									<td align="center" class="<?=$class;?>"><?=$judgment;?></td>
-								</tr>
-							<?php endforeach; ?>
-						</table>
-					</div>
-				</div>
-			
-			</div>
-		</div>
-	
-	<?php else: ?>
+	<?php if ( !$experiment->datecompleted ): ?>
 		<!-- active -->
 		
 		<div class="row">
