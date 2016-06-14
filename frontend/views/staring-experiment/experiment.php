@@ -55,7 +55,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 		<div id="showError" class="alert alert-danger">
 			<b>Sorry, one of the participants has left or lost their connection</b>
 			<p>
-				You may continue, picking up where you left off. For best results, we highly recommend using the latest version of either <a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Firefox</a> or <a href="https://www.google.com/chrome/browser/" target="_blank">Chrome</a>. 
+				You may continue with the experiment, picking up where you left off, once everyone has reconnected.
 			</p>
 		</div>
 			
@@ -85,7 +85,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 		<div id="showError" class="alert alert-danger">
 			<b>Sorry, one of the participants has left or lost their connection</b>
 			<p>
-				You may continue, picking up where you left off. For best results, we highly recommend using the latest version of either <a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Firefox</a> or <a href="https://www.google.com/chrome/browser/" target="_blank">Chrome</a>.
+				You may continue with the experiment, picking up where you left off, once everyone has reconnected.
 			</p>
 		</div>
 	</div>
