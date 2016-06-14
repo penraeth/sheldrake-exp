@@ -118,9 +118,9 @@
 		} else if ($model->row_totals[$attr.'_right'] > $chance) {
 			$data .= '<span class="glyphicon glyphicon-plus" style="padding-right:4px; color:#00aa00" aria-hidden="true"></span>';
 		} else if ($model->row_totals[$attr.'_right'] < $chance) {
-			$data .= '<span class="glyphicon glyphicon-minus" style="padding-right:4px; color:#fab000" aria-hidden="true"></span>';
+			$data .= '<span class="glyphicon glyphicon-minus" style="padding-right:4px; color:#cc0000" aria-hidden="true"></span>';
 		} else {
-			$data .= '<span class="glyphicon glyphicon-remove" style="padding-right:4px; color:#000088" aria-hidden="true"></span>';
+			$data .= '<span class="glyphicon glyphicon-remove" style="padding-right:4px; color:#aaa" aria-hidden="true"></span>';
 		}
 		$data .= $model->row_totals[$attr.'_right'].'/'.$model->row_totals[$attr.'_count'];
 		return $data;
