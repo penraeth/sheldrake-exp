@@ -76,8 +76,21 @@ a.desc:after {
 
 /*-- Other --*/
 
+.table-bordered {
+	border:none !important;
+}
+
 .grid-view th {
     white-space: nowrap;
+    border:none !important;
+}
+
+.filters {
+    background-color:#eeffee;
+}
+
+.filters td {
+    border:none !important;
 }
 
 .hint-block {

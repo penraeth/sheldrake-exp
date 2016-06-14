@@ -176,7 +176,7 @@
             
           	// HOST GENDER
          	[
-         		'label'					=> 'Gen',
+         		'label'					=> 'Gender',
          		'attribute'				=> 'hostGender',
          		'value'					=> function($model) { return substr(Yii::$app->params['genders'][$model->host->gender], 0, 1); },
             	'contentOptions'		=> ['style'=>'white-space: nowrap', 'align'=>'center'],
@@ -187,7 +187,7 @@
         	
          	// PARTICIPANTS
          	[
-         		'attribute' => 'Participants',
+         		'attribute' => 'Observers',
          		'content' => 'col_participants',
             	'contentOptions'		=> ['style'=>'white-space: nowrap'],
          	],
@@ -204,7 +204,7 @@
          	
          	// GENDERS
          	[
-         		'label'					=> 'Gen',
+         		'label'					=> 'Gender',
          		'attribute'				=> 'genders',
          		'content'				=> 'col_genders',
             	'contentOptions'		=> ['style'=>'white-space: nowrap', 'align'=>'center'],
@@ -215,7 +215,7 @@
          	
          	// DISTANCES
          	[
-         		'label'					=> 'Distance',
+         		'label'					=> 'Distance (M)',
          		'attribute'				=> 'distances',
          		'content'				=> 'col_distances',
             	'contentOptions'		=> ['style'=>'white-space: nowrap', 'align'=>'right'],
@@ -226,7 +226,7 @@
          	
          	// OBSERVERS
          	[
-         		'label'					=> 'Obs',
+         		'label'					=> '#Obs',
          		'content'				=> 'col_observers',
             	'contentOptions'		=> ['align'=>'right'],
             	'headerOptions'			=> ['style'=>'text-align:right'],
