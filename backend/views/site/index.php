@@ -247,11 +247,11 @@
          	
          	// TOTAL
          	[
-         		'label'					=> 'Total #Obs',
+         		'label'					=> 'Total Obs',
          		'attribute'				=> 'result_observers',
          		'value'					=> function($model) { return $model->result_observers; },
          		'contentOptions'		=> ['align'=>'right', 'style'=>'font-weight:bold'],
-            	'filter'				=> Html::activeTextInput($searchModel, 'result_observers', ['class'=>'form-control input-xs', 'style'=>'width:3em;']),
+            	'filter'				=> Html::activeTextInput($searchModel, 'result_observers', ['class'=>'form-control input-xs', 'style'=>'width:4em;']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
          		'headerOptions'			=> ['style'=>'text-align:center']
          	],
@@ -282,14 +282,14 @@
          		'label'					=> 'Seen',
          		'attribute'				=> 'oby',
          		'content'				=> 'col_result',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeffff', 'align'=>'center'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeffee', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
 			],
          	[
          		'label'					=> 'Unseen',
          		'attribute'				=> 'obn',
          		'content'				=> 'col_result',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeffff', 'align'=>'center'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeffee', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
 			],
 
