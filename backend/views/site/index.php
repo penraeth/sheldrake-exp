@@ -188,7 +188,7 @@
          	[
          		'attribute' => 'Observers',
          		'content' => 'col_participants',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap', 'background-color'=>'#eeffee'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeffee'],
          	],
          	
          	// RELATIONSHIPS
