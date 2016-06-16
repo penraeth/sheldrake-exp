@@ -157,7 +157,7 @@
             
             // NAME
             [
-            	'label'					=> 'Name',
+            	'label'					=> 'Experiment',
             	'attribute'				=> 'name',
             	'value'					=> 'name',
             	'contentOptions'		=> ['style'=>'white-space: nowrap'],
@@ -169,7 +169,7 @@
             	'label'					=> 'Subject',
             	'attribute'				=> 'hostName',
             	'value'					=> function($model) { return $model->hostName; },
-            	'contentOptions'		=> ['style'=>'white-space: nowrap'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeffee'],
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             ],
             
@@ -178,7 +178,7 @@
          		'label'					=> 'Gender',
          		'attribute'				=> 'hostGender',
          		'value'					=> function($model) { return substr(Yii::$app->params['genders'][$model->host->gender], 0, 1); },
-            	'contentOptions'		=> ['style'=>'white-space: nowrap', 'align'=>'center'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeffee', 'align'=>'center'],
             	'filter'				=> Html::activeDropDownList($searchModel, 'hostGender', [null=>'-',0=>'F',1=>'M'], ['class'=>'form-control input-xs input-inline']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             	'headerOptions'			=> ['style'=>'text-align:center'],
@@ -188,7 +188,7 @@
          	[
          		'attribute' => 'Observers',
          		'content' => 'col_participants',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeffee'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeeeff'],
          	],
          	
          	// RELATIONSHIPS
@@ -196,7 +196,7 @@
          		'label'					=> 'Relation',
          		'attribute'				=> 'relations',
          		'content' 				=> 'col_relationships',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeeeff'],
             	'filter'				=> Html::activeDropDownList($searchModel, 'relations', Yii::$app->params['relationshipFilter'], ['class'=>'form-control input-xs input-inline']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
          	],
@@ -206,7 +206,7 @@
          		'label'					=> 'Gender',
          		'attribute'				=> 'genders',
          		'content'				=> 'col_genders',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap', 'align'=>'center'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeeeff', 'align'=>'center'],
             	'filter'				=> Html::activeDropDownList($searchModel, 'genders', Yii::$app->params['genderFilter'], ['class'=>'form-control input-xs input-inline']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             	'headerOptions'			=> ['style'=>'text-align:center'],
@@ -217,7 +217,7 @@
          		'label'					=> 'Distance (M)',
          		'attribute'				=> 'distances',
          		'content'				=> 'col_distances',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap', 'align'=>'right'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeeeff', 'align'=>'right'],
             	'filter'				=> Html::activeDropDownList($searchModel, 'distances', Yii::$app->params['distanceFilter'], ['class'=>'form-control input-xs input-inline']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             	'headerOptions'			=> ['style'=>'text-align:right'],
