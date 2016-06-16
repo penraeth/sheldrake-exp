@@ -261,7 +261,7 @@
          		'label'					=> 'Trials',
          		'attribute'				=> 'all',
          		'content'				=> 'col_result',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#ffeeee', 'align'=>'center'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#efe; font-style:bold', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
 			],
          	[
@@ -282,14 +282,14 @@
          		'label'					=> 'Seen',
          		'attribute'				=> 'oby',
          		'content'				=> 'col_result',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeffee', 'align'=>'center'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eef', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
 			],
          	[
          		'label'					=> 'Unseen',
          		'attribute'				=> 'obn',
          		'content'				=> 'col_result',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeffee', 'align'=>'center'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eef', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
 			],
 
