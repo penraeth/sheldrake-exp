@@ -247,11 +247,11 @@
          	
          	// TOTAL
          	[
-         		'label'					=> 'Total Observers',
+         		'label'					=> 'Total #Obs',
          		'attribute'				=> 'result_observers',
          		'value'					=> function($model) { return $model->result_observers; },
          		'contentOptions'		=> ['align'=>'right', 'style'=>'font-weight:bold'],
-            	'filter'				=> Html::activeTextInput($searchModel, 'result_observers', ['class'=>'form-control input-xs']),
+            	'filter'				=> Html::activeTextInput($searchModel, 'result_observers', ['class'=>'form-control input-xs', 'style'=>'width:3em;']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
          		'headerOptions'			=> ['style'=>'text-align:center']
          	],
