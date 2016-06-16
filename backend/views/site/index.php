@@ -188,7 +188,7 @@
          	[
          		'attribute' => 'Observers',
          		'content' => 'col_participants',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap', 'background-color'=>'#eeffee'],
          	],
          	
          	// RELATIONSHIPS
@@ -233,7 +233,7 @@
          	
          	// TOTAL
          	[
-         		'label'					=> 'Total',
+         		'label'					=> 'Total Observers',
          		'attribute'				=> 'result_observers',
          		'value'					=> function($model) { return $model->result_observers; },
          		'contentOptions'		=> ['align'=>'right', 'style'=>'font-weight:bold'],
@@ -244,7 +244,7 @@
          	
          	// RESULTS
          	[
-         		'label'					=> 'All',
+         		'label'					=> 'Trials',
          		'attribute'				=> 'all',
          		'content'				=> 'col_result',
             	'contentOptions'		=> ['style'=>'white-space: nowrap', 'align'=>'center'],
