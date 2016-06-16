@@ -1,4 +1,18 @@
-   <?php
+<style tyle="text/css">
+
+	td {
+		white-space: nowrap;
+	}
+	.subject {
+		color:#009900;
+	}
+	
+	.observer {
+		color:#000099;
+	}
+</style>
+
+<?php
 	use yii\helpers\Html;
 	use yii\helpers\Url;
 	use yii\grid\GridView;
@@ -152,7 +166,7 @@
             	'label'					=> 'Date',
             	'attribute'				=> 'datecompleted',
             	'content'				=> 'col_date',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap'],
+            	'contentOptions'		=> [],
             ],
             
             // NAME
@@ -160,7 +174,7 @@
             	'label'					=> 'Experiment',
             	'attribute'				=> 'name',
             	'value'					=> 'name',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap'],
+            	'contentOptions'		=> [],
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             ],
             
@@ -169,7 +183,7 @@
             	'label'					=> 'Subject',
             	'attribute'				=> 'hostName',
             	'value'					=> function($model) { return $model->hostName; },
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeffee'],
+            	'contentOptions'		=> ['class'=>'subject'],
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             ],
             
@@ -178,7 +192,7 @@
          		'label'					=> 'Gender',
          		'attribute'				=> 'hostGender',
          		'value'					=> function($model) { return substr(Yii::$app->params['genders'][$model->host->gender], 0, 1); },
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeffee', 'align'=>'center'],
+            	'contentOptions'		=> ['class'=>'subject', 'align'=>'center'],
             	'filter'				=> Html::activeDropDownList($searchModel, 'hostGender', [null=>'-',0=>'F',1=>'M'], ['class'=>'form-control input-xs input-inline']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             	'headerOptions'			=> ['style'=>'text-align:center'],
@@ -188,7 +202,7 @@
          	[
          		'attribute' => 'Observers',
          		'content' => 'col_participants',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeeeff'],
+            	'contentOptions'		=> ['class'=>'observer'],
          	],
          	
          	// RELATIONSHIPS
@@ -196,7 +210,7 @@
          		'label'					=> 'Relation',
          		'attribute'				=> 'relations',
          		'content' 				=> 'col_relationships',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeeeff'],
+            	'contentOptions'		=> ['class'=>'observer'],
             	'filter'				=> Html::activeDropDownList($searchModel, 'relations', Yii::$app->params['relationshipFilter'], ['class'=>'form-control input-xs input-inline']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
          	],
@@ -206,7 +220,7 @@
          		'label'					=> 'Gender',
          		'attribute'				=> 'genders',
          		'content'				=> 'col_genders',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeeeff', 'align'=>'center'],
+            	'contentOptions'		=> ['class'=>'observer', 'align'=>'center'],
             	'filter'				=> Html::activeDropDownList($searchModel, 'genders', Yii::$app->params['genderFilter'], ['class'=>'form-control input-xs input-inline']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             	'headerOptions'			=> ['style'=>'text-align:center'],
@@ -217,7 +231,7 @@
          		'label'					=> 'Distance (M)',
          		'attribute'				=> 'distances',
          		'content'				=> 'col_distances',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eeeeff', 'align'=>'right'],
+            	'contentOptions'		=> ['class'=>'observer', 'align'=>'right'],
             	'filter'				=> Html::activeDropDownList($searchModel, 'distances', Yii::$app->params['distanceFilter'], ['class'=>'form-control input-xs input-inline']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             	'headerOptions'			=> ['style'=>'text-align:right'],
@@ -227,8 +241,8 @@
          	[
          		'label'					=> '#Obs',
          		'content'				=> 'col_observers',
-            	'contentOptions'		=> ['style'=>'background-color:#eeeeff', 'align'=>'right'],
-            	'headerOptions'			=> ['style'=>'text-align:right'],
+            	'contentOptions'		=> ['class'=>'observer', 'align'=>'center'],
+            	'headerOptions'			=> ['style'=>'text-align:center'],
          	],
          	
          	// TOTAL
@@ -239,7 +253,7 @@
          		'contentOptions'		=> ['align'=>'right', 'style'=>'font-weight:bold'],
             	'filter'				=> Html::activeTextInput($searchModel, 'result_observers', ['class'=>'form-control input-xs']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
-         		'headerOptions'			=> ['style'=>'text-align:right']
+         		'headerOptions'			=> ['style'=>'text-align:center']
          	],
          	
          	// RESULTS
