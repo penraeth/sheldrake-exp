@@ -164,6 +164,8 @@
         'layout' => "{items}{pager}",
         'pager' => ['options' => ['class' => 'pagination pagination-sm pull-right'] ],
         'summary' => '<span class="small" style="padding-top:0px;">Showing {begin}-{end} of {totalCount} records</span>',
+		'showFooter'=>TRUE,
+		'footerRowOptions'=>['style'=>'font-weight:bold;'],
         
         'columns' => [
         	// DATE
@@ -184,7 +186,7 @@
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             ],
             
-            // HOST
+            // Subject
             [
             	'label'					=> 'Subject',
             	'attribute'				=> 'hostName',
@@ -193,7 +195,7 @@
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             ],
             
-          	// HOST GENDER
+          	// Subject GENDER
          	[
          		'label'					=> 'Gender',
          		'attribute'				=> 'hostGender',
@@ -234,13 +236,13 @@
          	
          	// DISTANCES
          	[
-         		'label'					=> 'Distance (M)',
+         		'label'					=> 'Distance',
          		'attribute'				=> 'distances',
          		'content'				=> 'col_distances',
             	'contentOptions'		=> ['class'=>'observer', 'align'=>'right'],
             	'filter'				=> Html::activeDropDownList($searchModel, 'distances', Yii::$app->params['distanceFilter'], ['class'=>'form-control input-xs input-inline']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
-            	'headerOptions'			=> ['style'=>'text-align:right'],
+            	'headerOptions'			=> ['style'=>'text-align:center'],
          	],
          	
          	// OBSERVERS
@@ -269,6 +271,7 @@
          		'content'				=> 'col_result',
             	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#efe; font-weight:bold', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
+				'footer'				=> '',
 			],
          	[
          		'label'					=> 'FB',
