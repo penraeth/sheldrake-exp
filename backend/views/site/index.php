@@ -70,6 +70,11 @@
 	function col_date($model, $key, $index, $column) {
 		return TzHelper::convertLocal($model->datecompleted, 'm/d/y, H:i T');
 	}
+	
+	function col_name($model, $key, $index, $column) {
+		$experimentView = "<a href=" . Url::to(['staring-experiment/view', 'id' => $model->id, 'user_id' => $model->user_id]) . " target=_blank>" . $model->name . "</a>";
+		return $experimentView;
+	}
 
 	function col_participants($model, $key, $index, $column) {
 		$data = '';
@@ -173,6 +178,7 @@
             [
             	'label'					=> 'Experiment',
             	'attribute'				=> 'name',
+         		'content' 				=> 'col_name',
             	'value'					=> 'name',
             	'contentOptions'		=> [],
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
@@ -261,7 +267,7 @@
          		'label'					=> 'Trials',
          		'attribute'				=> 'all',
          		'content'				=> 'col_result',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#efe; font-style:bold', 'align'=>'center'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#efe; font-weight:bold', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
 			],
          	[
@@ -282,14 +288,14 @@
          		'label'					=> 'Seen',
          		'attribute'				=> 'oby',
          		'content'				=> 'col_result',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eef', 'align'=>'center'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#f6efee', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
 			],
          	[
          		'label'					=> 'Unseen',
          		'attribute'				=> 'obn',
          		'content'				=> 'col_result',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#eef', 'align'=>'center'],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#f6efee', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
 			],
 
