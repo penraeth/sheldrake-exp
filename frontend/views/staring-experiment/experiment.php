@@ -44,7 +44,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 			<li> Keep your attention on the screen and avoid distractions.
 			<li> After a few seconds, you'll be asked to determine whether you're being stared at.
 			<li> Half the time you'll recieve feedback to confirm your guess.
-			<li> At the end of all trials you'll see the results of the experiment.
+			<li> At the end you'll see the results of this experiment.
 		</ol>
 		
 		<h4>Participants</h4>
@@ -81,7 +81,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 			<li> While visible, stare intently at the subject and avoid distractions.
 			<li> After a few seconds, the subject will determine whether you're staring at them.
 			<li> Half the time they'll recieve feedback to confirm their guess.
-			<li> At the end of all trials you'll see the results of this experiment.
+			<li> At the end you'll see the results of this experiment.
 		</ol>
 		
 		<div id="showError" class="alert alert-danger">

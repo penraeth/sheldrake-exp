@@ -5,6 +5,10 @@ body {
     height: 100%;
 }
 
+.green {
+	color:#009900;
+}
+
 .wrap {
     min-height: 100%;
     height: auto;
@@ -171,6 +175,11 @@ div.required label:after {
     color: #c4a500;   
 }
 
+.pale {
+    color: #ccc;
+    padding-left:1em;
+}
+
 hr.top {
     margin-top: 0px;
     border-width: 1px;
@@ -209,7 +218,7 @@ hr.article-devider {
   display: inline-block;
   min-width: 10px;
   padding: 3px 7px;
-  font-size: 12px;
+  font-size: 18px;
   font-weight: bold;
   color: #009900;
   line-height: 1;

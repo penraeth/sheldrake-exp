@@ -41,8 +41,11 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 		
 		<!-- result statement -->
 		<div class="col-sm-8 col-sm-offset-2">
-			<p class="statement">
-			<b>Experiment: <?= Html::encode($experiment->name) ?> Completed <?=$experiment->datecompleted ?></b><BR><BR>
+			<div class="statement">
+				<p>
+					<b>Experiment: <?= Html::encode($experiment->name) ?> Completed <?=$experiment->datecompleted ?></b>
+				</p>
+				
 			<?php 
 				$right=0;
 				$wrong=0;
@@ -71,7 +74,7 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				$accuracy = ($right > 0) ? round($right / $totalTrials * 100) : 0;
 				$fbAccuracy = ($fbRight > 0) ? round($fbRight / $fbTotalTrials * 100) : 0;
 				
-				print "Of $totalTrials trials $subject guessed correctly <b>$right</b> times and incorrectly <b>$wrong</b> times, giving an overall accuracy rating of <b>$accuracy%</b>. With a 50% chance of guessing right, this is ";
+				print "<p>Of $totalTrials trials $subject guessed correctly <b>$right</b> times and incorrectly <b>$wrong</b> times, giving an overall accuracy rating of <b>$accuracy%</b>. With a 50% chance of guessing right, this is ";
 
 				if ($accuracy >= 80){ 
 					print "<i>extremely</i> high - significantly above chance - and strongly supports the hypothesis, that people can tell when they're stared at through a live video feed."; }
@@ -94,15 +97,23 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 				elseif ($accuracy < 50){
 					print "slightly below chance. Keep trying!"; }
 
-				print "<BR><BR>In $fbTotalTrials trials $subject $subjectWas told at the end whether anyone was staring. For these $subject $subjectWas correct $fbRight times and incorrect $fbWrong times, giving an accuracy of $fbAccuracy%.";
+				print "</p><p>In $fbTotalTrials trials $subject $subjectWas told at the end whether anyone was staring. For these $subject $subjectWas correct $fbRight times and incorrect $fbWrong times, giving an accuracy of $fbAccuracy%.";
 				
 				if ($fbAccuracy > $accuracy){ 
 					print " ". ucfirst($subject) ." did better <i>with</i> feedback."; }
 				else {
 					print " ". ucfirst($subject) ." did better <i>without</i> feedback."; }
+				
+				print "</p>";
 
 			?>
+
+			<p>
+				<a class="btn btn-info" href="<?= Url::to(['staring-experiment/create']) ?>">Try again, as the subject&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+				<a class="btn btn-info" href="/exp/"> Home&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
 			</p>
+
+			</div>
 		</div>
 		
 		<div class="row">
