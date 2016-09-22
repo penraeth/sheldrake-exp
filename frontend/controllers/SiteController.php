@@ -30,6 +30,15 @@ class SiteController extends Controller
      * Returns a list of behaviors that this component should behave as.
      *
      * @return array
+     
+     no idea why this was below, but I ran into trouble with it
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+            
      */
     public function behaviors()
     {
@@ -44,16 +53,10 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'signup'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
                 ],
             ],
         ];
@@ -248,10 +251,19 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {  
+    
+        if (!Yii::$app->user->isGuest) 
+        {
+            return $this->goHome();
+        }
+    	
         $model = new SignupForm();
         
+        // if a get request and email address is passed in
         if (Yii::$app->request->isGet  &&  Yii::$app->request->get('email')) {
         	$model->email = Yii::$app->request->get('email');
+        	
+        // or if a post and its validated
         } else if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             // try to save user data in database
             if ($user = $model->signup()) 
