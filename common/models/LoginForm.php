@@ -114,6 +114,7 @@ class LoginForm extends Model
 				Yii::$app->session['timezone'] = $_POST['timezone'];
 			}
 			
+			// login with duration of 30 days
             return Yii::$app->user->login($this->getUser(), 3600 * 24 * 30);
         } 
         else 

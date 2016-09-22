@@ -24,6 +24,7 @@ return [
         'user' => [
             'identityClass' => 'common\models\UserIdentity',
             'enableAutoLogin' => true,
+            'autoRenewCookie' => true,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
