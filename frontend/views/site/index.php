@@ -33,7 +33,7 @@ $this->registerJsFile('@exp/js/data-table.js', ['depends' => [\yii\web\JqueryAss
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-6">
-					<h3>
+					<h3 style="color:#800">
 						<b>Be the Subject</b>
 					</h3>
 					<p>
@@ -73,7 +73,7 @@ $this->registerJsFile('@exp/js/data-table.js', ['depends' => [\yii\web\JqueryAss
 				</div>
 				<div class="col-sm-6">
 				
-					<h3>
+					<h3 style="color:#800">
 						<b>Be an Observer</b>
 					</h3>
 					<p>

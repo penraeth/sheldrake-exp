@@ -109,8 +109,10 @@ $isHost = ($host->id == Yii::$app->user->identity->id);
 			?>
 
 			<p>
-				<a class="btn btn-info" href="<?= Url::to(['staring-experiment/create']) ?>">Try again, as the subject&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
-				<a class="btn btn-info" href="/exp/"> Home&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+				<a class="btn btn-info" href="<?= Url::to(['staring-experiment/create']) ?>">Do Another Experiment&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+			</p>
+			<p>
+				<?php ($isHost) ? print "Try being the observer this time: encourage your partner to create their own experiment." : print "Try being the subject this time: create your own experiment and invite your partner."; ?>
 			</p>
 
 			</div>
