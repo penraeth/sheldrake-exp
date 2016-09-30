@@ -5,6 +5,7 @@ use yii\helpers\Html;
 
 $signuplink = Yii::$app->urlManager->createAbsoluteUrl(['site/signup', 'email'=>$invitation['email']]);
 $signuptext = Yii::$app->urlManager->createAbsoluteUrl(['site/signup']);
+$explink = Yii::$app->urlManager->createAbsoluteUrl(['staring-experiment/view', 'id'=>$invitation['exp_id']]);
 $experiment = Yii::$app->urlManager->createAbsoluteUrl(['staring-experiment/view', 'email'=>$invitation['email'], 'id'=>$invitation['exp_id']]);
 
 ?>
@@ -15,7 +16,7 @@ $experiment = Yii::$app->urlManager->createAbsoluteUrl(['staring-experiment/view
     <p><?= $hostname ?> invited you to participate in an staring detection experiment online. Please use the link below to create an account.</p>
     <p><b>Create an account:</b> <?= Html::a($signuptext, $signuplink) ?></p>
     <p>Once logged in, or if you arleady have an account...</p>
-    <p><b>Join experiment:</b> <?= Html::a($experiment, $experiment) ?></p>
+    <p><b>Join experiment:</b> <?= Html::a($explink, $experiment) ?></p>
     </p>
 </div>
 
