@@ -29,7 +29,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 	var showError=<?php isset($_GET['error']) ? print 'true' : print 'false'; ?>;
 </script>
 
-<?php if (isSubject=='true'): ?>
+<?php if ($isSubject=='true'): ?>
 
 	<div id="waitingScreen">
 		<h3>
