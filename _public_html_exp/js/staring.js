@@ -280,7 +280,7 @@ if (showError){
 				$('#subjectDeterimation p').html('<span class="incorrect">' +message+ '</span>');
 			}
 		} else {
-			$('#subjectDeterimation p').html('No feedback this time');
+				$('#subjectDeterimation p').html('<span class="nofeedback">No feedback this time</span>');
 		}
 		setTimeout(
 			function(){
