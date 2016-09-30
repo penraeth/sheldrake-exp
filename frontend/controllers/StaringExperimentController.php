@@ -238,7 +238,7 @@ class StaringExperimentController extends Controller
 			$mail = Yii::$app->mailer->compose($template, ['invitation'=>$invitation,'hostname'=>$hostname])
 				->setFrom( Yii::$app->params['fromEmail'] )
 				->setTo($invitation->email)
-				->setSubject($hostname . ' invitied to join a Staring Experiment')
+				->setSubject($hostname . ' invitied you to join a Staring Experiment')
 				->send();
 			$invitation->email_status = ($mail)?1:-1;
     		$invitation->save();
