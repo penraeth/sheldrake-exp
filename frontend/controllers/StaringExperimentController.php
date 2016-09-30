@@ -232,12 +232,13 @@ class StaringExperimentController extends Controller
     private function sendInvites($id) {
 		$experiment = StaringExperiment::findOne($id);
     	$invitations = $experiment->userInvitations;
+    	$hostname = $experiment->host->first_name . " " . $experiment->host->last_name;
     	foreach ($invitations as $invitation) {
     		$template = ($invitation['user_id'])?'inviteUser':'inviteAnon';
-			$mail = Yii::$app->mailer->compose($template, ['invitation'=>$invitation])
+			$mail = Yii::$app->mailer->compose($template, ['invitation'=>$invitation,'hostname'=>$hostname])
 				->setFrom( Yii::$app->params['fromEmail'] )
 				->setTo($invitation->email)
-				->setSubject('You are invitied to join a Staring Experiment')
+				->setSubject($hostname . ' invitied to join a Staring Experiment')
 				->send();
 			$invitation->email_status = ($mail)?1:-1;
     		$invitation->save();

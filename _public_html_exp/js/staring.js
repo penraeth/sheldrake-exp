@@ -116,7 +116,7 @@ if (showError){
 	});
 	
 	skylink.init({
-		apiKey: '10185b27-a4cd-4ba0-a03f-e9bea4b5b67f'
+		apiKey: 'c919c00a-7e85-4ef7-9942-626a45487a11'
 	}, function(error, success) {
 		if (error) {
 			$('#status').html('Failed retrieval for room information ' + (error.error.message || error.error));
@@ -134,7 +134,11 @@ if (showError){
 				status: 'unknown'
 			},
 			audio: true,
-			video: true
+			video: true,
+			bandwidth: {
+				video:500,
+				audio:50
+			}
 		}, function(error, success) {
 			if (error) {
 				$('#status').html(error.error.message || error.error);
@@ -275,15 +279,14 @@ if (showError){
 			} else {
 				$('#subjectDeterimation p').html('<span class="incorrect">' +message+ '</span>');
 			}
-			setTimeout(
-				function(){
-					$('#subjectDeterimation').hide();
-					logTrial(judgment);
-				}, 2000);
 		} else {
-			$('#subjectDeterimation').hide();
-			logTrial(judgment);
+			$('#subjectDeterimation p').html('No feedback this time');
 		}
+		setTimeout(
+			function(){
+				$('#subjectDeterimation p').html('<span class="nofeedback">' +message+ '</span>');
+				logTrial(judgment);
+			}, 2000);
 	}
 	
 
@@ -324,7 +327,10 @@ if (showError){
 		}
 		
 		if (readyCount > 0) {
+			// now that we have at least one observer, show the begin button and start the clock on pre-experiment chat
 			$('#beginExperiment').show();
+			// some code here for limiting the time they can spend in video chat before beginning the experiment
+			// needs to be a warning message and then the connection is killed, with a refresh button
 		} else {
 			$('#beginExperiment').hide();
 		}

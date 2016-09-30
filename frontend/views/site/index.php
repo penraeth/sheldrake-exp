@@ -28,7 +28,7 @@ $this->registerJsFile('@exp/js/data-table.js', ['depends' => [\yii\web\JqueryAss
 <div class="site-index">
     <div class="body-content">
   
-		<h1 style="font-size:3em; font-weight:100; color:#ccc9cc;">Welcome <?= Yii::$app->user->identity->first_name ?></h1>
+		<h1 style="font-size:3em; font-weight:100; color:#ccc9cc;"><?= Yii::$app->user->identity->first_name ?>'s Staring Experiments</h1>
 		
 		<div class="container">
 			<div class="row">

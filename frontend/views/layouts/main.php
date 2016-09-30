@@ -37,7 +37,7 @@ AppAsset::register($this);
             ]);
 
             // everyone can see Home page
-            $menuItems[] = ['label' => Yii::t('app', 'my experiments'), 'url' => ['/site/index']];
+            $menuItems[] = ['label' => Yii::t('app', 'experiments home'), 'url' => ['/site/index']];
 
             // we do not need to display Article/index, About and Contact pages to editor+ roles
             /*if (!Yii::$app->user->can('editor')) 

@@ -69,6 +69,12 @@
     color:#880000;
 }
 
+#subjectDeterimation .nofeedback {
+    font-style:bold;
+    font-size: 1.8em;
+    color:#888;
+}
+
 #trialInformation {
     font-style:bold;
     font-size: 1.4em;

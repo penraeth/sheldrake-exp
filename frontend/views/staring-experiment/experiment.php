@@ -11,7 +11,7 @@ $this->title = $experiment->name;
 //$this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile('@exp/js/staring.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('//cdn.temasys.com.sg/skylink/skylinkjs/0.6.12/skylink.complete.min.js');
+$this->registerJsFile('//cdn.temasys.com.sg/skylink/skylinkjs/0.6.x/skylink.complete.min.js');
 $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 
 ?>
@@ -29,7 +29,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 	var showError=<?php isset($_GET['error']) ? print 'true' : print 'false'; ?>;
 </script>
 
-<?php if ($isSubject): ?>
+<?php if (isSubject=='true'): ?>
 
 	<div id="waitingScreen">
 		<h3>
