@@ -284,7 +284,7 @@ if (showError){
 		}
 		setTimeout(
 			function(){
-				$('#subjectDeterimation p').html('<span class="nofeedback">' +message+ '</span>');
+				$('#subjectDeterimation').hide();
 				logTrial(judgment);
 			}, 2000);
 	}
