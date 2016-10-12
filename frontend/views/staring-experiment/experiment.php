@@ -32,57 +32,49 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 <?php if ($isSubject=='true'): ?>
 
 	<div id="waitingScreen">
-		<h3>
-			Testing Video: <span id="status"></span>
-		</h3>
-		<p clear="both">
-			Below you should see your own video feed; make sure your face is well lit and centered. As others join the experiment, you'll see them appear. <b>During the experiment, do not leave this page or refresh your browser. Also refrain from communicating with others in your party.</b>
-		</p>
-		<ol>
-			<li> Once everyone has joined, begin the experiment.
-			<li> For each trial we randomly determine if the observers see you.
-			<li> Keep your attention on the screen and avoid distractions.
-			<li> After a few seconds, you'll be asked to determine whether you're being stared at.
-			<li> Half the time you'll recieve feedback to confirm your guess.
-			<li> At the end you'll see the results of this experiment.
-		</ol>
-		
-		<h4>Participants</h4>
-		<div id="peerList">
-			<ul class="list-group">
-			</ul>
-		</div>
+		<h2 style="font-size:3em; font-weight:100; color:#ccc9cc;">
+			Waiting Room for <?=$experiment->name; ?>
+		</h2>
 		
 		<div id="showError" class="alert alert-danger">
 			<b>Sorry, one of the participants has left or lost their connection</b>
 			<p>
 				You may continue with the experiment, picking up where you left off, once everyone has reconnected.
 			</p>
+		</div>
+		
+		<ol>
+			<li> Wait for your partners to appear & check your video below.
+			<li> Close other open applications to improve your computer's performance.
+			<li> Click the <i>Begin Experiment</i> button when ready.
+			<li> For each trial we randomly determine if you will be seen.
+			<li> You'll be asked <i>Are you being stared at?</i> and may answer <i>yes</i> or <i>no</i> at any time.
+			<li> Half the time you'll receive feedback to confirm your guess.
+			<li> After 20 trials you're done: a report will detail your results.
+		</ol>
+		
+		<h4>Testing Video: <span id="status"></span></h4>
+		<p clear="both">
+			Below you should see your own video; make sure your face is well lit and centered. As others join the experiment, you'll see them appear. During the experiment, do not leave this page or refresh your browser. Also refrain from communicating with others in your party.
+		</p>
+		<div id="peerList">
+			<ul class="list-group">
+			</ul>
 		</div>
 			
 		<p>
 			<a id="beginExperiment" class="btn btn-default" alt="Begin Experiment" href="" target="_blank">Begin Experiment</a>
 		</p>
 		
+		
 	</div>
 	
 <?php else: ?>
 
 	<div id="waitingScreen">
-		<h3>
-			Testing Video: <span id="status"></span>
-		</h3>
-		<p clear="both">
-			Below you should see the subject's video feed and that of other observers (if any) as they join the experiment. <b>During the experiment, do not leave this page or refresh your browser. Also refrain from communicating with others in your party.</b>
-		</p>
-		<ol>
-			<li> Once everyone has joined, the subject will begin the experiment.
-			<li> For each trial we randomly determine if you will see the subject.
-			<li> While visible, stare intently at the subject and avoid distractions.
-			<li> After a few seconds, the subject will determine whether you're staring at them.
-			<li> Half the time they'll recieve feedback to confirm their guess.
-			<li> At the end you'll see the results of this experiment.
-		</ol>
+		<h2 style="font-size:3em; font-weight:100; color:#ccc9cc;">
+			Waiting Room for <?=$experiment->name; ?> 
+		</h2>
 		
 		<div id="showError" class="alert alert-danger">
 			<b>Sorry, one of the participants has left or lost their connection</b>
@@ -90,10 +82,25 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 				You may continue with the experiment, picking up where you left off, once everyone has reconnected.
 			</p>
 		</div>
+		
+		<ol>
+			<li> Wait for your partners to appear & check your video below.
+			<li> Close other open applications to improve your computer's performance.
+			<li> The subject begins the experiment once everyone's ready.
+			<li> For each trial we randomly determine if you will see the subject or a random image.
+			<li> While visible, stare intently at the subject and avoid distractions.
+			<li> At anytime the subject may guess if they're being stared at, ending the trial.
+			<li> After 20 trials you're done: a report will detail your results.
+		</ol>
+		
+		<h4>Testing Video: <span id="status"></span></h4>
+		<p clear="both">
+			Below you should see the subject's video and that of other observers (if any) as they join the experiment. During the experiment, do not leave this page or refresh your browser. Also refrain from communicating with others in your party.
+		</p>
 	</div>
 	
 	<div id="waitingOnSubject">
-		<b>Please wait for the subject to join the experiment...</b>
+		<h4>Please wait for the subject to join the experiment...</h4>
 	</div>
 	
 <?php endif; ?>
