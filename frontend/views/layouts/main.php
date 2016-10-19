@@ -64,11 +64,13 @@ AppAsset::register($this);
             else 
             {
                 $menuItems[] = [
-                    'label' => Yii::t('app', 'Logout'). ' (' . Yii::$app->user->identity->first_name . ')',
+                    'label' => Yii::t('app', 'logout'). ' (' . Yii::$app->user->identity->first_name . ')',
                     'url' => ['/site/logout'],
                     'linkOptions' => ['data-method' => 'post']
                 ];
             }
+            
+            $menuItems[] = ['label' => Yii::t('app', 'back to main site'), 'url' => ['/']];
            
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],

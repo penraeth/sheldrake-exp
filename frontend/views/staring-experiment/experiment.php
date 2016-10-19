@@ -32,7 +32,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 <?php if ($isSubject=='true'): ?>
 
 	<div id="waitingScreen">
-		<h2 style="font-size:3em; font-weight:100; color:#ccc9cc;">
+		<h2 class="mainTitle">
 			Waiting Room for <?=$experiment->name; ?>
 		</h2>
 		
@@ -72,7 +72,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 <?php else: ?>
 
 	<div id="waitingScreen">
-		<h2 style="font-size:3em; font-weight:100; color:#ccc9cc;">
+		<h2 class="mainTitle">
 			Waiting Room for <?=$experiment->name; ?> 
 		</h2>
 		

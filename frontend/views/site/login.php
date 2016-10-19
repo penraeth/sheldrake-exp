@@ -18,11 +18,11 @@ $this->registerJsFile('@exp/js/jstimezonedetect/dist/jstz.min.js', ['depends' =>
 
 	<div class="row">
 		<div class="col-sm-6 col-sm-offset-3">
-		
+			<h1 class="mainTitle">
+				Experiments Login
+			</h1>
+
 			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<h3 class="panel-title">Experiments Login</h3>
-				</div>
 				<div class="panel-body">
 				
 					<?php $form = ActiveForm::begin([
@@ -61,7 +61,7 @@ $this->registerJsFile('@exp/js/jstimezonedetect/dist/jstz.min.js', ['depends' =>
 				
 				</div>
 			</div>
-			<div class="small" style="text-align:center">
+			<div style="text-align:center; font-size:1.5em;">
 				Don't have a login? <a href="<?= Url::to(['signup']) ?>"><?= Yii::t('app', 'Signup here.') ?></a>
 			</div>
 

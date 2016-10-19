@@ -180,6 +180,13 @@ div.required label:after {
     padding-left:1em;
 }
 
+.mainTitle {
+	font-size:3em;
+	font-weight:100;
+	color:#ccc9cc;
+}
+
+
 hr.top {
     margin-top: 0px;
     border-width: 1px;
