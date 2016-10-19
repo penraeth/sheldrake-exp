@@ -49,13 +49,13 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 			<li> Click the <i>Begin Experiment</i> button when ready.
 			<li> For each trial we randomly determine if you will be seen.
 			<li> You'll be asked <i>Are you being stared at?</i> and may answer <i>yes</i> or <i>no</i> at any time.
-			<li> Half the time you'll receive feedback to confirm your guess.
+			<li> Half the time you'll receive feedback about your guess.
 			<li> After 20 trials you're done: a report will detail your results.
 		</ol>
 		
 		<h4>Testing Video: <span id="status"></span></h4>
 		<p clear="both">
-			Below you should see your own video; make sure your face is well lit and centered. As others join the experiment, you'll see them appear. During the experiment, do not leave this page or refresh your browser. Also refrain from communicating with others in your party.
+			Below you should see your own video; make sure your face is well lit and centered. As others join the experiment you'll see them appear. During the experiment do not leave this page or refresh your browser. Importantly, refrain from communicating with others in your party.
 		</p>
 		<div id="peerList">
 			<ul class="list-group">
@@ -95,7 +95,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 		
 		<h4>Testing Video: <span id="status"></span></h4>
 		<p clear="both">
-			Below you should see the subject's video and that of other observers (if any) as they join the experiment. During the experiment, do not leave this page or refresh your browser. Also refrain from communicating with others in your party.
+			Below you should see the subject's video and that of other observers (if any) as they join the experiment. During the experiment, do not leave this page or refresh your browser. Importantly, refrain from communicating with others in your party.
 		</p>
 	</div>
 	

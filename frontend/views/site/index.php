@@ -53,7 +53,15 @@ $this->registerJsFile('@exp/js/data-table.js', ['depends' => [\yii\web\JqueryAss
 						<p>
 							<a class="btn btn-info small" href="<?=Url::to(['staring-experiment/view', 'id' => $experiment['id']]);?>">Open</a> &nbsp;
 							<b><?=$experiment['name'];?></b>
-							<span class="pale"><?=TzHelper::convertLocal( $experiment['created_at'] );?></span>
+							<span class="pale">
+								<?php
+									if (isset(Yii::$app->session['timezone'])  &&  Yii::$app->session['timezone']) {
+										print TzHelper::convertLocal( $experiment['created_at'] );
+									} else {
+										print TzHelper::convertLocal( $experiment['created_at'], 'M j, Y');
+									}
+								?>
+							</span>
 						</p>
 					<?php endforeach; ?>
 					
@@ -66,7 +74,15 @@ $this->registerJsFile('@exp/js/data-table.js', ['depends' => [\yii\web\JqueryAss
 						<p>
 							<a class="btn btn-info small" href="<?=Url::to(['staring-experiment/view', 'id' => $experiment['id']]);?>">Results</a> &nbsp;
 							<b><?=$experiment['name'];?></b>
-							<span class="pale"><?=TzHelper::convertLocal( $experiment['created_at'] );?></span>
+							<span class="pale">
+								<?php
+									if (isset(Yii::$app->session['timezone'])  &&  Yii::$app->session['timezone']) {
+										print TzHelper::convertLocal( $experiment['created_at'] );
+									} else {
+										print TzHelper::convertLocal( $experiment['created_at'], 'M j, Y');
+									}
+								?>
+							</span>
 						</p>
 					<?php endforeach; ?>
 					
@@ -92,7 +108,15 @@ $this->registerJsFile('@exp/js/data-table.js', ['depends' => [\yii\web\JqueryAss
 						<p>
 							<a class="btn btn-info small" href="<?=Url::to(['staring-experiment/view', 'id' => $experiment['id']]);?>">Open</a> &nbsp;
 							<b><?=$experiment['name'];?></b>
-							<span class="pale"><?=TzHelper::convertLocal( $experiment['created_at'] );?></span>
+							<span class="pale">
+								<?php
+									if (isset(Yii::$app->session['timezone'])  &&  Yii::$app->session['timezone']) {
+										print TzHelper::convertLocal( $experiment['created_at'] );
+									} else {
+										print TzHelper::convertLocal( $experiment['created_at'], 'M j, Y');
+									}
+								?>
+							</span>
 						</p>
 					<?php endforeach; ?>
 				
@@ -105,7 +129,15 @@ $this->registerJsFile('@exp/js/data-table.js', ['depends' => [\yii\web\JqueryAss
 						<p>
 							<a class="btn btn-info small" href="<?=Url::to(['staring-experiment/view', 'id' => $experiment['id']]);?>">Results</a> &nbsp;
 							<b><?=$experiment['name'];?></b>
-							<span class="pale"><?=TzHelper::convertLocal( $experiment['created_at'] );?></span>
+							<span class="pale">
+								<?php
+									if (isset(Yii::$app->session['timezone'])  &&  Yii::$app->session['timezone']) {
+										print TzHelper::convertLocal( $experiment['created_at'] );
+									} else {
+										print TzHelper::convertLocal( $experiment['created_at'], 'M j, Y');
+									}
+								?>
+							</span>
 						</p>
 					<?php endforeach; ?>
 					
