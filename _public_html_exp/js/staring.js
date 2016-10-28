@@ -1,4 +1,4 @@
-var debug = true;
+var debug = false;
 var roomName = String(expId) + apiKey;
 var totalTrials = 20;
 var currentTrial = 0;
@@ -9,6 +9,7 @@ var isObserver = isSubject ? false : true;
 var subjectPeerId = false;
 var observerStarted = false;
 var hideSubject = true;
+var experimentInProgress = false;
 
 var peerData = [];
 
@@ -35,7 +36,7 @@ if (showDropoutError){
 				location.href = exitURL;
 			} else if (Number(message.content) > currentTrial) { // If a new trial has begin
 				if (!observerStarted) {
-					skylink.muteStream({ videoMuted: true, audioMuted: true });
+					// skylink.muteStream({ videoMuted: true, audioMuted: true });
 					trialDisplaySettings();
 					sizeVideos();
 					observerStarted=true;
@@ -80,7 +81,7 @@ if (showDropoutError){
 		
 		// remove from viewable list of participants
 		if (isSubject) {
-			if (observerStarted){
+			if (experimentInProgress){
 				setTimeout(location.href = expURL +'?error=true', 500);
 			} else {
 				delete peerData[peerId];
@@ -241,6 +242,8 @@ if (showDropoutError){
 		
 		// show or hide video
 		showVideo = Boolean(Math.round(Math.random()));
+		debugmessage("showVideo Boolean: " + showVideo);
+		showVideo=true;
 		if (showVideo) {
 			skylink.muteStream({ videoMuted: false, audioMuted: true });
 		} else {
@@ -411,6 +414,7 @@ if (showDropoutError){
 	var resultFunctions = {
 		startExperiment: function(data, status) {
 			// started
+			experimentInProgress=true;
 		},
 		completeExperiment: function(data, status) {
 			skylink.leaveRoom();
