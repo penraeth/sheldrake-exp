@@ -16,7 +16,7 @@ class UserSearch extends User
      *
      * @var int
      */
-    private $_pageSize = 11;
+    private $_pageSize = 100;
 
     /**
      * Returns the validation rules for attributes.

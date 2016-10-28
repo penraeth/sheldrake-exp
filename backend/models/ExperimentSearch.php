@@ -71,6 +71,7 @@ class ExperimentSearch extends StaringExperiment
 					'desc' => ['host.gender' => SORT_DESC],
 					'default' => SORT_ASC
             	],
+            	'pagination' => false,
             	'result_observers'
             ]
         ]);

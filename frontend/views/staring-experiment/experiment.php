@@ -21,12 +21,13 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 	var expId=<?=$experiment->id; ?>;
 	var apiKey='<?=$experiment->apiKey; ?>';
 	var isSubject=<?=$isSubject; ?>;
+	var totalParticipants=<?=$totalParticipants; ?>;
 	var userName='<?=Yii::$app->user->identity->first_name . " ". Yii::$app->user->identity->last_name; ?>';
 	var userEmail='<?=Yii::$app->user->identity->email; ?>';
 	var observers=<?=$observers; ?>;
 	var exitURL='<?=Url::to(['staring-experiment/view', 'id' => $experiment->id]); ?>';
 	var expURL='<?=Url::to(['staring-experiment/experiment', 'id' => $experiment->id]); ?>';
-	var showError=<?php isset($_GET['error']) ? print 'true' : print 'false'; ?>;
+	var showDropoutError=<?php isset($_GET['error']) ? print 'true' : print 'false'; ?>;
 </script>
 
 <?php if ($isSubject=='true'): ?>
@@ -36,7 +37,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 			Waiting Room for <?=$experiment->name; ?>
 		</h2>
 		
-		<div id="showError" class="alert alert-danger">
+		<div id="dropoutError" class="alert alert-danger">
 			<b>Sorry, one of the participants has left or lost their connection</b>
 			<p>
 				You may continue with the experiment, picking up where you left off, once everyone has reconnected.
@@ -55,11 +56,16 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 		
 		<h4>Testing Video: <span id="status"></span></h4>
 		<p clear="both">
-			Below you should see your own video; make sure your face is well lit and centered. As others join the experiment you'll see them appear. During the experiment do not leave this page or refresh your browser. Importantly, refrain from communicating with others in your party.
+			Below you should see your own video; make sure your face is well lit and centered. As others join the experiment you'll see them appear. During the experiment do not leave this page or refresh your browser. Importantly, refrain from communicating with others in your party until afterwards.
 		</p>
 		<div id="peerList">
 			<ul class="list-group">
 			</ul>
+		</div>
+		<div id="autoStartWarning" class="alert alert-danger">
+			<p>
+				Everyone's here: please begin your experiment. It will <i>automatically</i> start in <span class="autoStartCountdown"></span> seconds.
+			</p>
 		</div>
 			
 		<p>
@@ -69,6 +75,16 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 		
 	</div>
 	
+	<div id="limitNotice" class="alert alert-warning">
+		<p>
+			If you're ready, please <i>begin the experiment</i>. Otherwise <i>continue later</i> once everyone's ready.
+		</p>
+		<p>
+			<a class="btn btn-default" alt="Begin Experiment" href="" target="_blank">Begin the Experiment</a>
+			<a class="btn btn-default" alt="Begin Experiment" href="" target="_blank">Continue Later</a>
+		</p>
+	</div>
+		
 <?php else: ?>
 
 	<div id="waitingScreen">
@@ -76,7 +92,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 			Waiting Room for <?=$experiment->name; ?> 
 		</h2>
 		
-		<div id="showError" class="alert alert-danger">
+		<div id="dropoutError" class="alert alert-danger">
 			<b>Sorry, one of the participants has left or lost their connection</b>
 			<p>
 				You may continue with the experiment, picking up where you left off, once everyone has reconnected.
@@ -95,7 +111,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 		
 		<h4>Testing Video: <span id="status"></span></h4>
 		<p clear="both">
-			Below you should see the subject's video and that of other observers (if any) as they join the experiment. During the experiment, do not leave this page or refresh your browser. Importantly, refrain from communicating with others in your party.
+			Below you should see the subject's video and that of other observers (if any) as they join the experiment. During the experiment, do not leave this page or refresh your browser. Importantly, refrain from communicating with others in your party until afterwards.
 		</p>
 	</div>
 	
@@ -106,24 +122,26 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 <?php endif; ?>
 
 
-	<div id="trialContainer">
-		<p id="trialInformation">
-			<span style="margin:0 25px 0 0">Trial <b><span id="currentTrial"></span></b> of <span id="totalTrials"></span></span> Countdown: <b><span class="countdown"></span></b>
+<div id="trialContainer">
+	<p id="trialInformation">
+		<span style="margin:0 25px 0 0">Trial <b><span id="currentTrial"></span></b> of <span id="totalTrials"></span></span> Countdown: <b><span class="countdown"></span></b>
+	</p>
+
+	<div id="subjectDeterimation">
+		<b>Are you being stared at?</b> 
+		<a id="yes" class="btn btn-default" alt="Yes" href="" target="_blank">Yes</a>
+		<a id="no" class="btn btn-default" alt="No" href="" target="_blank">No</a>
+		<p>
+			Please answer in the next <span class="countdown"></span> seconds.
 		</p>
-	
-		<div id="subjectDeterimation">
-			<b>Are you being stared at?</b> 
-			<a id="yes" class="btn btn-default" alt="Yes" href="" target="_blank">Yes</a>
-			<a id="no" class="btn btn-default" alt="No" href="" target="_blank">No</a>
-			<p>
-				Please answer in the next <span class="countdown"></span> seconds.
-			</p>
-		</div>
 	</div>
-	
-	<div id="videoContainer">
-		<video id="selftest" class="selfVideo" autoplay muted></video>
-		<span id="subjectVideo"></span>
-		<span id="peerVideo"></span>
+</div>
+
+<div id="videoContainer">
+	<video id="selftest" class="selfVideo" autoplay muted></video>
+	<span id="subjectVideo"></span>
+	<span id="peerVideo"></span>
+	<div id="observerCommand">
+		<b>Stare intently at the subject</b> 
 	</div>
-	
+</div>

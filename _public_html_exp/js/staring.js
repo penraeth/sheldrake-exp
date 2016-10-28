@@ -12,8 +12,8 @@ var hideSubject = true;
 
 var peerData = [];
 
-if (showError){
-	$('#showError').show();
+if (showDropoutError){
+	$('#dropoutError').show();
 }
 
 
@@ -155,12 +155,16 @@ if (showError){
 
 	$('#beginExperiment').bind('click', function(e){
 		e.preventDefault();
+		beginExperiment();
+	});
+	
+	function beginExperiment() {
 		debugmessage("Beginning experiment " + roomName);
 		startExperiment();
 		callApi('getNextTrial');
 		trialDisplaySettings();
 		skylink.lockRoom();
-	});
+	}
 	
 	$('#yes').bind('click', function(e){
 		e.preventDefault();
@@ -192,6 +196,7 @@ if (showError){
 			// hide video and display distraction
 			debugmessage("hiding subject");
 			$("#subjectVideo").hide();
+			$("#observerCommand").hide();
 			var imgId=Math.floor(Math.random() * 30) + 1;
 			var imageUrl="/exp/images/staring/"+imgId+".jpg";
 			$('.wrap').css({'background-image': 'url(' + imageUrl + ')', });
@@ -200,6 +205,7 @@ if (showError){
 			debugmessage("showing subject");
 			$('.wrap').css('background-image', '');
 			$("#subjectVideo").show();
+			$("#observerCommand").show();
 		}
 		
 		trialTime=0;
@@ -329,8 +335,9 @@ if (showError){
 		if (readyCount > 0) {
 			// now that we have at least one observer, show the begin button and start the clock on pre-experiment chat
 			$('#beginExperiment').show();
-			// some code here for limiting the time they can spend in video chat before beginning the experiment
-			// needs to be a warning message and then the connection is killed, with a refresh button
+			if(readyCount==totalParticipants-1) {
+				setTimeout(autoStartCountdown, 90000);
+			}
 		} else {
 			$('#beginExperiment').hide();
 		}
@@ -343,6 +350,29 @@ if (showError){
 			$('#waitingOnSubject').show();
 		}
 	}
+
+	var autoStartTime = 0;
+	var autoStartDuration = 0;
+	var autoStartCountdownDuration = 30;
+	
+	function autoStartCountdown() {
+		$('#autoStartWarning').show();
+		if (autoStartTime==0) { autoStartTime = new Date().getTime(); }
+		var currentTime = new Date().getTime(); // Get current time.  
+		var autoStartCount = Math.ceil((autoStartCountdownDuration) - ((currentTime - autoStartTime) /1000));
+		$('.autoStartCountdown').html(autoStartCount);
+		
+		if (autoStartCount <= 1) {
+			$('#autoStartWarning').hide();
+			beginExperiment();
+		} else { // still going
+			var processingDelay = (currentTime - autoStartTime) - autoStartDuration;
+			debugmessage("autostart countdown: " + autoStartCount + " adjustment:" + processingDelay);
+			autoStartDuration+=1000;
+			setTimeout(autoStartCountdown, (1000-processingDelay));
+		}
+	}
+
 	
 	function countObservers() {
 		totalObservers = 0;
@@ -372,8 +402,9 @@ if (showError){
 		$('#trialContainer').show();
 		$('#totalTrials').html(totalTrials);
 	}
-
-
+	
+	
+	
 //-------------------------------------- API
 
 	// these functions get called on successful completion of each API method

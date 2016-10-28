@@ -88,6 +88,12 @@ class StaringParticipant extends \yii\db\ActiveRecord
 		return $query->all();
 	} 
 
+	public static function getTotalParticipants($id) {
+		$query = static::find()->joinWith('user');
+		$query->where(['staring_participant.exp_id' => $id]);
+		return $query->count();
+	} 
+
 
 
     public function getStaringExperiment()

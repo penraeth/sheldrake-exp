@@ -184,6 +184,7 @@ div.required label:after {
 	font-size:3em;
 	font-weight:100;
 	color:#ccc9cc;
+	text-shadow: 0 1px 1px #009;
 }
 
 
