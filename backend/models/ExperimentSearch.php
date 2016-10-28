@@ -52,7 +52,8 @@ class ExperimentSearch extends StaringExperiment
         $query->with('staringTrials');
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query
+            'query' => $query,
+			'pagination' => false
         ]);
         $dataProvider->setSort([
 			'defaultOrder' => ['datecompleted'=>SORT_DESC],
@@ -71,7 +72,6 @@ class ExperimentSearch extends StaringExperiment
 					'desc' => ['host.gender' => SORT_DESC],
 					'default' => SORT_ASC
             	],
-            	'pagination' => false,
             	'result_observers'
             ]
         ]);
