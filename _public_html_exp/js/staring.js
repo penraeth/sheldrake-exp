@@ -243,7 +243,6 @@ if (showDropoutError){
 		// show or hide video
 		showVideo = Boolean(Math.round(Math.random()));
 		debugmessage("showVideo Boolean: " + showVideo);
-		showVideo=true;
 		if (showVideo) {
 			skylink.muteStream({ videoMuted: false, audioMuted: true });
 		} else {
