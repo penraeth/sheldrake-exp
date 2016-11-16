@@ -1,4 +1,4 @@
-var debug = false;
+var debug = true;
 var roomName = String(expId) + apiKey;
 var totalTrials = 20;
 var currentTrial = 0;
@@ -325,6 +325,7 @@ if (showDropoutError){
 		for (peerId in peerData) {
 			peerInfo = peerData[peerId];
 			itemClass = 'warning';
+			debugmessage("participant joining: " + peerInfo.userData.user + ", status: " + peerInfo.userData.status);
 			if (peerInfo.userData.user == 'subject') {
 				itemClass = 'success';
 			} else if (peerInfo.userData.user != 'subject'  &&  peerInfo.userData.status == 'ready') {
