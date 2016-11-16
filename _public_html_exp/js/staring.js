@@ -51,6 +51,7 @@ if (showDropoutError){
 	skylink.on('peerJoined', function(peerId, peerInfo, isSelf) {
 		if (isSubject) {
 			peerData[peerId] = peerInfo;
+			//peerData[peerId].userData.status='ready';
 			checkBeginSubject();
 		}
 		if (isSelf) return; // We already have a video element for our video and don't need to create a new one.
@@ -104,11 +105,12 @@ if (showDropoutError){
 		attachMediaStream(vid, stream);
 		sizeVideos();
 		
-		if (isObserver  &&  peerId == subjectPeerId) {
-			userData = skylink.getUserData();
-			userData.status = 'ready';
-			skylink.setUserData(userData);
-		}		
+		userData = skylink.getUserData();
+		userData.status = 'ready';
+		skylink.setUserData(userData);
+		if (isSubject) {
+			peerData[peerId].userData.status='ready';
+		}
 	});
 	
 	skylink.on('mediaAccessSuccess', function(stream) {
