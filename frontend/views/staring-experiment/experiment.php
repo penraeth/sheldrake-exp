@@ -125,6 +125,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 <div id="trialContainer">
 	<p id="trialInformation">
 		<span style="margin:0 25px 0 0">Trial <b><span id="currentTrial"></span></b> of <span id="totalTrials"></span></span> Countdown: <b><span class="countdown"></span></b>
+		<span id="observerCommand"><b>Stare intently at the subject</b></span>
 	</p>
 
 	<div id="subjectDeterimation">
@@ -141,7 +142,4 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 	<video id="selftest" class="selfVideo" autoplay muted></video>
 	<span id="subjectVideo"></span>
 	<span id="peerVideo"></span>
-	<div id="observerCommand">
-		<b>Stare intently at the subject</b> 
-	</div>
 </div>

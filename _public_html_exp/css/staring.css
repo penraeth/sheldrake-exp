@@ -35,7 +35,7 @@
 #videoContainer #subjectVideo.showSubject video,
 #videoContainer #subjectVideo.showSubject object {
 	display:inline-block;
-	width: 90% !important;
+	width: 81% !important;
 }
 
 .selfVideo {
@@ -80,17 +80,7 @@
 
 
 #observerCommand {
-	position:relative;
-    margin: 1.5em;
-    text-align:center;
-    z-index: 100;
-}
-
-#observerCommand b {
-    display: inline-block;
-    font-size: 1.8em;
-    margin: 0;
-    vertical-align: middle;
+    margin: 0 0 0 1.5em;
 }
 
 
