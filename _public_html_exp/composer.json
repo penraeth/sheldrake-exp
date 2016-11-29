@@ -17,6 +17,7 @@
         "nenad/yii2-password-strength": "*",
         "mihaildev/yii2-ckeditor": "*",
         "kartik-v/yii2-widgets": "*",
+        "kartik-v/yii2-grid": "*",
         "fedemotta/yii2-widget-datatables": "*"
     },
     "require-dev": {

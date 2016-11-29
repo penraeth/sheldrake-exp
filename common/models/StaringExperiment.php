@@ -23,6 +23,7 @@ use yii\db\Expression;
 class StaringExperiment extends \yii\db\ActiveRecord
 {
 	public $row_totals;
+	public $col_totals;
 	
     /**
      * @inheritdoc

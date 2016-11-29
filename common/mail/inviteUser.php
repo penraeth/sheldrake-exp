@@ -17,7 +17,7 @@ $experiment = Yii::$app->urlManager->createAbsoluteUrl(['staring-experiment/view
 </div>
 
 <p>
-	Have the latest version of <i>Chrome</i>, <i>Firefox</i> or <i>Opera</i> and a camera? You're ready. <i>Chrome</i> on an Android device will also work. <i>IE</i> and <i>Safari</i> users need to <a href="https://skylink.io/plugin/" target="_blank">install this plugin first</a>. 
+	Have the latest version of <i>Chrome</i>, <i>Firefox</i> or <i>Opera</i> and a camera? You're ready. <i>Chrome</i> on an Android device may also work. <i>IE</i> and <i>Safari</i> users need to <a href="https://skylink.io/plugin/" target="_blank">install this plugin first</a>. 
 </p>
 <p>
 	Traditional staring experiments involve one subject and one observer, staring at the back of the subject's neck. In this experiment, one or more observers stare directly at the subject's face, using new video sharing technology. Through several trials, observers see either the subject or a random image. Eath time the subject must guess whether or not they're being stared at.

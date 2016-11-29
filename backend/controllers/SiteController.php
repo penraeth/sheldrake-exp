@@ -70,7 +70,8 @@ class SiteController extends Controller
 	{
 		$searchModel = new ExperimentSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-		$dataProvider->pagination = ['pageSize'=>10];
+		$dataProvider->pagination = false;
+		//$dataProvider->pagination = ['pageSize'=>10];
 
 		return $this->render('index', [
 			'searchModel' => $searchModel,

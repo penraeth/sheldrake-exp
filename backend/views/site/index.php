@@ -15,14 +15,15 @@
 <?php
 	use yii\helpers\Html;
 	use yii\helpers\Url;
-	use yii\grid\GridView;
+	//use yii\grid\GridView;
+	use kartik\grid\GridView;
 	use yii\widgets\ListView;
 	use common\models\Product;
 	use common\helpers\TzHelper;
+	
+	$allTrials=0;
 		
-	
-	// ROW AGGREGATE FUNCTIONS
-	
+	// ROW AGGREGATE FUNCTION
 	function row_totals($model, $key, $index, $column) {
 		$model->row_totals['all_count'] = 0;
 		$model->row_totals['all_right'] = 0;
@@ -47,25 +48,67 @@
 			
 			$model->row_totals['all_count']++;
 			$model->row_totals['all_right']+= $right;
+			$col_totals['all_count']++;
+			$col_totals['all_right']+= $right;
 			if ($trial->feedback) {
 				$model->row_totals['fby_count']++;
 				$model->row_totals['fby_right']+= $right;
+				$col_totals['fby_count']++;
+				$col_totals['fby_right']+= $right;
 			} else {
 				$model->row_totals['fbn_count']++;
 				$model->row_totals['fbn_right']+= $right;
+				$col_totals['fbn_count']++;
+				$col_totals['fbn_right']+= $right;
 			}
 			if ($trial->observers) {
 				$model->row_totals['oby_count']++;
 				$model->row_totals['oby_right']+= $right;
+				$col_totals['oby_count']++;
+				$col_totals['oby_right']+= $right;
 			} else {
 				$model->row_totals['obn_count']++;
 				$model->row_totals['obn_right']+= $right;
+				$col_totals['obn_count']++;
+				$col_totals['obn_right']+= $right;
 			}
 		}
 	}
 	
 	
 	// COLUMN FUNCTIONS 
+	
+	function col_result($model, $key, $index, $column) {
+		$data = '';
+		$attr = $column->attribute;
+		$chance = round($model->row_totals[$attr.'_count'] / 2, 1);
+		
+		if ($model->row_totals[$attr.'_right'] == 0) {
+			$data .= '<span class="glyphicon glyphicon-minus" style="padding-right:4px; color:#cc0000" aria-hidden="true"></span>';
+		} else if ($model->row_totals[$attr.'_right'] == $model->row_totals[$attr.'_count']) {
+			$data .= '<span class="glyphicon glyphicon-plus" style="padding-right:4px; color:#0088aa" aria-hidden="true"></span>';
+		} else if ($model->row_totals[$attr.'_right'] > $chance) {
+			$data .= '<span class="glyphicon glyphicon-plus" style="padding-right:4px; color:#00aa00" aria-hidden="true"></span>';
+		} else if ($model->row_totals[$attr.'_right'] < $chance) {
+			$data .= '<span class="glyphicon glyphicon-minus" style="padding-right:4px; color:#cc0000" aria-hidden="true"></span>';
+		} else {
+			$data .= '<span class="glyphicon glyphicon-remove" style="padding-right:4px; color:#aaa" aria-hidden="true"></span>';
+		}
+		$data .= $model->row_totals[$attr.'_right'].'/'.$model->row_totals[$attr.'_count'];
+		return $data;
+	}
+
+	
+	function numberoftrials_count($model, $key, $index, $column) {
+		$attr = $column->attribute;
+		return $model->row_totals[$attr.'_count'];
+	}
+	
+	function numberoftrials_right($model, $key, $index, $column) {
+		$attr = $column->attribute;
+		return $model->row_totals[$attr.'_right'];
+	}
+	
 	
 	function col_date($model, $key, $index, $column) {
 		return TzHelper::convertLocal($model->datecompleted, 'm/d/y, H:i T');
@@ -124,48 +167,76 @@
 		}
 		return $data;
 	}
-	
-	function col_result($model, $key, $index, $column) {
-		$data = '';
-		$attr = $column->attribute;
-		$chance = round($model->row_totals[$attr.'_count'] / 2, 1);
-		
-		if ($model->row_totals[$attr.'_right'] == 0) {
-			$data .= '<span class="glyphicon glyphicon-minus" style="padding-right:4px; color:#cc0000" aria-hidden="true"></span>';
-		} else if ($model->row_totals[$attr.'_right'] == $model->row_totals[$attr.'_count']) {
-			$data .= '<span class="glyphicon glyphicon-plus" style="padding-right:4px; color:#0088aa" aria-hidden="true"></span>';
-		} else if ($model->row_totals[$attr.'_right'] > $chance) {
-			$data .= '<span class="glyphicon glyphicon-plus" style="padding-right:4px; color:#00aa00" aria-hidden="true"></span>';
-		} else if ($model->row_totals[$attr.'_right'] < $chance) {
-			$data .= '<span class="glyphicon glyphicon-minus" style="padding-right:4px; color:#cc0000" aria-hidden="true"></span>';
-		} else {
-			$data .= '<span class="glyphicon glyphicon-remove" style="padding-right:4px; color:#aaa" aria-hidden="true"></span>';
-		}
-		$data .= $model->row_totals[$attr.'_right'].'/'.$model->row_totals[$attr.'_count'];
-		return $data;
-	}
-
 ?>
+	
 
 <div class="document-index">
 
-    <h4 style="font-weight:bold">Staring Experiment Results</h4>
+    
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+    
     <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'beforeRow' => 'row_totals',
-        'summaryOptions' => ['class' => 'small'],
+    
+		'id' 				=> 'report-grid',
+		'dataProvider'		=> $dataProvider,
+		'filterModel'		=> $searchModel,
+        'headerRowOptions'	=> ['class' => 'small'],
+		'filterRowOptions'	=> ['class' => 'small'],
+        'summaryOptions' 	=> ['class' => 'small'],
+        'rowOptions' 		=> ['class' => 'small'],
+        
+		'panel'				=> ['type'=> 'default',
+								'heading'=> 'Staring Experiment Results',
+								],
+		'panelTemplate' 	=> '<div class="panel"> {panelHeading} {panelBefore} {items} {panelAfter} {panelFooter} </div>',
+		'panelHeadingTemplate' => '<div class="pull-right"> {summary} {export} </div> <h4 style="font-weight:bold"> {heading} </h4> <div class="clearfix"></div>',
+		'panelBeforeTemplate' => '{before} <div class="clearfix"></div>',
+		
+		'showFooter'		=> false,
+		'showPageSummary'	=> false,
+		//'pageSummaryRowOptions'=> '',
+		
+		'pjax'				=> true,
+		'bordered'			=> true,
+		'striped'			=> true,
+		'condensed'			=> true,
+		'responsive'		=> true, //'containerOptions'=>['style'=>'overflow: auto'], // only set when $responsive = false
+		'hover'				=> false,
+		'persistResize'		=> false,
+		
+		// set export properties
+		'export'=>[
+			'fontAwesome'	=> true,
+			'label'			=> 'Export'
+		],
+		'exportConfig' => [
+			GridView::EXCEL => [],
+			GridView::CSV 	=> [],
+			GridView::TEXT	=> [],
+			GridView::HTML 	=> [],
+		],
+		
+        'beforeRow' 		=> 'row_totals',
+        'formatter' 		=> ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
+		'footerRowOptions'	=> ['style'=>'font-weight:bold;'],
+        
+		/* not used
+        'summary' => '<span class="small" style="padding-top:0px;">Showing {begin}-{end} of {totalCount} records</span>',
+		'pageSummary' => [
+			function ($summary, $data, $widget) { return $summary; }
+		],
+		
+		'toolbar'=> [
+			['content'=>'Something'],
+			'{export}',
+			'{toggleData}',
+		],
+		
+		// from previous gridview
         'tableOptions' => ['class' => 'table table-striped table-bordered table-condensed'],
-        'headerRowOptions' => ['class'=>'small'],
-        'rowOptions' => ['class'=>'small'],
-        'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
         'layout' => "{items}{pager}",
         'pager' => ['options' => ['class' => 'pagination pagination-sm pull-right'] ],
-        'summary' => '<span class="small" style="padding-top:0px;">Showing {begin}-{end} of {totalCount} records</span>',
-		'showFooter'=>TRUE,
-		'footerRowOptions'=>['style'=>'font-weight:bold;'],
+		*/		
         
         'columns' => [
         	// DATE
@@ -208,8 +279,8 @@
         	
          	// PARTICIPANTS
          	[
-         		'attribute' => 'Observers',
-         		'content' => 'col_participants',
+         		'attribute' 			=> 'Observers',
+         		'content' 				=> 'col_participants',
             	'contentOptions'		=> ['class'=>'observer'],
          	],
          	
@@ -253,7 +324,7 @@
             	'headerOptions'			=> ['style'=>'text-align:center'],
          	],
          	
-         	// TOTAL
+         	// TOTAL OBSERVERS
          	[
          		'label'					=> 'Total Obs',
          		'attribute'				=> 'result_observers',
@@ -261,7 +332,7 @@
          		'contentOptions'		=> ['align'=>'right', 'style'=>'font-weight:bold'],
             	'filter'				=> Html::activeTextInput($searchModel, 'result_observers', ['class'=>'form-control input-xs', 'style'=>'width:4em;']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
-         		'headerOptions'			=> ['style'=>'text-align:center']
+         		'headerOptions'			=> ['style'=>'text-align:center'],
          	],
          	
          	// RESULTS
@@ -271,7 +342,8 @@
          		'content'				=> 'col_result',
             	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#efe; font-weight:bold', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
-				'footer'				=> '',
+				//'footer'				=> col_result_total($model, $key, $index, $column),
+				//'pageSummary'			=> function ($summary, $data, $widget) { return $data; },
 			],
          	[
          		'label'					=> 'FB',
@@ -303,6 +375,8 @@
 			],
 
        ],
-    ]); ?>
+    ]);
+    
+?>
 
 </div>
