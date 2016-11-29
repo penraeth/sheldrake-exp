@@ -48,29 +48,19 @@
 			
 			$model->row_totals['all_count']++;
 			$model->row_totals['all_right']+= $right;
-			$col_totals['all_count']++;
-			$col_totals['all_right']+= $right;
 			if ($trial->feedback) {
 				$model->row_totals['fby_count']++;
 				$model->row_totals['fby_right']+= $right;
-				$col_totals['fby_count']++;
-				$col_totals['fby_right']+= $right;
 			} else {
 				$model->row_totals['fbn_count']++;
 				$model->row_totals['fbn_right']+= $right;
-				$col_totals['fbn_count']++;
-				$col_totals['fbn_right']+= $right;
 			}
 			if ($trial->observers) {
 				$model->row_totals['oby_count']++;
 				$model->row_totals['oby_right']+= $right;
-				$col_totals['oby_count']++;
-				$col_totals['oby_right']+= $right;
 			} else {
 				$model->row_totals['obn_count']++;
 				$model->row_totals['obn_right']+= $right;
-				$col_totals['obn_count']++;
-				$col_totals['obn_right']+= $right;
 			}
 		}
 	}
