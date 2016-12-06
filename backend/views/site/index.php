@@ -31,24 +31,20 @@
 	$oby_right_t=0;
 	$obn_count_t=0;
 	$obn_right_t=0;
-
-
 	
-	if (!empty($dataProvider->getModels())) {
-        foreach ($dataProvider->getModels() as $key => $val) {
-            $all_count_t += $val->all_count;
-            $all_right_t += $val->all_right;
-			$fby_count_t += $val->fby_count;
-			$fby_right_t += $val->fby_right;
-			$fbn_count_t += $val->fbn_count;
-			$fbn_right_t += $val->fbn_right;
-			$oby_count_t += $val->oby_count;
-			$oby_right_t += $val->oby_right;
-			$obn_count_t += $val->obn_count;
-			$obn_right_t += $val->obn_right;
-        }
-    }
-		
+	foreach ($dataProvider->getModels() as $key => $val) {
+		$all_count_t += $val->all_count;
+		$all_right_t += $val->all_right;
+		$fby_count_t += $val->fby_count;
+		$fby_right_t += $val->fby_right;
+		$fbn_count_t += $val->fbn_count;
+		$fbn_right_t += $val->fbn_right;
+		$oby_count_t += $val->oby_count;
+		$oby_right_t += $val->oby_right;
+		$obn_count_t += $val->obn_count;
+		$obn_right_t += $val->obn_right;
+	}
+	
 	
 	// COLUMN FUNCTIONS 
 	
