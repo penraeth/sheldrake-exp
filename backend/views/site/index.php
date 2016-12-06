@@ -61,7 +61,13 @@
 		} else {
 			$data .= '<span class="glyphicon glyphicon-remove" style="padding-right:4px; color:#aaa" aria-hidden="true"></span>';
 		}
-		$data .= $right.'/'.$count;
+		
+		if ($count > 0) {
+			$accuracyRate = round($right/$count*100);
+		} else {
+			$accuracyRate = 0;
+		}
+		$data .= '<span style="cursor:pointer" data-toggle="tooltip" data-placement="top" title="' . $accuracyRate . '%">' . $right .' / '.$count . '</span>';
 		return $data;
 	}
 	
@@ -307,7 +313,7 @@
 			[
          		'label'					=> 'Trials',
          		'attribute'				=> 'all',
-				'format'				=> 'html',
+				'format'				=> 'raw',
             	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#efe; font-weight:bold', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
 				'value' 				=> function ($model, $key, $index, $widget) {
@@ -320,7 +326,7 @@
 			[
          		'label'					=> 'FB',
          		'attribute'				=> 'fby',
-				'format'				=> 'html',
+				'format'				=> 'raw',
             	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#ffffee', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
 				'value' 				=> function ($model, $key, $index, $widget) {
@@ -333,7 +339,7 @@
 			[
          		'label'					=> 'No FB',
          		'attribute'				=> 'fbn',
-				'format'				=> 'html',
+				'format'				=> 'raw',
             	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#ffffee', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
 				'value' 				=> function ($model, $key, $index, $widget) {
@@ -347,7 +353,7 @@
 			[
          		'label'					=> 'Seen',
          		'attribute'				=> 'oby',
-				'format'				=> 'html',
+				'format'				=> 'raw',
             	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#f6efee', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
 				'value' 				=> function ($model, $key, $index, $widget) {
@@ -360,7 +366,7 @@
 			[
          		'label'					=> 'Unseen',
          		'attribute'				=> 'obn',
-				'format'				=> 'html',
+				'format'				=> 'raw',
             	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#f6efee', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
 				'value' 				=> function ($model, $key, $index, $widget) {
