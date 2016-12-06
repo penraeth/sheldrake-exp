@@ -21,87 +21,57 @@
 	use common\models\Product;
 	use common\helpers\TzHelper;
 	
-	$allTrials=0;
-		
-	// ROW AGGREGATE FUNCTION
-	function row_totals($model, $key, $index, $column) {
-		$model->row_totals['all_count'] = 0;
-		$model->row_totals['all_right'] = 0;
-		$model->row_totals['fby_count'] = 0;
-		$model->row_totals['fby_right'] = 0;
-		$model->row_totals['fbn_count'] = 0;
-		$model->row_totals['fbn_right'] = 0;
-		$model->row_totals['oby_count'] = 0;
-		$model->row_totals['oby_right'] = 0;
-		$model->row_totals['obn_count'] = 0;
-		$model->row_totals['obn_right'] = 0;
-		
-		
-		foreach ($model->staringTrials as $trial) {
-			$right = 0;
-			if ($trial->observers > 0   &&  $trial->judgment > 0) {
-				$right = 1;
-			}
-			if ($trial->observers == 0   &&  $trial->judgment == 0) {
-				$right = 1;
-			}
-			
-			$model->row_totals['all_count']++;
-			$model->row_totals['all_right']+= $right;
-			if ($trial->feedback) {
-				$model->row_totals['fby_count']++;
-				$model->row_totals['fby_right']+= $right;
-			} else {
-				$model->row_totals['fbn_count']++;
-				$model->row_totals['fbn_right']+= $right;
-			}
-			if ($trial->observers) {
-				$model->row_totals['oby_count']++;
-				$model->row_totals['oby_right']+= $right;
-			} else {
-				$model->row_totals['obn_count']++;
-				$model->row_totals['obn_right']+= $right;
-			}
-		}
-	}
+	$all_count_t=0;
+	$all_right_t=0;
+	$fby_count_t=0;
+	$fby_right_t=0;
+	$fbn_count_t=0;
+	$fbn_right_t=0;
+	$oby_count_t=0;
+	$oby_right_t=0;
+	$obn_count_t=0;
+	$obn_right_t=0;
+
+
 	
+	if (!empty($dataProvider->getModels())) {
+        foreach ($dataProvider->getModels() as $key => $val) {
+            $all_count_t += $val->all_count;
+            $all_right_t += $val->all_right;
+			$fby_count_t += $val->fby_count;
+			$fby_right_t += $val->fby_right;
+			$fbn_count_t += $val->fbn_count;
+			$fbn_right_t += $val->fbn_right;
+			$oby_count_t += $val->oby_count;
+			$oby_right_t += $val->oby_right;
+			$obn_count_t += $val->obn_count;
+			$obn_right_t += $val->obn_right;
+        }
+    }
+		
 	
 	// COLUMN FUNCTIONS 
 	
-	function col_result($model, $key, $index, $column) {
-		$data = '';
-		$attr = $column->attribute;
-		$chance = round($model->row_totals[$attr.'_count'] / 2, 1);
-		
-		if ($model->row_totals[$attr.'_right'] == 0) {
+	function sandwitch($right,$count) {
+		$data = '';		
+		if ($right == 0) {
 			$data .= '<span class="glyphicon glyphicon-minus" style="padding-right:4px; color:#cc0000" aria-hidden="true"></span>';
-		} else if ($model->row_totals[$attr.'_right'] == $model->row_totals[$attr.'_count']) {
+		} else if ($right == $count) {
 			$data .= '<span class="glyphicon glyphicon-plus" style="padding-right:4px; color:#0088aa" aria-hidden="true"></span>';
-		} else if ($model->row_totals[$attr.'_right'] > $chance) {
+		} else if ($right > round($count / 2, 1)) {
 			$data .= '<span class="glyphicon glyphicon-plus" style="padding-right:4px; color:#00aa00" aria-hidden="true"></span>';
-		} else if ($model->row_totals[$attr.'_right'] < $chance) {
+		} else if ($right < round($count / 2, 1)) {
 			$data .= '<span class="glyphicon glyphicon-minus" style="padding-right:4px; color:#cc0000" aria-hidden="true"></span>';
 		} else {
 			$data .= '<span class="glyphicon glyphicon-remove" style="padding-right:4px; color:#aaa" aria-hidden="true"></span>';
 		}
-		$data .= $model->row_totals[$attr.'_right'].'/'.$model->row_totals[$attr.'_count'];
+		$data .= $right.'/'.$count;
 		return $data;
 	}
-
-	
-	function numberoftrials_count($model, $key, $index, $column) {
-		$attr = $column->attribute;
-		return $model->row_totals[$attr.'_count'];
-	}
-	
-	function numberoftrials_right($model, $key, $index, $column) {
-		$attr = $column->attribute;
-		return $model->row_totals[$attr.'_right'];
-	}
-	
 	
 	function col_date($model, $key, $index, $column) {
-		return TzHelper::convertLocal($model->datecompleted, 'm/d/y, H:i T');
+		return TzHelper::convertLocal($model->datecompleted, 'm/d/y');
+		//return TzHelper::convertLocal($model->datecompleted, 'm/d/y, H:i T');
 	}
 	
 	function col_name($model, $key, $index, $column) {
@@ -161,17 +131,14 @@
 	
 
 <div class="document-index">
-
-    
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     
     <?= GridView::widget([
     
 		'id' 				=> 'report-grid',
 		'dataProvider'		=> $dataProvider,
 		'filterModel'		=> $searchModel,
-        'headerRowOptions'	=> ['class' => 'small'],
-		'filterRowOptions'	=> ['class' => 'small'],
+        'headerRowOptions'	=> ['class' => ''],
+		'filterRowOptions'	=> ['class' => 'tight'],
         'summaryOptions' 	=> ['class' => 'small'],
         'rowOptions' 		=> ['class' => 'small'],
         
@@ -182,8 +149,8 @@
 		'panelHeadingTemplate' => '<div class="pull-right"> {summary} {export} </div> <h4 style="font-weight:bold"> {heading} </h4> <div class="clearfix"></div>',
 		'panelBeforeTemplate' => '{before} <div class="clearfix"></div>',
 		
-		'showFooter'		=> false,
-		'showPageSummary'	=> false,
+		'showFooter'		=> true,
+		//'showPageSummary'	=> true,
 		//'pageSummaryRowOptions'=> '',
 		
 		'pjax'				=> true,
@@ -206,7 +173,6 @@
 			GridView::HTML 	=> [],
 		],
 		
-        'beforeRow' 		=> 'row_totals',
         'formatter' 		=> ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
 		'footerRowOptions'	=> ['style'=>'font-weight:bold;'],
         
@@ -223,6 +189,7 @@
 		],
 		
 		// from previous gridview
+        'beforeRow' 		=> 'row_totals',
         'tableOptions' => ['class' => 'table table-striped table-bordered table-condensed'],
         'layout' => "{items}{pager}",
         'pager' => ['options' => ['class' => 'pagination pagination-sm pull-right'] ],
@@ -250,21 +217,31 @@
             // Subject
             [
             	'label'					=> 'Subject',
-            	'attribute'				=> 'hostName',
-            	'value'					=> function($model) { return $model->hostName; },
+            	'attribute'				=> 'subject_name',
+            	//'value'					=> function($model) { return $model->subject_Name; },
             	'contentOptions'		=> ['class'=>'subject'],
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             ],
             
           	// Subject GENDER
          	[
-         		'label'					=> 'Gender',
-         		'attribute'				=> 'hostGender',
-         		'value'					=> function($model) { return substr(Yii::$app->params['genders'][$model->host->gender], 0, 1); },
+         		'label'					=> 'Sex',
+         		'attribute'				=> 'subject_gender',
+         		'value'					=> function($model) { return substr(Yii::$app->params['genders'][$model->subject_gender], 0, 1); },
             	'contentOptions'		=> ['class'=>'subject', 'align'=>'center'],
-            	'filter'				=> Html::activeDropDownList($searchModel, 'hostGender', [null=>'-',0=>'F',1=>'M'], ['class'=>'form-control input-xs input-inline']),
+            	'filter'				=> Html::activeDropDownList($searchModel, 'subject_gender', [null=>'-',0=>'F',1=>'M'], ['class'=>'form-control input-xs input-inline']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
-            	'headerOptions'			=> ['style'=>'text-align:center'],
+            	'headerOptions'			=> ['style'=>'text-align:center','width' => '1.5em'],
+         	],
+            
+          	// Subject AGE
+         	[
+         		'label'					=> 'Age',
+         		'attribute'				=> 'subject_age',
+            	'contentOptions'		=> ['class'=>'subject', 'align'=>'center'],
+            	//'filter'				=> Html::activeDropDownList($searchModel, 'subject_age', [null=>'-',0=>'F',1=>'M'], ['class'=>'form-control input-xs input-inline']),
+            	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
+            	'headerOptions'			=> ['style'=>'text-align:center','width' => '1.5em'],
          	],
         	
          	// PARTICIPANTS
@@ -286,26 +263,27 @@
          	
          	// GENDERS
          	[
-         		'label'					=> 'Gender',
+         		'label'					=> 'Sex',
          		'attribute'				=> 'genders',
          		'content'				=> 'col_genders',
             	'contentOptions'		=> ['class'=>'observer', 'align'=>'center'],
             	'filter'				=> Html::activeDropDownList($searchModel, 'genders', Yii::$app->params['genderFilter'], ['class'=>'form-control input-xs input-inline']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
-            	'headerOptions'			=> ['style'=>'text-align:center'],
+            	'headerOptions'			=> ['style'=>'text-align:center','width' => '1.5em'],
          	],
          	
          	// DISTANCES
          	[
-         		'label'					=> 'Distance',
+         		'label'					=> 'Miles',
          		'attribute'				=> 'distances',
          		'content'				=> 'col_distances',
             	'contentOptions'		=> ['class'=>'observer', 'align'=>'right'],
-            	'filter'				=> Html::activeDropDownList($searchModel, 'distances', Yii::$app->params['distanceFilter'], ['class'=>'form-control input-xs input-inline']),
+            	'filter'				=> Html::activeDropDownList($searchModel, 'distances', Yii::$app->params['distanceFilter'], ['class'=>'form-control input-xs input-inline','style'=>'text-align:center']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             	'headerOptions'			=> ['style'=>'text-align:center'],
          	],
          	
+         	/*
          	// OBSERVERS
          	[
          		'label'					=> '#Obs',
@@ -313,10 +291,11 @@
             	'contentOptions'		=> ['class'=>'observer', 'align'=>'center'],
             	'headerOptions'			=> ['style'=>'text-align:center'],
          	],
+         	*/
          	
          	// TOTAL OBSERVERS
          	[
-         		'label'					=> 'Total Obs',
+         		'label'					=> '#Obs',
          		'attribute'				=> 'result_observers',
          		'value'					=> function($model) { return $model->result_observers; },
          		'contentOptions'		=> ['align'=>'right', 'style'=>'font-weight:bold'],
@@ -325,44 +304,97 @@
          		'headerOptions'			=> ['style'=>'text-align:center'],
          	],
          	
+         	
          	// RESULTS
-         	[
+         	
+         	// All Trials ------------------------------------------------------------------------------
+			[
          		'label'					=> 'Trials',
          		'attribute'				=> 'all',
-         		'content'				=> 'col_result',
+				'format'				=> 'html',
             	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#efe; font-weight:bold', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
-				//'footer'				=> col_result_total($model, $key, $index, $column),
-				//'pageSummary'			=> function ($summary, $data, $widget) { return $data; },
+				'value' 				=> function ($model, $key, $index, $widget) {
+												return sandwitch( $model->all_right , $model->all_count );
+											},
+         		'footer'				=> sandwitch(  $all_right_t , $all_count_t ),
 			],
-         	[
+			
+         	// With Feedback ------------------------------------------------------------------------------
+			[
          		'label'					=> 'FB',
          		'attribute'				=> 'fby',
-         		'content'				=> 'col_result',
+				'format'				=> 'html',
             	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#ffffee', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
+				'value' 				=> function ($model, $key, $index, $widget) {
+												return sandwitch( $model->fby_right , $model->fby_count );
+											},
+         		'footer'				=> sandwitch(  $fby_right_t , $fby_count_t ),
 			],
-         	[
+			
+         	// Without Feedback ------------------------------------------------------------------------------
+			[
          		'label'					=> 'No FB',
          		'attribute'				=> 'fbn',
-         		'content'				=> 'col_result',
+				'format'				=> 'html',
             	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#ffffee', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
+				'value' 				=> function ($model, $key, $index, $widget) {
+												return sandwitch( $model->fbn_right , $model->fbn_count );
+											},
+         		'footer'				=> sandwitch(  $fbn_right_t , $fbn_count_t ),
 			],
-         	[
+         	
+			
+         	// Seen ------------------------------------------------------------------------------
+			[
          		'label'					=> 'Seen',
          		'attribute'				=> 'oby',
-         		'content'				=> 'col_result',
+				'format'				=> 'html',
             	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#f6efee', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
+				'value' 				=> function ($model, $key, $index, $widget) {
+												return sandwitch( $model->oby_right , $model->oby_count );
+											},
+         		'footer'				=> sandwitch(  $oby_right_t , $oby_count_t ),
 			],
-         	[
+			
+         	// Unseen ------------------------------------------------------------------------------
+			[
          		'label'					=> 'Unseen',
          		'attribute'				=> 'obn',
-         		'content'				=> 'col_result',
+				'format'				=> 'html',
             	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#f6efee', 'align'=>'center'],
 				'headerOptions'			=> ['style'=>'text-align:center'],
+				'value' 				=> function ($model, $key, $index, $widget) {
+												return sandwitch( $model->obn_right , $model->obn_count );
+											},
+         		'footer'				=> sandwitch(  $obn_right_t , $obn_count_t ),
 			],
+         	
+         	/* may need additional hidden columns for export
+         	[
+         		'attribute'				=> 'all_count',
+            	'hidden'				=> true,
+			],
+         	[
+         		'attribute'				=> 'all_right',
+            	'hidden'				=> true,
+			],
+			[
+         		'label'					=> 'Trials',
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#efe; font-weight:bold', 'align'=>'center'],
+				'headerOptions'			=> ['style'=>'text-align:center'],
+				'class' 				=> '\kartik\grid\FormulaColumn',
+				'value' 				=> function ($model, $key, $index, $widget) {
+												$p = compact('model', 'key', 'index');
+												return getGlyphicon( $widget->col(11, $p) , $widget->col(10, $p) ) . $widget->col(11, $p) . '/' . $widget->col(10, $p);
+											},
+         		'autoFooter'			=> false,
+         		'footer'				=> $all_right_t . '/' . $all_count_t,
+			],
+			*/
 
        ],
     ]);

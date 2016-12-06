@@ -5,15 +5,15 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\StaringExperiment;
+use common\models\StaringExperimentView;
 
 /**
  * DocumentSearch represents the model behind the search form about `\common\models\Document`.
  */
-class ExperimentSearch extends StaringExperiment
+class ExperimentSearch extends StaringExperimentView
 {
-	public $hostName;
-	public $hostGender;
+	//public $subject_name;
+	//public $subject_gender;
 	public $relations;
 	public $genders;
 	public $distances;
@@ -21,8 +21,8 @@ class ExperimentSearch extends StaringExperiment
     public function rules()
     {
         return [
-            [['name', 'hostName', 'hostGender', 'relations', 'genders', 'distances', 'result_observers'], 'string'],
-            [['name', 'hostName', 'hostGender', 'relations', 'genders', 'distances', 'result_observers'], 'safe'],
+            [['name', 'subject_name', 'subject_gender', 'subject_age', 'relations', 'genders', 'distances', 'result_observers'], 'string'],
+            [['name', 'subject_name', 'subject_gender', 'subject_age', 'relations', 'genders', 'distances', 'result_observers'], 'safe'],
         ];
     }
 
@@ -44,12 +44,12 @@ class ExperimentSearch extends StaringExperiment
      
     public function search($params)
     {
-        $query = StaringExperiment::find();
-        $query->where('datecompleted IS NOT NULL');
-        $query->andWhere('result_observers > 0');
-        $query->joinWith('host host');
+        $query = StaringExperimentView::find();
+        //$query->where('datecompleted IS NOT NULL');
+        //$query->andWhere('result_observers > 0');
+        //$query->joinWith('host host');
         $query->with(['staringParticipants', 'staringParticipants.user']);
-        $query->with('staringTrials');
+        //$query->with('staringTrials');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -62,14 +62,14 @@ class ExperimentSearch extends StaringExperiment
 					'default' => SORT_DESC
         		],
         		'name',
-            	'hostName' => [
-					'asc' => ['host.first_name' => SORT_ASC, 'host.last_name' => SORT_ASC],
-					'desc' => ['host.first_name' => SORT_DESC, 'host.last_name' => SORT_DESC],
+            	'subject_name' => [
+					//'asc' => ['host.first_name' => SORT_ASC, 'host.last_name' => SORT_ASC],
+					//'desc' => ['host.first_name' => SORT_DESC, 'host.last_name' => SORT_DESC],
 					'default' => SORT_ASC
             	],
-            	'hostGender' => [
-					'asc' => ['host.gender' => SORT_ASC],
-					'desc' => ['host.gender' => SORT_DESC],
+            	'subject_gender' => [
+					//'asc' => ['host.gender' => SORT_ASC],
+					//'desc' => ['host.gender' => SORT_DESC],
 					'default' => SORT_ASC
             	],
             	'result_observers'
@@ -82,11 +82,14 @@ class ExperimentSearch extends StaringExperiment
 		if ($this->name) {
 			$query->andFilterWhere(['like', 'staring_experiment.name', $this->name]);
 		}
-		if ($this->hostName) {
-			$query->andFilterWhere(['like', 'CONCAT(host.first_name, " ", host.last_name)', $this->hostName]);
+		if ($this->subject_name) {
+			$query->andFilterWhere(['like', 'subject_name', $this->subject_name]);
 		}
-		if ($this->hostGender >= 0) {
-			$query->andFilterWhere(['host.gender' => $this->hostGender]);
+		if ($this->subject_gender >= 0) {
+			$query->andFilterWhere(['subject_gender' => $this->subject_gender]);
+		}
+		if ($this->subject_age >= 0) {
+			$query->andFilterWhere(['subject_age' => $this->subject_age]);
 		}
 		if ($this->relations != 0) {
 			$query->andFilterWhere(['result_relations' => $this->relations]);

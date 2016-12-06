@@ -213,7 +213,7 @@ hr.article-devider {
 
 .input-xs {
   height: 20px;
-  padding: 4px 6px;
+  padding: 1px 2px;
   font-size: 10px;
   line-height: 1.5;
   border-radius: 3px;
@@ -221,6 +221,36 @@ hr.article-devider {
 .input-inline {
 	width: auto;
 	display: inline;
+}
+
+.table-condensed > thead > tr.small > th,
+.table-condensed > tbody > tr.small > th,
+.table-condensed > tfoot > tr.small > th,
+.table-condensed > thead > tr.small > td,
+.table-condensed > tbody > tr.small > td,
+.table-condensed > tfoot > tr.small > td
+{
+	padding: 5px 3px;
+}
+
+
+.table-condensed > thead > tr.tight > th,
+.table-condensed > tbody > tr.tight > th,
+.table-condensed > tfoot > tr.tight > th,
+.table-condensed > thead > tr.tight > td,
+.table-condensed > tbody > tr.tight > td,
+.table-condensed > tfoot > tr.tight > td
+{
+	padding: 0;
+	border: none;
+}
+
+.panel-heading {
+    padding: 0;
+}
+
+.panel {
+	background: none;
 }
 
 .pagination {

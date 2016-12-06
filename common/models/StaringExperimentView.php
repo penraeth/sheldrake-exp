@@ -20,7 +20,7 @@ use yii\db\Expression;
  * @property User[] $users
  * @property StaringTrial[] $staringTrials
  */
-class StaringExperiment extends \yii\db\ActiveRecord
+class StaringExperimentView extends \yii\db\ActiveRecord
 {
 	public $row_totals;
 	
@@ -29,7 +29,7 @@ class StaringExperiment extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'staring_experiment';
+        return 'staring_experiment_view';
     }
 
 	public function behaviors()
