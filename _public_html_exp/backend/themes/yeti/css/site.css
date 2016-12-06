@@ -249,10 +249,17 @@ hr.article-devider {
     padding: 0;
 }
 
-.panel {
+.panel,
+.panel-footer {
 	background: none;
+	border: none;
 }
+
+
+
+
 
 .pagination {
 	margin: 0px !important;
 }
+

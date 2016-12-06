@@ -145,10 +145,6 @@
 		'panelHeadingTemplate' => '<div class="pull-right"> {summary} {export} </div> <h4 style="font-weight:bold"> {heading} </h4> <div class="clearfix"></div>',
 		'panelBeforeTemplate' => '{before} <div class="clearfix"></div>',
 		
-		'showFooter'		=> true,
-		//'showPageSummary'	=> true,
-		//'pageSummaryRowOptions'=> '',
-		
 		'pjax'				=> true,
 		'bordered'			=> true,
 		'striped'			=> true,
@@ -169,8 +165,12 @@
 			GridView::HTML 	=> [],
 		],
 		
+		'showFooter'		=> true,
+		'footerRowOptions'	=> ['style'=>'font-weight:bold; padding:3px 2px; border:none'],
+		//'showPageSummary'	=> true,
+		//'pageSummaryRowOptions'=> '',
+		
         'formatter' 		=> ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
-		'footerRowOptions'	=> ['style'=>'font-weight:bold;'],
         
 		/* not used
         'summary' => '<span class="small" style="padding-top:0px;">Showing {begin}-{end} of {totalCount} records</span>',
@@ -273,7 +273,7 @@
          		'label'					=> 'Miles',
          		'attribute'				=> 'distances',
          		'content'				=> 'col_distances',
-            	'contentOptions'		=> ['class'=>'observer', 'align'=>'right'],
+            	'contentOptions'		=> ['class'=>'observer', 'style'=>'text-align:center'],
             	'filter'				=> Html::activeDropDownList($searchModel, 'distances', Yii::$app->params['distanceFilter'], ['class'=>'form-control input-xs input-inline','style'=>'text-align:center']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             	'headerOptions'			=> ['style'=>'text-align:center'],
@@ -294,7 +294,7 @@
          		'label'					=> '#Obs',
          		'attribute'				=> 'result_observers',
          		'value'					=> function($model) { return $model->result_observers; },
-         		'contentOptions'		=> ['align'=>'right', 'style'=>'font-weight:bold'],
+         		'contentOptions'		=> ['style'=>'font-weight:bold;text-align:center'],
             	'filter'				=> Html::activeTextInput($searchModel, 'result_observers', ['class'=>'form-control input-xs', 'style'=>'width:4em;']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
          		'headerOptions'			=> ['style'=>'text-align:center'],
