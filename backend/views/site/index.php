@@ -23,27 +23,69 @@
 	
 	$all_count_t=0;
 	$all_right_t=0;
+	$all_plus_t=0;
+	$all_minus_t=0;
+	$all_even_t=0;
 	$fby_count_t=0;
 	$fby_right_t=0;
+	$fby_plus_t=0;
+	$fby_minus_t=0;
+	$fby_even_t=0;
 	$fbn_count_t=0;
 	$fbn_right_t=0;
+	$fbn_plus_t=0;
+	$fbn_minus_t=0;
+	$fbn_even_t=0;
 	$oby_count_t=0;
 	$oby_right_t=0;
+	$oby_plus_t=0;
+	$oby_minus_t=0;
+	$oby_even_t=0;
 	$obn_count_t=0;
 	$obn_right_t=0;
+	$obn_plus_t=0;
+	$obn_minus_t=0;
+	$obn_even_t=0;
+	
+	function plusminuseven($attr,$right,$count) {
+		if ($right > round($count / 2, 1)) {
+			${$attr.'_plus_t'}++; 
+		} else if ($right < round($count / 2, 1)) {
+			${$attr.'_minus_t'}++; 
+		} else {
+			${$attr.'_even_t'}++; 
+		}
+	}
 	
 	foreach ($dataProvider->getModels() as $key => $val) {
 		$all_count_t += $val->all_count;
 		$all_right_t += $val->all_right;
+			   if ($val->all_right > round($val->all_count / 2, 1)) {	$all_plus_t++; 
+		} else if ($val->all_right < round($val->all_count / 2, 1)) {	$all_minus_t++; 
+		} else {														$all_even_t++; }
 		$fby_count_t += $val->fby_count;
 		$fby_right_t += $val->fby_right;
+			   if ($val->fby_right > round($val->fby_count / 2, 1)) {	$fby_plus_t++; 
+		} else if ($val->fby_right < round($val->fby_count / 2, 1)) {	$fby_minus_t++; 
+		} else {														$fby_even_t++; }
 		$fbn_count_t += $val->fbn_count;
 		$fbn_right_t += $val->fbn_right;
+			   if ($val->fbn_right > round($val->fbn_count / 2, 1)) {	$fbn_plus_t++; 
+		} else if ($val->fbn_right < round($val->fbn_count / 2, 1)) {	$fbn_minus_t++; 
+		} else {														$fbn_even_t++; }
 		$oby_count_t += $val->oby_count;
 		$oby_right_t += $val->oby_right;
+			   if ($val->oby_right > round($val->oby_count / 2, 1)) {	$oby_plus_t++; 
+		} else if ($val->oby_right < round($val->oby_count / 2, 1)) {	$oby_minus_t++; 
+		} else {														$oby_even_t++; }
 		$obn_count_t += $val->obn_count;
 		$obn_right_t += $val->obn_right;
+			   if ($val->obn_right > round($val->obn_count / 2, 1)) {	$obn_plus_t++; 
+		} else if ($val->obn_right < round($val->obn_count / 2, 1)) {	$obn_minus_t++; 
+		} else {														$obn_even_t++; }
 	}
+	
+	
 	
 	
 	// COLUMN FUNCTIONS 
@@ -68,6 +110,16 @@
 			$accuracyRate = 0;
 		}
 		$data .= '<span style="cursor:pointer" data-toggle="tooltip" data-placement="top" title="' . $accuracyRate . '%">' . $right .' / '.$count . '</span>';
+		
+		return $data;
+	}
+	
+	function bigmac($right,$count,$plus,$minus,$even) {
+		$data = sandwitch($right,$count);
+		$data .= '<BR>';
+		$data .= $plus . ' <span class="glyphicon glyphicon-plus" style="padding-right:4px; color:#00aa00" aria-hidden="true"></span><BR>';
+		$data .= $minus . ' <span class="glyphicon glyphicon-minus" style="padding-right:4px; color:#cc0000" aria-hidden="true"></span><BR>';
+		$data .= $even . ' <span class="glyphicon glyphicon-remove" style="padding-right:4px; color:#aaa" aria-hidden="true"></span>';
 		return $data;
 	}
 	
@@ -319,7 +371,8 @@
 				'value' 				=> function ($model, $key, $index, $widget) {
 												return sandwitch( $model->all_right , $model->all_count );
 											},
-         		'footer'				=> sandwitch(  $all_right_t , $all_count_t ),
+         		'footer'				=> bigmac(  $all_right_t , $all_count_t , $all_plus_t , $all_minus_t , $all_even_t),
+				'footerOptions'			=> ['style'=>'text-align:center'],
 			],
 			
          	// With Feedback ------------------------------------------------------------------------------
@@ -332,7 +385,8 @@
 				'value' 				=> function ($model, $key, $index, $widget) {
 												return sandwitch( $model->fby_right , $model->fby_count );
 											},
-         		'footer'				=> sandwitch(  $fby_right_t , $fby_count_t ),
+         		'footer'				=> bigmac(  $fby_right_t , $fby_count_t , $fby_plus_t , $fby_minus_t , $fby_even_t),
+				'footerOptions'			=> ['style'=>'text-align:center'],
 			],
 			
          	// Without Feedback ------------------------------------------------------------------------------
@@ -345,7 +399,8 @@
 				'value' 				=> function ($model, $key, $index, $widget) {
 												return sandwitch( $model->fbn_right , $model->fbn_count );
 											},
-         		'footer'				=> sandwitch(  $fbn_right_t , $fbn_count_t ),
+         		'footer'				=> bigmac(  $fbn_right_t , $fbn_count_t , $fbn_plus_t , $fbn_minus_t , $fbn_even_t),
+				'footerOptions'			=> ['style'=>'text-align:center'],
 			],
          	
 			
@@ -359,7 +414,8 @@
 				'value' 				=> function ($model, $key, $index, $widget) {
 												return sandwitch( $model->oby_right , $model->oby_count );
 											},
-         		'footer'				=> sandwitch(  $oby_right_t , $oby_count_t ),
+         		'footer'				=> bigmac(  $oby_right_t , $oby_count_t , $oby_plus_t , $oby_minus_t , $oby_even_t),
+				'footerOptions'			=> ['style'=>'text-align:center'],
 			],
 			
          	// Unseen ------------------------------------------------------------------------------
@@ -372,7 +428,8 @@
 				'value' 				=> function ($model, $key, $index, $widget) {
 												return sandwitch( $model->obn_right , $model->obn_count );
 											},
-         		'footer'				=> sandwitch(  $obn_right_t , $obn_count_t ),
+         		'footer'				=> bigmac(  $obn_right_t , $obn_count_t , $obn_plus_t , $obn_minus_t , $obn_even_t),
+				'footerOptions'			=> ['style'=>'text-align:center'],
 			],
          	
          	/* may need additional hidden columns for export
