@@ -110,6 +110,16 @@ return [
     	'5' => 528000
     ],
     
+    'fin' => [
+    	'1' => 'y',
+    	'0' => 'n'
+    ],
+    'finFilter' => [
+    	null => '-',
+    	'1' => 'y',
+    	'0' => 'n'
+    ],
+    
     'serverTimezone' => 'America/Los_Angeles',
     
     

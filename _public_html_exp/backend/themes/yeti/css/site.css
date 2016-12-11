@@ -263,3 +263,8 @@ hr.article-devider {
 	margin: 0px !important;
 }
 
+
+.table-bordered > tfoot > tr > td {
+    border: none;
+    border-top: 1px solid #000;
+}

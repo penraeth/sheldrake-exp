@@ -17,12 +17,14 @@ class ExperimentSearch extends StaringExperimentView
 	public $relations;
 	public $genders;
 	public $distances;
+	public $fin;
 
     public function rules()
     {
         return [
-            [['name', 'subject_name', 'subject_gender', 'subject_age', 'relations', 'genders', 'distances', 'result_observers'], 'string'],
-            [['name', 'subject_name', 'subject_gender', 'subject_age', 'relations', 'genders', 'distances', 'result_observers'], 'safe'],
+            [['fin','duration', 'subject_age'], 'integer'],
+            [['name', 'subject_name', 'subject_gender', 'genders', 'distances', 'result_observers'], 'string'],
+            [['name', 'fin','duration','subject_name', 'subject_gender', 'subject_age', 'relations', 'genders', 'distances', 'result_observers'], 'safe'],
         ];
     }
 
@@ -58,20 +60,21 @@ class ExperimentSearch extends StaringExperimentView
         $dataProvider->setSort([
 			'defaultOrder' => ['datecompleted'=>SORT_DESC],
         	'attributes' => [
+        		'name',
+        		'fin' => [
+					'default' => SORT_DESC
+        		],
+        		'duration',
         		'datecompleted' => [
 					'default' => SORT_DESC
         		],
-        		'name',
             	'subject_name' => [
 					//'asc' => ['host.first_name' => SORT_ASC, 'host.last_name' => SORT_ASC],
 					//'desc' => ['host.first_name' => SORT_DESC, 'host.last_name' => SORT_DESC],
 					'default' => SORT_ASC
             	],
-            	'subject_gender' => [
-					//'asc' => ['host.gender' => SORT_ASC],
-					//'desc' => ['host.gender' => SORT_DESC],
-					'default' => SORT_ASC
-            	],
+            	'subject_gender',
+            	'subject_age',
             	'result_observers'
             ]
         ]);
@@ -80,7 +83,15 @@ class ExperimentSearch extends StaringExperimentView
 
 		// FILTERS
 		if ($this->name) {
-			$query->andFilterWhere(['like', 'staring_experiment.name', $this->name]);
+			$query->andFilterWhere(['like', 'staring_experiment_view.name', $this->name]);
+		}
+		/* if ( ! is_null($this->datecompleted) && strpos($this->datecompleted, ' - ') !== false ) {
+			list($start_date, $end_date) = explode(' - ', $this->discharge_date);
+			$query->andFilterWhere(['between', 'datecompleted', $start_date, $end_date]);
+			$this->datecompleted = null;
+		} */
+		if ($this->duration >= 0) {
+			$query->andFilterWhere(['duration' => $this->duration]);
 		}
 		if ($this->subject_name) {
 			$query->andFilterWhere(['like', 'subject_name', $this->subject_name]);
@@ -99,6 +110,12 @@ class ExperimentSearch extends StaringExperimentView
 		}
 		if ($this->distances != 0) {
 			$query->andFilterWhere(['result_distances' => $this->distances]);
+		}
+		if ($this->fin >= 0) {
+			$query->andFilterWhere(['fin' => $this->fin]);
+		}
+		if ($this->fin >= 0) {
+			$query->andFilterWhere(['fin' => $this->fin]);
 		}
 		if ($this->result_observers != '') {
 			if (is_numeric($this->result_observers)) {

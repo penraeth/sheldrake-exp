@@ -20,6 +20,7 @@
 	use yii\widgets\ListView;
 	use common\models\Product;
 	use common\helpers\TzHelper;
+	use kartik\daterange\DateRangePicker;
 	
 	$all_count_t=0;
 	$all_right_t=0;
@@ -122,7 +123,7 @@
 		$data .= $even . ' <span class="glyphicon glyphicon-remove" style="padding-right:4px; color:#aaa" aria-hidden="true"></span>';
 		return $data;
 	}
-	
+
 	function col_date($model, $key, $index, $column) {
 		return TzHelper::convertLocal($model->datecompleted, 'm/d/y');
 		//return TzHelper::convertLocal($model->datecompleted, 'm/d/y, H:i T');
@@ -192,10 +193,11 @@
 		'dataProvider'		=> $dataProvider,
 		'filterModel'		=> $searchModel,
         'headerRowOptions'	=> ['class' => ''],
-		'filterRowOptions'	=> ['class' => 'tight'],
-        'summaryOptions' 	=> ['class' => 'small'],
         'rowOptions' 		=> ['class' => 'small'],
-        
+		'filterRowOptions'	=> ['class' => 'tight'],
+		'showFooter'		=> true,
+		'footerRowOptions'	=> ['style'=>'font-weight:bold;'],		
+        'formatter' 		=> ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
 		'panel'				=> ['type'=> 'default',
 								'heading'=> 'Staring Experiment Results',
 								],
@@ -211,7 +213,6 @@
 		'hover'				=> false,
 		'persistResize'		=> false,
 		
-		// set export properties
 		'export'=>[
 			'fontAwesome'	=> true,
 			'label'			=> 'Export'
@@ -223,40 +224,9 @@
 			GridView::HTML 	=> [],
 		],
 		
-		'showFooter'		=> true,
-		'footerRowOptions'	=> ['style'=>'font-weight:bold; padding:3px 2px; border:none'],
-		//'showPageSummary'	=> true,
-		//'pageSummaryRowOptions'=> '',
-		
-        'formatter' 		=> ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
-        
-		/* not used
-        'summary' => '<span class="small" style="padding-top:0px;">Showing {begin}-{end} of {totalCount} records</span>',
-		'pageSummary' => [
-			function ($summary, $data, $widget) { return $summary; }
-		],
-		
-		'toolbar'=> [
-			['content'=>'Something'],
-			'{export}',
-			'{toggleData}',
-		],
-		
-		// from previous gridview
-        'beforeRow' 		=> 'row_totals',
-        'tableOptions' => ['class' => 'table table-striped table-bordered table-condensed'],
-        'layout' => "{items}{pager}",
-        'pager' => ['options' => ['class' => 'pagination pagination-sm pull-right'] ],
-		*/		
+        	
         
         'columns' => [
-        	// DATE
-            [
-            	'label'					=> 'Date',
-            	'attribute'				=> 'datecompleted',
-            	'content'				=> 'col_date',
-            	'contentOptions'		=> [],
-            ],
             
             // NAME
             [
@@ -264,15 +234,52 @@
             	'attribute'				=> 'name',
          		'content' 				=> 'col_name',
             	'value'					=> 'name',
-            	'contentOptions'		=> [],
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#efefff; font-weight:bold'],
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
+            	'headerOptions'			=> ['width' => '1.5em'],
+            ],
+        	// FINI
+            [
+            	'label'					=> 'Fin',
+            	'attribute'				=> 'fin',
+         		'value'					=> function($model) { return Yii::$app->params['fin'][$model->fin]; },
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#efefff; font-weight:normal', 'align'=>'center'],
+            	'filter'				=> Html::activeDropDownList($searchModel, 'fin', Yii::$app->params['finFilter'], ['class'=>'form-control input-xs input-inline']),
+            	'headerOptions'			=> ['style'=>'text-align:center','width' => '1.5em'],
+            ],
+            
+        	// DATE
+            [
+            	'label'					=> 'Date',
+            	'attribute'				=> 'datecompleted',
+            	'content'				=> 'col_date',
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#efefff; font-weight:normal', 'align'=>'center'],
+            	'headerOptions'			=> ['width' => '1.5em'],
+            	
+				/*'filterType' => GridView::FILTER_DATE,
+				'filterWidgetOptions' => [
+					'pluginOptions' => [
+						'format' => 'dd-mm-yyyy',
+						'autoclose' => true,
+						'todayHighlight' => true,
+					]
+				],*/
+            
+            ],
+            
+            // DURATION
+            [
+            	'label'					=> 'Dur',
+            	'attribute'				=> 'duration',
+            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#efefff; font-weight:normal', 'align'=>'center'],
+            	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
+            	'headerOptions'			=> ['style'=>'text-align:center','width' => '1.5em'],
             ],
             
             // Subject
             [
             	'label'					=> 'Subject',
             	'attribute'				=> 'subject_name',
-            	//'value'					=> function($model) { return $model->subject_Name; },
             	'contentOptions'		=> ['class'=>'subject'],
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             ],
@@ -293,12 +300,11 @@
          		'label'					=> 'Age',
          		'attribute'				=> 'subject_age',
             	'contentOptions'		=> ['class'=>'subject', 'align'=>'center'],
-            	//'filter'				=> Html::activeDropDownList($searchModel, 'subject_age', [null=>'-',0=>'F',1=>'M'], ['class'=>'form-control input-xs input-inline']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
             	'headerOptions'			=> ['style'=>'text-align:center','width' => '1.5em'],
          	],
         	
-         	// PARTICIPANTS
+         	// OBSERVER NAME
          	[
          		'attribute' 			=> 'Observers',
          		'content' 				=> 'col_participants',
@@ -310,9 +316,10 @@
          		'label'					=> 'Relation',
          		'attribute'				=> 'relations',
          		'content' 				=> 'col_relationships',
-            	'contentOptions'		=> ['class'=>'observer'],
+            	'contentOptions'		=> ['class'=>'observer','style'=>'padding-left:7px;'],
             	'filter'				=> Html::activeDropDownList($searchModel, 'relations', Yii::$app->params['relationshipFilter'], ['class'=>'form-control input-xs input-inline']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
+            	'headerOptions'			=> ['width' => '1.5em'],
          	],
          	
          	// GENDERS
@@ -334,7 +341,7 @@
             	'contentOptions'		=> ['class'=>'observer', 'style'=>'text-align:center'],
             	'filter'				=> Html::activeDropDownList($searchModel, 'distances', Yii::$app->params['distanceFilter'], ['class'=>'form-control input-xs input-inline','style'=>'text-align:center']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
-            	'headerOptions'			=> ['style'=>'text-align:center'],
+            	'headerOptions'			=> ['style'=>'text-align:center','width' => '1.5em'],
          	],
          	
          	/*
@@ -355,7 +362,7 @@
          		'contentOptions'		=> ['style'=>'font-weight:bold;text-align:center'],
             	'filter'				=> Html::activeTextInput($searchModel, 'result_observers', ['class'=>'form-control input-xs', 'style'=>'width:4em;']),
             	'filterInputOptions'	=> ['class'=>'form-control input-xs'],
-         		'headerOptions'			=> ['style'=>'text-align:center'],
+            	'headerOptions'			=> ['style'=>'text-align:center','width' => '1.5em'],
          	],
          	
          	
@@ -432,30 +439,23 @@
 				'footerOptions'			=> ['style'=>'text-align:center'],
 			],
          	
-         	/* may need additional hidden columns for export
-         	[
-         		'attribute'				=> 'all_count',
-            	'hidden'				=> true,
-			],
-         	[
-         		'attribute'				=> 'all_right',
-            	'hidden'				=> true,
-			],
-			[
-         		'label'					=> 'Trials',
-            	'contentOptions'		=> ['style'=>'white-space: nowrap; background-color:#efe; font-weight:bold', 'align'=>'center'],
-				'headerOptions'			=> ['style'=>'text-align:center'],
-				'class' 				=> '\kartik\grid\FormulaColumn',
-				'value' 				=> function ($model, $key, $index, $widget) {
-												$p = compact('model', 'key', 'index');
-												return getGlyphicon( $widget->col(11, $p) , $widget->col(10, $p) ) . $widget->col(11, $p) . '/' . $widget->col(10, $p);
-											},
-         		'autoFooter'			=> false,
-         		'footer'				=> $all_right_t . '/' . $all_count_t,
-			],
-			*/
-
        ],
+       
+		/* settings not used
+        'summary' => '<span class="small" style="padding-top:0px;">Showing {begin}-{end} of {totalCount} records</span>',
+		'pageSummary' => [
+			function ($summary, $data, $widget) { return $summary; }
+		],
+		'toolbar'=> [
+			['content'=>'Something'],
+			'{export}',
+			'{toggleData}',
+		],
+		// from previous gridview
+        'beforeRow' 		=> 'row_totals',
+        'layout' => "{items}{pager}",
+        'pager' => ['options' => ['class' => 'pagination pagination-sm pull-right'] ],
+		*/	
     ]);
     
 ?>
