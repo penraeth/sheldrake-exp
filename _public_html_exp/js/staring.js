@@ -1,21 +1,35 @@
-var debug = true;
-var roomName = String(expId) + apiKey;
-var totalTrials = 20;
-var currentTrial = 0;
-var trialDuration = 15;
-var showQuestionAt = 15;
-var userType = isSubject ? "subject" : "observer";
-var isObserver = isSubject ? false : true;
-var subjectPeerId = false;
-var observerStarted = false;
-var hideSubject = true;
-var experimentInProgress = false;
+(function() { // Begin scoping function
 
-var peerData = [];
-
-if (showDropoutError){
-	$('#dropoutError').show();
-}
+//	var peerId;
+//	var peerInfo;
+//	var itemClass;
+	var apiData = new Array();
+	var debug = true;
+	var participantIds;
+	var totalObservers=0;
+	var roomName = String(expId) + apiKey;
+	var totalTrials = 20;
+	var currentTrial = 0;
+	var trialDuration = 15;
+	var showQuestionAt = 11;
+	var userType = isSubject ? "subject" : "observer";
+	var isObserver = isSubject ? false : true;
+	var subjectPeerId = false;
+	var observerStarted = false;
+	var hideSubject = true;
+	var experimentInProgress = false;
+	
+	var showVideo;
+	var startTime;
+	var trialTime;
+	var feedback;
+	var timerId;
+	
+	var peerData = [];
+	
+	if (showDropoutError){
+		$('#dropoutError').show();
+	}
 
 
 //-------------------------------------- skylink
@@ -34,7 +48,7 @@ if (showDropoutError){
 			if (message.content == "done") { // If the experiment is over
 				skylink.leaveRoom();
 				location.href = exitURL;
-			} else if (Number(message.content) > currentTrial) { // If a new trial has begin
+			} else if (Number(message.content) > currentTrial) { // If a new trial has begun
 				if (!observerStarted) {
 					// skylink.muteStream({ videoMuted: true, audioMuted: true });
 					trialDisplaySettings();
@@ -188,8 +202,10 @@ if (showDropoutError){
 	
 	
 //-------------------------------------- observer trial handling
+
 	
 	function observer_startTrial() {
+		trialTime=0;
 		startTime = new Date().getTime();
 		debugmessage("New trial: " + startTime + " hide subject? " + hideSubject);
 
@@ -198,13 +214,12 @@ if (showDropoutError){
 		
 		if (hideSubject) {
 			// hide video and display distraction
-			debugmessage("hiding subject");
 			$("#subjectVideo").hide();
 			$("#observerCommand").hide();
 			var imgId=Math.floor(Math.random() * 30) + 1;
 			var imageUrl="/exp/images/staring/"+imgId+".jpg";
 			$('.wrap').css({'background-image': 'url(' + imageUrl + ')', });
-			debugmessage("showing image "+imageUrl);
+			debugmessage("hiding subject and showing image "+imageUrl);
 		} else {
 			// show video
 			debugmessage("showing subject");
@@ -212,8 +227,6 @@ if (showDropoutError){
 			$("#subjectVideo").show();
 			$("#observerCommand").show();
 		}
-		
-		trialTime=0;
 		
 		try{ clearTimeout(timerId); } catch(err){}
 		observer_displayCountdown();
@@ -226,7 +239,7 @@ if (showDropoutError){
 		$('.countdown').html(countdown);
 		
 		if (countdown <= 0) {  // finished
-			debugmessage("trial over");
+			debugmessage("full countdown completed for trial " + currentTrial);
 			clearTimeout(timerId);
 		} else { // still going
 			var processingDelay = (currentTime - startTime) - trialTime;
@@ -247,7 +260,6 @@ if (showDropoutError){
 		
 		// show or hide video
 		showVideo = Boolean(Math.round(Math.random()));
-		debugmessage("showVideo Boolean: " + showVideo);
 		if (showVideo) {
 			skylink.muteStream({ videoMuted: false, audioMuted: true });
 		} else {
@@ -255,15 +267,18 @@ if (showDropoutError){
 		}
 		
 		// observers determine start of trial based on the below; important that it happens after muteStream above
-		sendMessageAll(String(currentTrial));
-		startTime = new Date().getTime();
-		debugmessage("New trial: " + startTime);
 		
-		trialTime=0;
-		feedback=Math.round(Math.random());
-		subject_displayCountdown();
+		setTimeout(function(){ 
+			feedback  = Math.round(Math.random());
+			trialTime = 0;
+			startTime = new Date().getTime();
+			debugmessage("New trial: " + startTime + " showVideo Boolean: " + showVideo);
+			
+			sendMessageAll(String(currentTrial));
+			subject_displayCountdown();
+		}, 1999);
 	}
-	
+
 	function subject_displayCountdown() {
 		var currentTime = new Date().getTime(); // Get current time.  
 		var countdown = Math.ceil((trialDuration) - ((currentTime - startTime) /1000));
@@ -285,20 +300,23 @@ if (showDropoutError){
 	
 	function endTrial(judgment) {
 		$('.wrap').removeClass('animateBackground');
+		try{ clearTimeout(timerId); } catch(err){}
+		$('#subjectDeterimation').hide();
 		debugmessage("ending trial");
 		if (feedback == 1) {
 			var message= showVideo ? "You were STARED AT" : "You were NOT stared at"
 			if ((showVideo && judgment == 1) || (!showVideo && judgment == 0)) {
-				$('#subjectDeterimation p').html('<span class="correct">' +message+ '</span>');
+				$('#feedback').html('<span class="correct">' +message+ '</span>');
 			} else {
-				$('#subjectDeterimation p').html('<span class="incorrect">' +message+ '</span>');
+				$('#feedback').html('<span class="incorrect">' +message+ '</span>');
 			}
 		} else {
-				$('#subjectDeterimation p').html('<span class="nofeedback">No feedback this time</span>');
+				$('#feedback').html('<span class="nofeedback">No feedback this time</span>');
 		}
+		$('#feedback').show();
 		setTimeout(
 			function(){
-				$('#subjectDeterimation').hide();
+				$('#feedback').hide();
 				logTrial(judgment);
 			}, 2000);
 	}
@@ -309,9 +327,6 @@ if (showDropoutError){
 	
 	function debugmessage(message) {
 		if (debug && typeof console != "undefined") {
-			if (typeof console.debug != "undefined") {
-				console.debug(message);
-			}
 			console.log(message);
 		}
 	}
@@ -327,9 +342,9 @@ if (showDropoutError){
 	
 	function checkBeginSubject() {
 		$('.peerListItem').remove();
-		readyCount = 0;
+		var readyCount = 0;
 		for (peerId in peerData) {
-			peerInfo = peerData[peerId];
+			var peerInfo = peerData[peerId];
 			itemClass = 'warning';
 			//debugmessage("participant joining: " + peerInfo.userData.user + ", status: " + peerInfo.userData.status);
 			if (peerInfo.userData.user == 'subject') {
@@ -376,7 +391,7 @@ if (showDropoutError){
 			beginExperiment();
 		} else { // still going
 			var processingDelay = (currentTime - autoStartTime) - autoStartDuration;
-			debugmessage("autostart countdown: " + autoStartCount + " adjustment:" + processingDelay);
+			// debugmessage("autostart countdown: " + autoStartCount + " adjustment:" + processingDelay);
 			autoStartDuration+=1000;
 			setTimeout(autoStartCountdown, (1000-processingDelay));
 		}
@@ -387,7 +402,7 @@ if (showDropoutError){
 		totalObservers = 0;
 		participantIds = [];
 		for (peerId in peerData) {
-			peerInfo = peerData[peerId];
+			var peerInfo = peerData[peerId];
 			totalObservers+=peerInfo.userData.observers;
 			participantIds.push(peerInfo.userData.userId);
 		}
@@ -419,24 +434,24 @@ if (showDropoutError){
 	// these functions get called on successful completion of each API method
 	var resultFunctions = {
 		startExperiment: function(data, status) {
-			debugmessage("startExperiment success");
+			debugmessage("API call startExperiment success");
 			experimentInProgress=true;
 		},
 		completeExperiment: function(data, status) {
-			debugmessage("completeExperiment success");
+			debugmessage("API call completeExperiment success");
 			sendMessageAll("done");
 			skylink.leaveRoom();
 			location.href = exitURL;
 		},
 		getNextTrial: function(data, status) {
-			debugmessage("getNextTrial success");
+			debugmessage("API call getNextTrial success");
 			currentTrial = data.next;
 			if (isSubject) {
 				subject_startTrial();
 			}
 		},
 		logTrial: function(data, status) {
-			debugmessage("logTrial success");
+			debugmessage("API call logTrial success");
 			if (currentTrial==totalTrials) { // end of experiment
 				callApi('completeExperiment');
 			} else { // continue
@@ -448,10 +463,10 @@ if (showDropoutError){
 	
 	// main API call
 	function callApi(method, data) {
-		urlMethod = method.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-		urlString = '/exp/api/'+urlMethod+'/'+expId+'/'+apiKey;
+		var urlMethod = method.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+		var urlString = '/exp/api/'+urlMethod+'/'+expId+'/'+apiKey;
 		
-		fd = new FormData();
+		var fd = new FormData();
 		for (key in data) {  fd.append(key, data[key]);  }
 		
 		$.ajax({
@@ -478,10 +493,10 @@ if (showDropoutError){
 	
 	// second chance API call
 	function secondChance(method, data) {
-		urlMethod = method.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-		urlString = '/exp/api/'+urlMethod+'/'+expId+'/'+apiKey;
+		var urlMethod = method.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+		var urlString = '/exp/api/'+urlMethod+'/'+expId+'/'+apiKey;
 		
-		fd = new FormData();
+		var fd = new FormData();
 		for (key in data) {  fd.append(key, data[key]);  }
 		
 		$.ajax({
@@ -509,7 +524,7 @@ if (showDropoutError){
 	function logTrial(judgment) {
 		countObservers();
 		debugmessage("logging trial with: " + totalObservers + " observers, " + feedback + " feedback and a judgement of " + judgment);
-		apiData = new Array();
+		
 		apiData['trial'] = currentTrial;
 		apiData['observers'] = showVideo ? totalObservers : 0 ;
 		apiData['judgment'] = judgment;
@@ -522,9 +537,10 @@ if (showDropoutError){
 	// prepare data for start experiment call
 	function startExperiment() {
 		countObservers();
-		apiData = new Array();
+		
 		apiData['participantIds'] = participantIds.join();
 		
 		callApi('startExperiment', apiData);
 	}
-	
+
+})();

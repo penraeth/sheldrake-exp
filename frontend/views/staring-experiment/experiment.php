@@ -11,7 +11,8 @@ $this->title = $experiment->name;
 //$this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile('@exp/js/staring.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('//cdn.temasys.com.sg/skylink/skylinkjs/0.6.x/skylink.complete.min.js');
+$this->registerJsFile('//cdn.temasys.io/adapterjs/0.14.x/adapter.debug.js');
+$this->registerJsFile('//cdn.temasys.io/skylink/skylinkjs/0.6.x/skylink.complete.min.js');
 $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 
 ?>
@@ -136,6 +137,7 @@ $this->registerCssFile('@exp/css/staring.css', ['depends' => [\yii\bootstrap\Boo
 			Please answer in the next <span class="countdown"></span> seconds.
 		</p>
 	</div>
+	<div id="feedback"></div>
 </div>
 
 <div id="videoContainer">

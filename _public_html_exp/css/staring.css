@@ -8,6 +8,7 @@
 #beginExperiment,
 #trialContainer,
 #subjectDeterimation,
+#feedback,
 #autoStartWarning,
 #observerCommand,
 #limitNotice {
@@ -42,7 +43,8 @@
 	transform: rotateY(-180deg);
 }
 
-#subjectDeterimation {
+#subjectDeterimation,
+#feedback {
 	position:absolute;
     top: 45%;
     width: 100%;
@@ -60,19 +62,19 @@
     margin: 0 0 0 -10em;
 }
 
-#subjectDeterimation .correct {
+#feedback .correct {
     font-style:bold;
     font-size: 1.8em;
     color:#008800;
 }
 
-#subjectDeterimation .incorrect {
+#feedback .incorrect {
     font-style:bold;
     font-size: 1.8em;
     color:#880000;
 }
 
-#subjectDeterimation .nofeedback {
+#feedback .nofeedback {
     font-style:bold;
     font-size: 1.8em;
     color:#888;
